@@ -1,0 +1,33 @@
+{
+  "name": "dreaction-server-protocol",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc",
+    "test": "vitest"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "keywords": [
+    "tianji"
+  ],
+  "author": "moonrailgun <moonrailgun@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/ws": "^8.5.13",
+    "eventemitter-strict": "^1.0.1",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.0.0",
+    "happy-dom": "15.11.6",
+    "msw": "^2.2.13",
+    "typescript": "^5.4.5",
+    "vitest": "^1.2.1"
+  }
+}
