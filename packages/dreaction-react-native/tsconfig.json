@@ -7,7 +7,10 @@
     "declaration": true,
     "declarationMap": true,
     "noEmit": false,
-    "typeRoots": ["./node_modules/@types", "./types"],
+    // "typeRoots": [
+    //   "./node_modules/@types",
+    //   "./types"
+    // ]
   },
   "include": ["./src/**/*"]
 }

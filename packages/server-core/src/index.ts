@@ -67,7 +67,7 @@ interface ServerEventMap {
 /**
  * The dreaction server.
  */
-class Server extends EventEmitter<ServerEventMap> {
+export class Server extends EventEmitter<ServerEventMap> {
   /**
    * Additional server configuration.
    */

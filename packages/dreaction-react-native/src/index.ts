@@ -68,7 +68,7 @@ const {
 const DEFAULTS: ClientOptions<ReactotronReactNative> = {
   createSocket: (path: string) => new WebSocket(path), // eslint-disable-line
   host: getHost('localhost'),
-  port: 9090,
+  port: 9600,
   name: 'React Native App',
   environment: process.env.NODE_ENV || (__DEV__ ? 'development' : 'production'),
   client: {

@@ -252,7 +252,7 @@ export class ReactotronImpl
       {
         createSocket: null as never,
         host: 'localhost',
-        port: 9090,
+        port: 9600,
         name: 'reactotron-core-client',
         secure: false,
         plugins: corePlugins,

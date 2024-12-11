@@ -2,6 +2,7 @@ import { Blockquote, Code } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { getIp } from '../utils/ip';
 import { port } from '../service/server';
+import { useDReactionServerContext } from '../context/DReaction';
 
 export const Home: React.FC = React.memo(() => {
   const [ip, setIp] = useState('');
@@ -10,6 +11,8 @@ export const Home: React.FC = React.memo(() => {
       setIp(ip);
     });
   }, []);
+
+  const context = useDReactionServerContext();
 
   return (
     <div>
@@ -22,6 +25,8 @@ export const Home: React.FC = React.memo(() => {
           to start debugging.
         </Blockquote>
       </div>
+
+      <div>{JSON.stringify(context, null, 4)}</div>
     </div>
   );
 });
