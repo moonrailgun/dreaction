@@ -1,0 +1,125 @@
+// JSON.stringify() doesn't support circular dependencies or keeping
+// falsy values.  This does.
+//
+// Mostly adapted from https://github.com/isaacs/json-stringify-safe
+
+// replacement tokens
+const UNDEFINED = '~~~ undefined ~~~';
+const NULL = `~~~ null ~~~`;
+const FALSE = `~~~ false ~~~`;
+const ZERO = `~~~ zero ~~~`;
+const EMPTY_STRING = `~~~ empty string ~~~`;
+const CIRCULAR = '~~~ Circular Reference ~~~';
+const ANONYMOUS = '~~~ anonymous function ~~~';
+const INFINITY = '~~~ Infinity ~~~';
+const NEGATIVE_INFINITY = '~~~ -Infinity ~~~';
+// const NAN = '~~~ NaN ~~~'
+
+/**
+ * Fix BigInt serialization
+ * BigInts are not supported by JSON.stringify in Hermes android.
+ * This is a workaround.
+ * https://github.com/GoogleChromeLabs/jsbi/issues/30#issuecomment-953187833
+ * https://github.com/infinitered/reactotron/issues/1436
+ */
+declare global {
+  interface BigInt {
+    toJSON(): string;
+  }
+}
+if (typeof BigInt !== 'undefined') {
+  // eslint-disable-next-line no-extend-native
+  BigInt.prototype.toJSON = function () {
+    return this.toString();
+  };
+}
+
+/**
+ * Attempts to give a name to a function.
+ *
+ * @param {Function} fn - The function to name.
+ */
+function getFunctionName(fn: any): string {
+  const n = fn.name;
+  if (n === null || n === undefined || n === '') {
+    return ANONYMOUS;
+  } else {
+    return `~~~ ${n}() ~~~`;
+  }
+}
+
+/**
+ * Serializes an object to JSON.
+ *
+ *  @param {any} source - The victim.
+ */
+function serialize(source: any, proxyHack = false) {
+  const stack = [] as any[];
+  const keys = [] as string[];
+
+  /**
+   * Replace this object node with something potentially custom.
+   *
+   * @param {*} key - The key currently visited.
+   * @param {*} value - The value to replace.
+   */
+  function serializer(replacer: Function | null) {
+    return function (this: any, key: string, value: any) {
+      // slam dunks
+      if (value === true) return true;
+
+      // weird stuff
+      // if (Object.is(value, NaN)) return NAN // OK, apparently this is hard... leaving out for now
+      if (value === Infinity) return INFINITY;
+      if (value === -Infinity) return NEGATIVE_INFINITY;
+      if (value === 0) return ZERO;
+
+      // classic javascript
+      if (value === undefined) return UNDEFINED;
+      if (value === null) return NULL;
+      if (value === false) return FALSE;
+
+      // head shakers
+      if (value === -0) return ZERO; // eslint-disable-line
+      if (value === '') return EMPTY_STRING;
+
+      if (proxyHack && typeof value === 'object' && value.nativeEvent) {
+        return value.nativeEvent;
+      }
+
+      // known types that have easy resolving
+      switch (typeof value) {
+        case 'string':
+          return value;
+        case 'number':
+          return value;
+        case 'bigint':
+          return value.toString();
+        case 'function':
+          return getFunctionName(value);
+      }
+
+      // Tough things to crack
+      // If we have an iterator but are not an array (because arrays are easily seralizeable already)...
+      if (value[Symbol.iterator] && !Array.isArray(value)) {
+        // Convert to an array!
+        return [...value];
+      }
+
+      if (stack.length > 0) {
+        // check for prior existance
+        const thisPos = stack.indexOf(this);
+        ~thisPos ? stack.splice(thisPos + 1) : stack.push(this);
+        ~thisPos ? keys.splice(thisPos, Infinity, key) : keys.push(key);
+        if (~stack.indexOf(value)) value = CIRCULAR;
+      } else {
+        stack.push(value);
+      }
+
+      return replacer == null ? value : replacer.call(this, key, value);
+    };
+  }
+  return JSON.stringify(source, serializer(null));
+}
+
+export default serialize;

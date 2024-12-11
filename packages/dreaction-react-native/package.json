@@ -1,7 +1,7 @@
 {
-  "name": "dreaction-protocol",
+  "name": "dreaction-react-native",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "description": "",
   "main": "lib/index.js",
   "scripts": {
@@ -19,15 +19,10 @@
   "author": "moonrailgun <moonrailgun@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@types/ws": "^8.5.13",
-    "eventemitter-strict": "^1.0.1",
-    "ws": "^8.18.0"
+    "dreaction-client-core": "workspace:*",
+    "dreaction-protocol": "workspace:*"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.0.0",
-    "happy-dom": "15.11.6",
-    "msw": "^2.2.13",
-    "typescript": "^5.4.5",
-    "vitest": "^1.2.1"
+    "typescript": "^5.4.5"
   }
 }

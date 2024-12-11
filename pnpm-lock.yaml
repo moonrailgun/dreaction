@@ -128,6 +128,9 @@ importers:
       '@react-navigation/native':
         specifier: ^7.0.0
         version: 7.0.13(react-native@0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
+      dreaction-react-native:
+        specifier: workspace:*
+        version: link:../../packages/dreaction-react-native
       expo:
         specifier: ~52.0.17
         version: 52.0.17(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@expo/metro-runtime@4.0.0(react-native@0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(encoding@0.1.13)(react@18.3.1)))(encoding@0.1.13)(graphql@16.9.0)(react-native@0.76.3(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))(@types/react@18.3.14)(encoding@0.1.13)(react@18.3.1))(react@18.3.1)
@@ -192,6 +195,38 @@ importers:
       typescript:
         specifier: ~5.3.3
         version: 5.3.3
+
+  packages/client-core:
+    dependencies:
+      '@types/ws':
+        specifier: ^8.5.13
+        version: 8.5.13
+      dreaction-protocol:
+        specifier: workspace:*
+        version: link:../protocol
+      eventemitter-strict:
+        specifier: ^1.0.1
+        version: 1.0.1
+      ws:
+        specifier: ^8.18.0
+        version: 8.18.0
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.7.2
+
+  packages/dreaction-react-native:
+    dependencies:
+      dreaction-client-core:
+        specifier: workspace:*
+        version: link:../client-core
+      dreaction-protocol:
+        specifier: workspace:*
+        version: link:../protocol
+    devDependencies:
+      typescript:
+        specifier: ^5.4.5
+        version: 5.7.2
 
   packages/protocol:
     dependencies:
