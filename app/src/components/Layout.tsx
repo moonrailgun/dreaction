@@ -1,18 +1,10 @@
 import { PropsWithChildren, useState } from 'react';
-import {
-  IconArrowsRightLeft,
-  IconCalendarStats,
-  IconDeviceDesktopAnalytics,
-  IconFingerprint,
-  IconGauge,
-  IconHome2,
-  IconSettings,
-  IconUser,
-} from '@tabler/icons-react';
+import { IconArrowsRightLeft, IconGauge, IconHome2 } from '@tabler/icons-react';
 import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import { MantineLogo } from '@mantinex/mantine-logo';
 import clsx from 'clsx';
 import { DeviceSwitcher } from './DeviceSwitcher';
+import { useLayoutStore } from '../store/layout';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -40,24 +32,23 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 }
 
 const mockdata = [
-  { icon: IconHome2, label: 'Home' },
-  { icon: IconGauge, label: 'Dashboard' },
-  { icon: IconDeviceDesktopAnalytics, label: 'Analytics' },
-  { icon: IconCalendarStats, label: 'Releases' },
-  { icon: IconUser, label: 'Account' },
-  { icon: IconFingerprint, label: 'Security' },
-  { icon: IconSettings, label: 'Settings' },
+  { key: 'home', icon: IconHome2, label: 'Home' },
+  { key: 'dashboard', icon: IconGauge, label: 'Dashboard' },
 ];
 
 export function Layout(props: PropsWithChildren) {
-  const [active, setActive] = useState(0);
+  const { activePage } = useLayoutStore();
 
-  const links = mockdata.map((link, index) => (
+  const handleChangeTab = (key: string) => {
+    useLayoutStore.setState({ activePage: key });
+  };
+
+  const links = mockdata.map((link) => (
     <NavbarLink
       {...link}
       key={link.label}
-      active={index === active}
-      onClick={() => setActive(index)}
+      active={link.key === activePage}
+      onClick={() => handleChangeTab(link.key)}
     />
   ));
 

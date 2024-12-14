@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { getIp } from '../utils/ip';
 import { port } from '../service/server';
 import { useDReactionServerContext } from '../context/DReaction';
+import { JSONView } from './JsonView';
 
 export const Home: React.FC = React.memo(() => {
   const [ip, setIp] = useState('');
@@ -27,7 +28,7 @@ export const Home: React.FC = React.memo(() => {
       </div>
 
       <div>
-        <pre>{JSON.stringify(context, null, 4)}</pre>
+        <JSONView data={context} />
       </div>
     </div>
   );

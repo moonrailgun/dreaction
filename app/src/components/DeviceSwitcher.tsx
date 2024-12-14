@@ -39,7 +39,7 @@ export const DeviceSwitcher: React.FC<PropsWithChildren> = React.memo(
                 <div>{React.createElement(getIcon(connection))}</div>
               }
               rightSection={
-                connection.clientId === selectedConnection.clientId && (
+                connection.clientId === selectedConnection?.clientId && (
                   <IconCheck style={{ width: rem(14), height: rem(14) }} />
                 )
               }

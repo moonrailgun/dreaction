@@ -24,6 +24,8 @@ import trackGlobalLogs from './plugins/trackGlobalLogs';
 import { getHostFromUrl } from './helpers/parseURL';
 import getReactNativePlatformConstants from './helpers/getReactNativePlatformConstants';
 
+export type { Command } from 'dreaction-protocol';
+
 const REACTOTRON_ASYNC_CLIENT_ID = '@REACTOTRON/clientId';
 
 let tempClientId: string | null = null;

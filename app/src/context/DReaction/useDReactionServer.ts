@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { Command } from 'dreaction-server-core';
 
 export enum ActionTypes {
   ServerStarted = 'SERVER_STARTED',
@@ -25,7 +26,7 @@ export interface ReactotronConnection {
 }
 
 export interface Connection extends ReactotronConnection {
-  commands: any[];
+  commands: Command[];
   connected: boolean;
 }
 

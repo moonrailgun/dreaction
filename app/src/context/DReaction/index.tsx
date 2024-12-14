@@ -14,7 +14,7 @@ export { type Connection };
 interface Context {
   serverStatus: ServerStatus;
   connections: Connection[];
-  selectedConnection: Connection;
+  selectedConnection: Connection | null;
   selectConnection: (clientId: string) => void;
 }
 
@@ -22,7 +22,8 @@ const DReactionServerContext = React.createContext<Context>({
   serverStatus: 'stopped',
   connections: [],
   selectedConnection: null,
-  selectConnection: null,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  selectConnection: () => {},
 });
 
 export const DReactionServerProvider: React.FC<{
@@ -69,7 +70,7 @@ export const DReactionServerProvider: React.FC<{
     reactotronServer.current.start();
 
     return () => {
-      reactotronServer.current.stop();
+      reactotronServer.current?.stop();
     };
   }, [
     serverStarted,

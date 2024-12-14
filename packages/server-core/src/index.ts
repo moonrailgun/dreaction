@@ -1,6 +1,10 @@
 import { Server as WebSocketServer, OPEN, type RawData, WebSocket } from 'ws';
 import { EventEmitter } from 'eventemitter-strict';
 
+import type { Command } from 'dreaction-protocol';
+
+export { Command };
+
 interface ServerOptions {
   port: number;
 }
@@ -13,17 +17,6 @@ interface PartialConnection {
 }
 
 interface Connection extends PartialConnection {}
-
-interface Command {
-  type: string;
-  connectionId: number;
-  clientId?: string;
-  date: Date;
-  deltaTime: number;
-  important: boolean;
-  messageId: number;
-  payload: Record<string, any>;
-}
 
 /**
  * The default server options.

@@ -106,9 +106,9 @@ export interface ReactotronCore {
   plugins: Plugin<this>[];
   startTimer: () => () => number;
   close: () => void;
-  send: <Type extends CommandTypeKey, Payload extends Command<Type>['payload']>(
+  send: <Type extends keyof Command>(
     type: Type,
-    payload?: Payload,
+    payload?: Command[Type],
     important?: boolean
   ) => void;
   display: (config: DisplayConfig) => void;
