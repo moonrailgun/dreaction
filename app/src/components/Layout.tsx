@@ -1,5 +1,6 @@
 import { PropsWithChildren, useState } from 'react';
 import {
+  IconArrowsRightLeft,
   IconCalendarStats,
   IconDeviceDesktopAnalytics,
   IconFingerprint,
@@ -11,6 +12,7 @@ import {
 import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import { MantineLogo } from '@mantinex/mantine-logo';
 import clsx from 'clsx';
+import { DeviceSwitcher } from './DeviceSwitcher';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -71,9 +73,13 @@ export function Layout(props: PropsWithChildren) {
             {links}
           </Stack>
         </div>
+
+        <DeviceSwitcher>
+          <NavbarLink icon={IconArrowsRightLeft} label="Switcher" />
+        </DeviceSwitcher>
       </nav>
 
-      <div className="flex-1">{props.children}</div>
+      <div className="flex-1 h-full overflow-auto">{props.children}</div>
     </div>
   );
 }

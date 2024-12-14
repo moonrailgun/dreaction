@@ -26,7 +26,9 @@ export const Home: React.FC = React.memo(() => {
         </Blockquote>
       </div>
 
-      <div>{JSON.stringify(context, null, 4)}</div>
+      <div>
+        <pre>{JSON.stringify(context, null, 4)}</pre>
+      </div>
     </div>
   );
 });

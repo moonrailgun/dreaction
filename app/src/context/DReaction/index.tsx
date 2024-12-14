@@ -8,6 +8,8 @@ import {
   ServerStatus,
 } from './useDReactionServer';
 
+export { type Connection };
+
 // TODO: Move up to better places like core somewhere!
 interface Context {
   serverStatus: ServerStatus;
