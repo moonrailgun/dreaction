@@ -1,5 +1,6 @@
 import React from 'react';
 import { JSONTree } from 'react-json-tree';
+import { repairSerialization } from '../utils/repairSerialization';
 
 const theme = {
   scheme: 'monokai',
@@ -23,6 +24,12 @@ const theme = {
 };
 
 export const JSONView: React.FC<{ data: unknown }> = React.memo((props) => {
-  return <JSONTree theme={theme} data={props.data} invertTheme={true} />;
+  return (
+    <JSONTree
+      theme={theme}
+      data={repairSerialization(props.data)}
+      invertTheme={true}
+    />
+  );
 });
 JSONView.displayName = 'JSONView';

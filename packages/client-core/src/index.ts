@@ -323,7 +323,7 @@ export class ReactotronImpl
           ...client,
           name,
           clientId,
-          reactotronCoreClientVersion: 'REACTOTRON_CORE_CLIENT_VERSION',
+          dreactionCoreClientVersion: 'DREACTION_CORE_CLIENT_VERSION',
         });
 
         // flush the send queue

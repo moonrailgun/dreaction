@@ -66,6 +66,29 @@ const Item: React.FC<{
     );
   }
 
+  if (command.type === 'client.intro') {
+    return (
+      <Accordion.Item key={command.messageId} value={String(command.messageId)}>
+        <Accordion.Control>
+          <div className="flex gap-2 items-center">
+            <div>{command.date.toISOString()}</div>
+
+            <Badge color="indigo">Connect</Badge>
+
+            <div className="flex-1 overflow-hidden">
+              {command.payload.clientId}
+            </div>
+          </div>
+        </Accordion.Control>
+        <Accordion.Panel>
+          <div className="overflow-auto">
+            <JSONView data={command.payload} />
+          </div>
+        </Accordion.Panel>
+      </Accordion.Item>
+    );
+  }
+
   return (
     <Accordion.Item key={command.messageId} value={String(command.messageId)}>
       <Accordion.Control>{String(command)}</Accordion.Control>

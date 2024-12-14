@@ -75,7 +75,7 @@ const DEFAULTS: ClientOptions<ReactotronReactNative> = {
   environment: process.env.NODE_ENV || (__DEV__ ? 'development' : 'production'),
   client: {
     dreactionLibraryName: 'dreaction-react-native',
-    dreactionLibraryVersion: 'REACTOTRON_REACT_NATIVE_VERSION',
+    dreactionLibraryVersion: 'DREACTION_REACT_NATIVE_VERSION',
     platform: Platform.OS,
     platformVersion: Platform.Version,
     osRelease,
