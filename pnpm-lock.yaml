@@ -255,9 +255,6 @@ importers:
 
   packages/server-core:
     dependencies:
-      '@types/ws':
-        specifier: ^8.5.13
-        version: 8.5.13
       dreaction-protocol:
         specifier: workspace:*
         version: link:../protocol
@@ -271,6 +268,9 @@ importers:
       '@testing-library/dom':
         specifier: ^10.0.0
         version: 10.4.0
+      '@types/ws':
+        specifier: ^8.5.13
+        version: 8.5.13
       happy-dom:
         specifier: 15.11.6
         version: 15.11.6
