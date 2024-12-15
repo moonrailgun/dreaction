@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { getIp } from '../utils/ip';
 import { port } from '../service/server';
 import { useDReactionServerContext } from '../context/DReaction';
-import { JSONView } from './JsonView';
+import { omit } from 'lodash-es';
+import { getConnectionName, getIcon } from '../utils/connection';
+import { JSONView } from './JSONView';
 
 export const Home: React.FC = React.memo(() => {
   const [ip, setIp] = useState('');
@@ -13,10 +15,10 @@ export const Home: React.FC = React.memo(() => {
     });
   }, []);
 
-  const context = useDReactionServerContext();
+  const { selectedConnection } = useDReactionServerContext();
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       <div>
         <Blockquote color="blue" mt="xl">
           Connect to{' '}
@@ -27,9 +29,22 @@ export const Home: React.FC = React.memo(() => {
         </Blockquote>
       </div>
 
-      <div>
-        <JSONView data={context} />
-      </div>
+      {selectedConnection && (
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <div className="pl-4 font-semibold opacity-60 flex items-center gap-2">
+            Current Connnection:
+            {React.createElement(getIcon(selectedConnection))}
+            {getConnectionName(selectedConnection)}
+          </div>
+
+          <div className="flex-1 overflow-auto">
+            <JSONView
+              data={omit(selectedConnection, ['commands'])}
+              hideRoot={true}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 });

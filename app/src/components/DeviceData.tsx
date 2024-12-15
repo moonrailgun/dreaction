@@ -4,6 +4,7 @@ import { entries, groupBy, last } from 'lodash-es';
 import { JSONView } from './JsonView';
 import { List } from '@mantine/core';
 import { DataRender } from './DataRender';
+import { repairSerialization } from '../utils/repairSerialization';
 
 export const DeviceData: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
@@ -21,7 +22,7 @@ export const DeviceData: React.FC = React.memo(() => {
       {dataList.length === 0 && <div>No any data has been register</div>}
 
       {dataList.map(([name, list]) => {
-        const payload = last(list)?.payload;
+        const payload = repairSerialization(last(list)?.payload);
 
         return (
           <div

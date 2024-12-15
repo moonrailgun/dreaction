@@ -27,7 +27,7 @@ replacements['~~~ -Infinity ~~~'] = -Infinity;
  * @param payload The object
  * @return The same object with some values replaced.
  */
-export function repairSerialization(payload: any) {
+export function repairSerialization<T = any>(payload: T): T {
   // we only want objects
   if (typeof payload !== 'object') {
     return payload;

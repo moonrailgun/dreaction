@@ -4,6 +4,8 @@ import { Command } from 'dreaction-server-core';
 import { Accordion, Badge, SegmentedControl, Tabs } from '@mantine/core';
 import { JSONView } from './JsonView';
 import { renderDeviceLogsDate } from '../utils/date';
+import { CopyText } from './CopyText';
+import { apiRequestToCurl } from '../utils/api';
 
 export const DeviceLogs: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
@@ -140,25 +142,57 @@ const Item: React.FC<{
         title={String(command.payload.request.url)}
         body={
           <Tabs defaultValue="summary">
-            <Tabs.List>
+            <Tabs.List className="items-center">
               <Tabs.Tab value="summary">Summary</Tabs.Tab>
               <Tabs.Tab value="request">Request</Tabs.Tab>
               <Tabs.Tab value="response">Response</Tabs.Tab>
+
+              <div className="w-4" />
+              <CopyText
+                label="Copy as curl"
+                value={apiRequestToCurl(command.payload)}
+              />
             </Tabs.List>
 
             <Tabs.Panel value="summary">
-              <div>Url: {command.payload.request.url}</div>
-              <div>Method: {command.payload.request.method}</div>
               <div>
-                Duration: {command.payload.duration}
+                <span className="opacity-60 text-xs mr-2">Url:</span>
+                <span className="text-sm">{command.payload.request.url}</span>
+              </div>
+              <div>
+                <span className="opacity-60 text-xs mr-2">Method:</span>
+                <Badge>{command.payload.request.method}</Badge>
+              </div>
+              <div>
+                <span className="opacity-60 text-xs mr-2">Duration:</span>
+                {Math.round(command.payload.duration)}
                 <span className="text-gray-500 ml-1">ms</span>
               </div>
-              <div>Request Header</div>
+              <div className="flex gap-1 items-center">
+                <span className="opacity-60 text-xs">Request Header</span>
+
+                <CopyText
+                  value={JSON.stringify(
+                    command.payload.request.headers || {},
+                    null,
+                    2
+                  )}
+                />
+              </div>
               <JSONView
                 data={command.payload.request.headers}
                 hideRoot={true}
               />
-              <div>Response Header</div>
+              <div className="flex gap-1 items-center">
+                <span className="opacity-60 text-xs">Response Header</span>
+                <CopyText
+                  value={JSON.stringify(
+                    command.payload.response.headers || {},
+                    null,
+                    2
+                  )}
+                />
+              </div>
               <JSONView
                 data={command.payload.response.headers}
                 hideRoot={true}
