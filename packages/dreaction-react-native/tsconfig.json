@@ -3,14 +3,10 @@
   "compilerOptions": {
     "module": "CommonJS",
     "outDir": "./lib",
-    "baseUrl": ".",
+    // "baseUrl": ".",
     "declaration": true,
     "declarationMap": true,
     "noEmit": false,
-    // "typeRoots": [
-    //   "./node_modules/@types",
-    //   "./types"
-    // ]
   },
   "include": ["./src/**/*"]
 }

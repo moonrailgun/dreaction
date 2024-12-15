@@ -105,7 +105,7 @@ export interface DReactionCore {
   options: ClientOptions<this>;
   plugins: Plugin<this>[];
   startTimer: () => () => number;
-  close: () => void;
+  close: () => this;
   send: <Type extends keyof CommandMap>(
     type: Type,
     payload?: CommandMap[Type],
@@ -188,7 +188,7 @@ export class ReactotronImpl
   implements
     Omit<
       DReactionCore,
-      'options' | 'plugins' | 'configure' | 'connect' | 'use'
+      'options' | 'plugins' | 'configure' | 'connect' | 'use' | 'close'
     >
 {
   // the configuration options
@@ -282,6 +282,8 @@ export class ReactotronImpl
   close() {
     this.connected = false;
     this.socket && this.socket.close && this.socket.close();
+
+    return this;
   }
 
   /**

@@ -5,8 +5,8 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
+    "dev": "tsc --watch",
     "build": "tsc",
-    "watch": "tsc --watch",
     "prepare": "tsc",
     "test": "vitest"
   },
