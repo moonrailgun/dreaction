@@ -23,14 +23,15 @@ const theme = {
   base0F: '#cc6633',
 };
 
-export const JSONView: React.FC<{ data: unknown }> = React.memo((props) => {
-  return (
-    <JSONTree
-      theme={theme}
-      data={repairSerialization(props.data)}
-      invertTheme={true}
-      // hideRoot={true}
-    />
-  );
-});
+export const JSONView: React.FC<{ data: unknown; hideRoot?: boolean }> =
+  React.memo((props) => {
+    return (
+      <JSONTree
+        theme={theme}
+        data={repairSerialization(props.data)}
+        invertTheme={true}
+        hideRoot={props.hideRoot ?? false}
+      />
+    );
+  });
 JSONView.displayName = 'JSONView';

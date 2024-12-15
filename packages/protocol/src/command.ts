@@ -1,4 +1,5 @@
 import type { LogPayload } from './log';
+import { NetworkPayload } from './network';
 import { EditorOpenPayload } from './openInEditor';
 import type {
   StateActionCompletePayload,
@@ -50,7 +51,7 @@ export const CommandType = {
 export type CommandTypeKey = (typeof CommandType)[keyof typeof CommandType];
 
 export interface CommandMap {
-  [CommandType.ApiResponse]: any;
+  [CommandType.ApiResponse]: NetworkPayload;
   [CommandType.AsyncStorageMutation]: any;
   [CommandType.Benchmark]: any;
   [CommandType.ClientIntro]: any;

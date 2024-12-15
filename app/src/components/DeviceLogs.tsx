@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { Command } from 'dreaction-server-core';
-import { Accordion, Badge, SegmentedControl } from '@mantine/core';
+import { Accordion, Badge, SegmentedControl, Tabs } from '@mantine/core';
 import { JSONView } from './JsonView';
 import { renderDeviceLogsDate } from '../utils/date';
 
@@ -126,6 +126,52 @@ const Item: React.FC<{
         tag={<Badge color="indigo">Connect</Badge>}
         title={command.payload.clientId}
         body={<JSONView data={command.payload} />}
+      />
+    );
+  }
+
+  if (command.type === 'api.response') {
+    return (
+      <ItemContainer
+        command={command}
+        tag={<Badge color="violet">{command.payload.request.method}</Badge>}
+        title={String(command.payload.request.url)}
+        body={
+          <Tabs defaultValue="summary">
+            <Tabs.List>
+              <Tabs.Tab value="summary">Summary</Tabs.Tab>
+              <Tabs.Tab value="request">Request</Tabs.Tab>
+              <Tabs.Tab value="response">Response</Tabs.Tab>
+            </Tabs.List>
+
+            <Tabs.Panel value="summary">
+              <div>Url: {command.payload.request.url}</div>
+              <div>Method: {command.payload.request.method}</div>
+              <div>
+                Duration: {command.payload.duration}
+                <span className="text-gray-500 ml-1">ms</span>
+              </div>
+              <div>Request Header</div>
+              <JSONView
+                data={command.payload.request.headers}
+                hideRoot={true}
+              />
+              <div>Response Header</div>
+              <JSONView
+                data={command.payload.response.headers}
+                hideRoot={true}
+              />
+            </Tabs.Panel>
+
+            <Tabs.Panel value="request">
+              <JSONView data={command.payload.request.data} />
+            </Tabs.Panel>
+
+            <Tabs.Panel value="response">
+              <JSONView data={command.payload.response} />
+            </Tabs.Panel>
+          </Tabs>
+        }
       />
     );
   }
