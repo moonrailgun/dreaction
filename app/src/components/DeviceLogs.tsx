@@ -1,24 +1,47 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { Command } from 'dreaction-server-core';
-import { Accordion, Badge } from '@mantine/core';
+import { Accordion, Badge, SegmentedControl } from '@mantine/core';
 import { JSONView } from './JsonView';
-import dayjs from 'dayjs';
 import { renderDeviceLogsDate } from '../utils/date';
 
 export const DeviceLogs: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
+  const [filter, setFilter] = useState('all');
 
-  const commands = selectedConnection?.commands ?? [];
+  const commands = useMemo(() => {
+    const commands = selectedConnection?.commands ?? [];
+
+    if (filter === 'logs') {
+      return commands.filter((command) => command.type === 'log');
+    }
+
+    if (filter === 'network') {
+      return commands.filter((command) => command.type === 'api.response');
+    }
+
+    return commands;
+  }, [selectedConnection, filter]);
 
   return (
-    <Accordion multiple={true}>
-      {commands.map((command) => (
-        <div key={command.messageId}>
-          <Item command={command} />
-        </div>
-      ))}
-    </Accordion>
+    <div>
+      <SegmentedControl
+        value={filter}
+        onChange={setFilter}
+        data={[
+          { label: 'All', value: 'all' },
+          { label: 'Logs', value: 'logs' },
+          { label: 'Network', value: 'network' },
+        ]}
+      />
+      <Accordion multiple={true}>
+        {commands.map((command) => (
+          <div key={command.messageId}>
+            <Item command={command} />
+          </div>
+        ))}
+      </Accordion>
+    </div>
   );
 });
 DeviceLogs.displayName = 'DeviceLogs';
