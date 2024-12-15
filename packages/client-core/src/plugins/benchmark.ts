@@ -1,9 +1,9 @@
-import type { ReactotronCore, Plugin } from '../';
+import type { DReactionCore, Plugin } from '../';
 
 /**
  * Runs small high-unscientific benchmarks for you.
  */
-const benchmark = () => (reactotron: ReactotronCore) => {
+const benchmark = () => (reactotron: DReactionCore) => {
   const { startTimer } = reactotron;
 
   const benchmark = (title: string) => {
@@ -29,7 +29,7 @@ const benchmark = () => (reactotron: ReactotronCore) => {
 
   return {
     features: { benchmark },
-  } satisfies Plugin<ReactotronCore>;
+  } satisfies Plugin<DReactionCore>;
 };
 
 export default benchmark;

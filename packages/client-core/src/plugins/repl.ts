@@ -1,9 +1,9 @@
-import type { ReactotronCore, Plugin } from '../';
+import type { DReactionCore, Plugin } from '../';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type AcceptableRepls = object | Function | string | number;
 
-const repl = () => (reactotron: ReactotronCore) => {
+const repl = () => (reactotron: DReactionCore) => {
   const myRepls: { [key: string]: AcceptableRepls } = {};
   // let currentContext = null
   return {
@@ -58,6 +58,6 @@ const repl = () => (reactotron: ReactotronCore) => {
         myRepls[name] = value;
       },
     },
-  } satisfies Plugin<ReactotronCore>;
+  } satisfies Plugin<DReactionCore>;
 };
 export default repl;

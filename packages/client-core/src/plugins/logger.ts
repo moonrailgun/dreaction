@@ -1,27 +1,27 @@
-import type { ReactotronCore, Plugin, InferFeatures } from '../';
+import type { DReactionCore, Plugin, InferFeatures } from '../';
 
 /**
  * Provides 4 features for logging.  log & debug are the same.
  */
-const logger = () => (reactotron: ReactotronCore) => {
+const logger = () => (dreaction: DReactionCore) => {
   return {
     features: {
       log: (...args) => {
         const content = args && args.length === 1 ? args[0] : args;
-        reactotron.send('log', { level: 'debug', message: content }, false);
+        dreaction.send('log', { level: 'debug', message: content }, false);
       },
       logImportant: (...args) => {
         const content = args && args.length === 1 ? args[0] : args;
-        reactotron.send('log', { level: 'debug', message: content }, true);
+        dreaction.send('log', { level: 'debug', message: content }, true);
       },
       debug: (message, important = false) =>
-        reactotron.send('log', { level: 'debug', message }, !!important),
+        dreaction.send('log', { level: 'debug', message }, !!important),
       warn: (message) =>
-        reactotron.send('log', { level: 'warn', message }, true),
+        dreaction.send('log', { level: 'warn', message }, true),
       error: (message, stack) =>
-        reactotron.send('log', { level: 'error', message, stack }, true),
+        dreaction.send('log', { level: 'error', message, stack }, true),
     },
-  } satisfies Plugin<ReactotronCore>;
+  } satisfies Plugin<DReactionCore>;
 };
 
 export default logger;
@@ -29,29 +29,29 @@ export default logger;
 export type LoggerPlugin = ReturnType<typeof logger>;
 
 export const hasLoggerPlugin = (
-  reactotron: ReactotronCore
-): reactotron is ReactotronCore &
-  InferFeatures<ReactotronCore, ReturnType<typeof logger>> => {
+  dreaction: DReactionCore
+): dreaction is DReactionCore &
+  InferFeatures<DReactionCore, ReturnType<typeof logger>> => {
   return (
-    reactotron &&
-    'log' in reactotron &&
-    typeof reactotron.log === 'function' &&
-    'logImportant' in reactotron &&
-    typeof reactotron.logImportant === 'function' &&
-    'debug' in reactotron &&
-    typeof reactotron.debug === 'function' &&
-    'warn' in reactotron &&
-    typeof reactotron.warn === 'function' &&
-    'error' in reactotron &&
-    typeof reactotron.error === 'function'
+    dreaction &&
+    'log' in dreaction &&
+    typeof dreaction.log === 'function' &&
+    'logImportant' in dreaction &&
+    typeof dreaction.logImportant === 'function' &&
+    'debug' in dreaction &&
+    typeof dreaction.debug === 'function' &&
+    'warn' in dreaction &&
+    typeof dreaction.warn === 'function' &&
+    'error' in dreaction &&
+    typeof dreaction.error === 'function'
   );
 };
 
 export const assertHasLoggerPlugin = (
-  reactotron: ReactotronCore
-): asserts reactotron is ReactotronCore &
-  InferFeatures<ReactotronCore, ReturnType<typeof logger>> => {
-  if (!hasLoggerPlugin(reactotron)) {
+  dreaction: DReactionCore
+): asserts dreaction is DReactionCore &
+  InferFeatures<DReactionCore, ReturnType<typeof logger>> => {
+  if (!hasLoggerPlugin(dreaction)) {
     throw new Error(
       'This Reactotron client has not had the logger plugin applied to it. Make sure that you add `use(logger())` before adding this plugin.'
     );

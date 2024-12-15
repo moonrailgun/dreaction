@@ -1,4 +1,4 @@
-import type { ReactotronCore, Plugin } from '../';
+import type { DReactionCore, Plugin } from '../';
 
 export interface ImagePayload {
   uri: string;
@@ -12,7 +12,7 @@ export interface ImagePayload {
 /**
  * Provides an image.
  */
-const image = () => (reactotron: ReactotronCore) => {
+const image = () => (reactotron: DReactionCore) => {
   return {
     features: {
       // expanded just to show the specs
@@ -28,7 +28,7 @@ const image = () => (reactotron: ReactotronCore) => {
         });
       },
     },
-  } satisfies Plugin<ReactotronCore>;
+  } satisfies Plugin<DReactionCore>;
 };
 
 export default image;

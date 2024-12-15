@@ -101,7 +101,7 @@ type InferFeaturesFromPlugin<
   P extends PluginCreator<Client>
 > = UnionToIntersection<PluginFeatures<Client, P>>;
 
-export interface ReactotronCore {
+export interface DReactionCore {
   options: ClientOptions<this>;
   plugins: Plugin<this>[];
   startTimer: () => () => number;
@@ -134,7 +134,7 @@ export interface ReactotronCore {
 }
 
 export type InferFeatures<
-  Client = ReactotronCore,
+  Client = DReactionCore,
   PC extends PluginCreator<Client> = PluginCreator<Client>
 > = PC extends (client: Client) => { features: infer U } ? U : never;
 
@@ -146,7 +146,7 @@ export const corePlugins = [
   apiResponse(),
   clear(),
   repl(),
-] satisfies PluginCreator<ReactotronCore>[];
+] satisfies PluginCreator<DReactionCore>[];
 
 export type InferPluginsFromCreators<
   Client,
@@ -157,12 +157,12 @@ export type InferPluginsFromCreators<
 // #endregion
 
 type CorePluginFeatures = InferFeaturesFromPlugins<
-  ReactotronCore,
+  DReactionCore,
   typeof corePlugins
 >;
 
 // export interface Reactotron extends ReactotronCore, CorePluginFeatures {}
-export interface Reactotron extends ReactotronCore {}
+export interface Reactotron extends DReactionCore {}
 
 // these are not for you.
 const reservedFeatures = [
@@ -187,12 +187,12 @@ function emptyPromise() {
 export class ReactotronImpl
   implements
     Omit<
-      ReactotronCore,
+      DReactionCore,
       'options' | 'plugins' | 'configure' | 'connect' | 'use'
     >
 {
   // the configuration options
-  options!: ClientOptions<ReactotronCore>;
+  options!: ClientOptions<DReactionCore>;
 
   /**
    * Are we connected to a server?
@@ -260,7 +260,7 @@ export class ReactotronImpl
         onCommand: () => null,
         onConnect: () => null,
         onDisconnect: () => null,
-      } satisfies ClientOptions<ReactotronCore>,
+      } satisfies ClientOptions<DReactionCore>,
       this.options,
       options
     );
@@ -647,7 +647,7 @@ export class ReactotronImpl
 }
 
 // convenience factory function
-export function createClient<Client extends ReactotronCore = ReactotronCore>(
+export function createClient<Client extends DReactionCore = DReactionCore>(
   options?: ClientOptions<Client>
 ) {
   const client = new ReactotronImpl();

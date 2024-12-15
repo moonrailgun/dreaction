@@ -5,12 +5,12 @@ import type {
   StateValuesChangePayload,
   StateValuesResponsePayload,
 } from 'dreaction-protocol';
-import type { ReactotronCore, Plugin, InferFeatures } from '../';
+import type { DReactionCore, Plugin, InferFeatures } from '../';
 
 /**
  * Provides helper functions for send state responses.
  */
-const stateResponse = () => (reactotron: ReactotronCore) => {
+const stateResponse = () => (reactotron: DReactionCore) => {
   return {
     features: {
       stateActionComplete: (
@@ -40,7 +40,7 @@ const stateResponse = () => (reactotron: ReactotronCore) => {
       stateBackupResponse: (state: StateBackupResponsePayload['state']) =>
         reactotron.send('state.backup.response', { state }),
     },
-  } satisfies Plugin<ReactotronCore>;
+  } satisfies Plugin<DReactionCore>;
 };
 
 export type StateResponsePlugin = ReturnType<typeof stateResponse>;
@@ -48,9 +48,9 @@ export type StateResponsePlugin = ReturnType<typeof stateResponse>;
 export default stateResponse;
 
 export const hasStateResponsePlugin = (
-  reactotron: ReactotronCore
-): reactotron is ReactotronCore &
-  InferFeatures<ReactotronCore, ReturnType<typeof stateResponse>> =>
+  reactotron: DReactionCore
+): reactotron is DReactionCore &
+  InferFeatures<DReactionCore, ReturnType<typeof stateResponse>> =>
   reactotron &&
   'stateActionComplete' in reactotron &&
   typeof reactotron.stateActionComplete === 'function' &&
@@ -64,9 +64,9 @@ export const hasStateResponsePlugin = (
   typeof reactotron.stateBackupResponse === 'function';
 
 export const assertHasStateResponsePlugin = (
-  reactotron: ReactotronCore
-): asserts reactotron is ReactotronCore &
-  InferFeatures<ReactotronCore, ReturnType<typeof stateResponse>> => {
+  reactotron: DReactionCore
+): asserts reactotron is DReactionCore &
+  InferFeatures<DReactionCore, ReturnType<typeof stateResponse>> => {
   if (!hasStateResponsePlugin(reactotron)) {
     throw new Error(
       'This Reactotron client has not had the state responses plugin applied to it. Make sure that you add `use(stateResponse())` before adding this plugin.'

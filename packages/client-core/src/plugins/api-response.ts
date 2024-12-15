@@ -1,9 +1,9 @@
-import type { ReactotronCore, Plugin } from '../';
+import type { DReactionCore, Plugin } from '../';
 
 /**
  * Sends API request/response information.
  */
-const apiResponse = () => (reactotron: ReactotronCore) => {
+const apiResponse = () => (reactotron: DReactionCore) => {
   return {
     features: {
       apiResponse: (
@@ -25,7 +25,7 @@ const apiResponse = () => (reactotron: ReactotronCore) => {
         );
       },
     },
-  } satisfies Plugin<ReactotronCore>;
+  } satisfies Plugin<DReactionCore>;
 };
 
 export default apiResponse;

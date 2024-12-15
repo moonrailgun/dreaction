@@ -1,9 +1,9 @@
 import type { ClientOptions } from './client-options';
-import type { ReactotronCore } from './';
+import type { DReactionCore } from './';
 
 const isCreateSocketValid = (
   createSocket: unknown
-): createSocket is ClientOptions<ReactotronCore>['createSocket'] =>
+): createSocket is ClientOptions<DReactionCore>['createSocket'] =>
   typeof createSocket !== 'undefined' && createSocket !== null;
 const isHostValid = (host: string): boolean =>
   (typeof host === 'string' && host && host !== '') as boolean;
@@ -15,7 +15,7 @@ const onCommandValid = (fn: (cmd: string) => any) => typeof fn === 'function';
  * Ensures the options are sane to run this baby.  Throw if not.  These
  * are basically sanity checks.
  */
-const validate = (options: ClientOptions<ReactotronCore>) => {
+const validate = (options: ClientOptions<DReactionCore>) => {
   const { createSocket, host, port, onCommand } = options;
 
   if (!isCreateSocketValid(createSocket)) {
