@@ -29,6 +29,7 @@ export const JSONView: React.FC<{ data: unknown }> = React.memo((props) => {
       theme={theme}
       data={repairSerialization(props.data)}
       invertTheme={true}
+      // hideRoot={true}
     />
   );
 });

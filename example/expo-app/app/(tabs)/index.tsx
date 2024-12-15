@@ -36,6 +36,17 @@ export default function TabOneScreen() {
       >
         <Text>Click here to console misc</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          fetch('https://github.com/moonrailgun/dreaction')
+            .then((response) => response.text())
+            .then((data) => console.log(data))
+            .catch((error) => console.error(error));
+        }}
+      >
+        <Text>Click here to send network request</Text>
+      </TouchableOpacity>
     </View>
   );
 }

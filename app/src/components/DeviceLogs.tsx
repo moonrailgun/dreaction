@@ -3,6 +3,8 @@ import { useDReactionServerContext } from '../context/DReaction';
 import { Command } from 'dreaction-server-core';
 import { Accordion, Badge } from '@mantine/core';
 import { JSONView } from './JsonView';
+import dayjs from 'dayjs';
+import { renderDeviceLogsDate } from '../utils/date';
 
 export const DeviceLogs: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
@@ -20,6 +22,44 @@ export const DeviceLogs: React.FC = React.memo(() => {
   );
 });
 DeviceLogs.displayName = 'DeviceLogs';
+
+const ItemContainer: React.FC<{
+  command: Command;
+  tag?: React.ReactNode;
+  title: React.ReactNode;
+  body: React.ReactNode;
+}> = React.memo((props) => {
+  const { command, tag, title, body } = props;
+  const { messageId, date } = command;
+
+  return (
+    <Accordion.Item key={messageId} value={String(messageId)}>
+      <Accordion.Control>
+        <div className="flex gap-2 items-center">
+          <ItemDate date={date} />
+          {tag}
+          <div className="flex-1 overflow-hidden whitespace-nowrap text-ellipsis">
+            {title}
+          </div>
+        </div>
+      </Accordion.Control>
+      <Accordion.Panel>
+        <div className="overflow-auto">{body}</div>
+      </Accordion.Panel>
+    </Accordion.Item>
+  );
+});
+ItemContainer.displayName = 'ItemContainer';
+
+const ItemDate: React.FC<{
+  date: Date;
+}> = React.memo((props) => {
+  const { date } = props;
+
+  return (
+    <div className="text-xs text-gray-500">{renderDeviceLogsDate(date)}</div>
+  );
+});
 
 const Item: React.FC<{
   command: Command;
@@ -47,55 +87,33 @@ const Item: React.FC<{
     }
 
     return (
-      <Accordion.Item key={command.messageId} value={String(command.messageId)}>
-        <Accordion.Control>
-          <div className="flex gap-2 items-center">
-            <div>{command.date.toISOString()}</div>
-
-            <Badge color={color}>{command.payload.level}</Badge>
-
-            <div className="flex-1 overflow-hidden">
-              {JSON.stringify(command.payload.message)}
-            </div>
-          </div>
-        </Accordion.Control>
-        <Accordion.Panel>
-          <div className="overflow-auto">{body}</div>
-        </Accordion.Panel>
-      </Accordion.Item>
+      <ItemContainer
+        command={command}
+        tag={<Badge color={color}>{command.payload.level}</Badge>}
+        title={JSON.stringify(command.payload.message)}
+        body={body}
+      />
     );
   }
 
   if (command.type === 'client.intro') {
     return (
-      <Accordion.Item key={command.messageId} value={String(command.messageId)}>
-        <Accordion.Control>
-          <div className="flex gap-2 items-center">
-            <div>{command.date.toISOString()}</div>
-
-            <Badge color="indigo">Connect</Badge>
-
-            <div className="flex-1 overflow-hidden">
-              {command.payload.clientId}
-            </div>
-          </div>
-        </Accordion.Control>
-        <Accordion.Panel>
-          <div className="overflow-auto">
-            <JSONView data={command.payload} />
-          </div>
-        </Accordion.Panel>
-      </Accordion.Item>
+      <ItemContainer
+        command={command}
+        tag={<Badge color="indigo">Connect</Badge>}
+        title={command.payload.clientId}
+        body={<JSONView data={command.payload} />}
+      />
     );
   }
 
   return (
-    <Accordion.Item key={command.messageId} value={String(command.messageId)}>
-      <Accordion.Control>{String(command)}</Accordion.Control>
-      <Accordion.Panel>
-        <div>{JSON.stringify(command)}</div>
-      </Accordion.Panel>
-    </Accordion.Item>
+    <ItemContainer
+      command={command}
+      tag={<Badge color="gray">Unknown</Badge>}
+      title={String(command.type)}
+      body={<JSONView data={command} />}
+    />
   );
 });
 Item.displayName = 'Item';
