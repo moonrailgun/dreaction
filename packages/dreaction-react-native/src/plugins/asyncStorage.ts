@@ -1,4 +1,4 @@
-import type { ReactotronCore, Plugin } from 'dreaction-client-core';
+import type { DReactionCore, Plugin } from 'dreaction-client-core';
 // @ts-ignore
 import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage';
 export interface AsyncStorageOptions {
@@ -10,7 +10,7 @@ const PLUGIN_DEFAULTS: AsyncStorageOptions = {
 };
 
 const asyncStorage =
-  (options?: AsyncStorageOptions) => (reactotron: ReactotronCore) => {
+  (options?: AsyncStorageOptions) => (reactotron: DReactionCore) => {
     // setup configuration
     const config = Object.assign({}, PLUGIN_DEFAULTS, options || {});
     const ignore = config.ignore || PLUGIN_DEFAULTS.ignore;
@@ -216,7 +216,7 @@ const asyncStorage =
         trackAsyncStorage,
         untrackAsyncStorage,
       },
-    } satisfies Plugin<ReactotronCore>;
+    } satisfies Plugin<DReactionCore>;
   };
 
 export default asyncStorage;

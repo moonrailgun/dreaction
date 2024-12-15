@@ -3,10 +3,11 @@ import { MantineProvider } from '@mantine/core';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { DReactionServerProvider } from './context/DReaction';
-
-import '@mantine/core/styles.css';
 import { useLayoutStore } from './store/layout';
 import { DeviceLogs } from './components/DeviceLogs';
+import { DeviceData } from './components/DeviceData';
+
+import '@mantine/core/styles.css';
 
 export const App: React.FC = () => {
   const activePage = useLayoutStore((state) => state.activePage);
@@ -18,6 +19,8 @@ export const App: React.FC = () => {
           {activePage === 'home' && <Home />}
 
           {activePage === 'dashboard' && <DeviceLogs />}
+
+          {activePage === 'dataWatch' && <DeviceData />}
         </Layout>
       </MantineProvider>
     </DReactionServerProvider>

@@ -1,9 +1,28 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
-
-import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
+import { useState } from 'react';
+import {
+  useDebugCounter,
+  useDebugList,
+  useDebugObject,
+} from '@/utils/dreaction';
 
 export default function TabOneScreen() {
+  const [counter, setCounter] = useState(0);
+  const [arr, setArr] = useState<number[]>([]);
+
+  useDebugCounter(counter);
+  useDebugList(arr);
+  useDebugObject({ foo: 'bar' });
+
+  const handleRandomArray = () => {
+    const randomArray = Array.from(
+      { length: Math.round(Math.random() * 100) },
+      () => Math.floor(Math.random() * 100)
+    );
+    setArr(randomArray);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
@@ -46,6 +65,20 @@ export default function TabOneScreen() {
         }}
       >
         <Text>Click here to send network request</Text>
+      </TouchableOpacity>
+
+      <View>
+        <Text>Counter: {counter}</Text>
+      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setCounter(counter + 1)}
+      >
+        <Text>Click here to increase counter</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleRandomArray}>
+        <Text>Click here to set random array</Text>
       </TouchableOpacity>
     </View>
   );

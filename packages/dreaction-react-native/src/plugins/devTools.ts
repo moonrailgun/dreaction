@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import type { ReactotronCore, Plugin } from 'dreaction-client-core';
+import type { DReactionCore, Plugin } from 'dreaction-client-core';
 
 let DevMenu = { show: () => {}, reload: () => {} };
 if (Platform.OS === 'ios') {
@@ -23,7 +23,7 @@ const devTools: any = () => () => {
         DevMenu.reload();
       }
     },
-  } satisfies Plugin<ReactotronCore>;
+  } satisfies Plugin<DReactionCore>;
 };
 
 export default devTools;

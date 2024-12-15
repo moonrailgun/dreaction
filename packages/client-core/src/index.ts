@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import type { Command, CommandTypeKey } from 'dreaction-protocol';
+import type { Command, CommandMap, CommandTypeKey } from 'dreaction-protocol';
 import validate from './validate';
 import logger from './plugins/logger';
 import image from './plugins/image';
@@ -106,9 +106,9 @@ export interface DReactionCore {
   plugins: Plugin<this>[];
   startTimer: () => () => number;
   close: () => void;
-  send: <Type extends keyof Command>(
+  send: <Type extends keyof CommandMap>(
     type: Type,
-    payload?: Command[Type],
+    payload?: CommandMap[Type],
     important?: boolean
   ) => void;
   display: (config: DisplayConfig) => void;
@@ -412,12 +412,9 @@ export class ReactotronImpl
   /**
    * Sends a command to the server
    */
-  send = <
-    Type extends CommandTypeKey,
-    Payload extends Command<Type>['payload']
-  >(
+  send = <Type extends CommandTypeKey>(
     type: Type,
-    payload?: Payload,
+    payload?: CommandMap[Type]['payload'],
     important?: boolean
   ) => {
     // set the timing info

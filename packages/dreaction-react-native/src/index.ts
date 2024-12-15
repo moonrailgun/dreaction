@@ -5,7 +5,7 @@ import type {
   InferFeaturesFromPlugins,
   PluginCreator,
   Reactotron,
-  ReactotronCore,
+  DReactionCore,
 } from 'dreaction-client-core';
 // @ts-ignore
 import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage';
@@ -23,6 +23,8 @@ import devTools from './plugins/devTools';
 import trackGlobalLogs from './plugins/trackGlobalLogs';
 import { getHostFromUrl } from './helpers/parseURL';
 import getReactNativePlatformConstants from './helpers/getReactNativePlatformConstants';
+import { DataWatchPayload } from 'dreaction-protocol';
+import { useEffect } from 'react';
 
 export type { Command } from 'dreaction-protocol';
 
@@ -152,10 +154,10 @@ export const reactNativeCorePlugins = [
   openInEditor(),
   networking(),
   devTools(),
-] satisfies PluginCreator<ReactotronCore>[];
+] satisfies PluginCreator<DReactionCore>[];
 
 type ReactNativePluginFeatures = InferFeaturesFromPlugins<
-  ReactotronCore,
+  DReactionCore,
   typeof reactNativeCorePlugins
 >;
 
@@ -166,6 +168,13 @@ export interface ReactotronReactNative
   useReactNative: (options?: UseReactNativeOptions) => this;
   asyncStorageHandler?: AsyncStorageStatic;
   setAsyncStorageHandler: (asyncStorage: AsyncStorageStatic) => this;
+  registerDataWatcher: (
+    name: string,
+    type: DataWatchPayload['type']
+  ) => {
+    updateDebugValue: (data: unknown) => void;
+    useDebugDataWatch: (target: unknown) => void;
+  };
 }
 
 export const dreaction = createClient<ReactotronReactNative>(DEFAULTS);
@@ -212,6 +221,31 @@ dreaction.setAsyncStorageHandler = (asyncStorage: AsyncStorageStatic) => {
   dreaction.asyncStorageHandler = asyncStorage;
 
   return dreaction;
+};
+
+dreaction.registerDataWatcher = (
+  name: string,
+  type: DataWatchPayload['type']
+) => {
+  if (!__DEV__) {
+    return {
+      updateDebugValue: () => {},
+      useDebugDataWatch: () => {},
+    };
+  }
+
+  const updateDebugValue = (data: unknown) => {
+    dreaction.send('dataWatch', { name, type, data });
+  };
+
+  return {
+    updateDebugValue,
+    useDebugDataWatch: (target: unknown) => {
+      useEffect(() => {
+        updateDebugValue(target);
+      }, [target]);
+    },
+  };
 };
 
 export {

@@ -1,6 +1,6 @@
 // @ts-ignore
 import XHRInterceptor from 'react-native/Libraries/Network/XHRInterceptor';
-import type { ReactotronCore, Plugin } from 'dreaction-client-core';
+import type { DReactionCore, Plugin } from 'dreaction-client-core';
 
 /**
  * Don't include the response bodies for images by default.
@@ -16,7 +16,7 @@ const DEFAULTS: NetworkingOptions = {};
 
 const networking =
   (pluginConfig: NetworkingOptions = {}) =>
-  (reactotron: ReactotronCore) => {
+  (reactotron: DReactionCore) => {
     const options = Object.assign({}, DEFAULTS, pluginConfig);
 
     // a RegExp to suppress adding the body cuz it costs a lot to serialize
@@ -167,6 +167,6 @@ const networking =
         XHRInterceptor.setResponseCallback(onResponse);
         XHRInterceptor.enableInterception();
       },
-    } satisfies Plugin<ReactotronCore>;
+    } satisfies Plugin<DReactionCore>;
   };
 export default networking;

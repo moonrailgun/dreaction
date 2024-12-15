@@ -1,10 +1,10 @@
-import { PropsWithChildren, useState } from 'react';
-import { IconArrowsRightLeft, IconGauge, IconHome2 } from '@tabler/icons-react';
+import { PropsWithChildren } from 'react';
+import { IconArrowsRightLeft, IconHome2 } from '@tabler/icons-react';
 import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import { MantineLogo } from '@mantinex/mantine-logo';
 import clsx from 'clsx';
 import { DeviceSwitcher } from './DeviceSwitcher';
-import { useLayoutStore } from '../store/layout';
+import { menu, useLayoutStore } from '../store/layout';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -31,11 +31,6 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
   );
 }
 
-const mockdata = [
-  { key: 'home', icon: IconHome2, label: 'Home' },
-  { key: 'dashboard', icon: IconGauge, label: 'Dashboard' },
-];
-
 export function Layout(props: PropsWithChildren) {
   const { activePage } = useLayoutStore();
 
@@ -43,7 +38,7 @@ export function Layout(props: PropsWithChildren) {
     useLayoutStore.setState({ activePage: key });
   };
 
-  const links = mockdata.map((link) => (
+  const links = menu.map((link) => (
     <NavbarLink
       {...link}
       key={link.label}

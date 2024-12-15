@@ -1,7 +1,7 @@
 import {
   InferFeatures,
   LoggerPlugin,
-  ReactotronCore,
+  DReactionCore,
   assertHasLoggerPlugin,
   Plugin,
 } from 'dreaction-client-core';
@@ -9,10 +9,10 @@ import {
 /**
  * Track calls to console.log, console.warn, and console.debug and send them to Reactotron logger
  */
-const trackGlobalLogs = () => (reactotron: ReactotronCore) => {
+const trackGlobalLogs = () => (reactotron: DReactionCore) => {
   assertHasLoggerPlugin(reactotron);
-  const client = reactotron as ReactotronCore &
-    InferFeatures<ReactotronCore, LoggerPlugin>;
+  const client = reactotron as DReactionCore &
+    InferFeatures<DReactionCore, LoggerPlugin>;
 
   return {
     onConnect: () => {
@@ -36,7 +36,7 @@ const trackGlobalLogs = () => (reactotron: ReactotronCore) => {
 
       // console.error is taken care of by ./trackGlobalErrors.ts
     },
-  } satisfies Plugin<ReactotronCore>;
+  } satisfies Plugin<DReactionCore>;
 };
 
 export default trackGlobalLogs;

@@ -1,3 +1,4 @@
+import { DataWatchPayload } from './data';
 import type { LogPayload } from './log';
 import { NetworkPayload } from './network';
 import { EditorOpenPayload } from './openInEditor';
@@ -23,6 +24,7 @@ export const CommandType = {
   Display: 'display',
   Image: 'image',
   Log: 'log',
+  DataWatch: 'dataWatch',
   SagaTaskComplete: 'saga.task.complete',
   StateActionComplete: 'state.action.complete',
   StateKeysResponse: 'state.keys.response',
@@ -58,6 +60,7 @@ export interface CommandMap {
   [CommandType.Display]: any;
   [CommandType.Image]: any;
   [CommandType.Log]: LogPayload;
+  [CommandType.DataWatch]: DataWatchPayload;
   [CommandType.SagaTaskComplete]: any;
   [CommandType.StateActionComplete]: StateActionCompletePayload;
   [CommandType.StateKeysResponse]: StateKeysResponsePayload;

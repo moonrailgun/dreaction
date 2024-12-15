@@ -4,7 +4,7 @@
 import {
   InferFeatures,
   LoggerPlugin,
-  ReactotronCore,
+  DReactionCore,
   assertHasLoggerPlugin,
   Plugin,
 } from 'dreaction-client-core';
@@ -62,11 +62,11 @@ const objectifyError = (error: Error) => {
  * Track global errors and send them to Reactotron logger.
  */
 const trackGlobalErrors =
-  (options?: TrackGlobalErrorsOptions) => (reactotron: ReactotronCore) => {
+  (options?: TrackGlobalErrorsOptions) => (reactotron: DReactionCore) => {
     // make sure we have the logger plugin
     assertHasLoggerPlugin(reactotron);
-    const client = reactotron as ReactotronCore &
-      InferFeatures<ReactotronCore, LoggerPlugin>;
+    const client = reactotron as DReactionCore &
+      InferFeatures<DReactionCore, LoggerPlugin>;
 
     // setup configuration
     const config = Object.assign({}, PLUGIN_DEFAULTS, options || {});
@@ -150,7 +150,7 @@ const trackGlobalErrors =
       features: {
         reportError,
       },
-    } satisfies Plugin<ReactotronCore>;
+    } satisfies Plugin<DReactionCore>;
   };
 
 export default trackGlobalErrors;

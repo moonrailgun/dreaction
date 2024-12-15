@@ -1,4 +1,4 @@
-import type { ReactotronCore, Plugin } from 'dreaction-client-core';
+import type { DReactionCore, Plugin } from 'dreaction-client-core';
 import type { Command } from 'dreaction-protocol';
 
 export interface OpenInEditorOptions {
@@ -25,6 +25,6 @@ const openInEditor =
 
         fetch(url, { method, body: JSON.stringify(body) });
       },
-    } satisfies Plugin<ReactotronCore>;
+    } satisfies Plugin<DReactionCore>;
   };
 export default openInEditor;

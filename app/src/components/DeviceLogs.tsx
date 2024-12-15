@@ -20,7 +20,9 @@ export const DeviceLogs: React.FC = React.memo(() => {
       return commands.filter((command) => command.type === 'api.response');
     }
 
-    return commands;
+    return commands.filter(
+      (commands) => !['dataWatch'].includes(commands.type)
+    );
   }, [selectedConnection, filter]);
 
   return (

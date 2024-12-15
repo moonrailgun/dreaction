@@ -20,6 +20,7 @@ const apiResponse = () => (reactotron: DReactionCore) => {
         const important = !ok;
         reactotron.send(
           'api.response',
+          // @ts-ignore
           { request, response, duration },
           important
         );
