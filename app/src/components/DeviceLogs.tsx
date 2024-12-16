@@ -1,14 +1,23 @@
 import React, { useMemo, useState } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { Command } from 'dreaction-server-core';
-import { Accordion, Badge, SegmentedControl, Tabs } from '@mantine/core';
+import {
+  Accordion,
+  ActionIcon,
+  Badge,
+  SegmentedControl,
+  Tabs,
+} from '@mantine/core';
 import { JSONView } from './JSONView';
 import { renderDeviceLogsDate } from '../utils/date';
 import { CopyText } from './CopyText';
 import { apiRequestToCurl } from '../utils/api';
+import { IconTrash } from '@tabler/icons-react';
+import { useDReactionServer } from '../context/DReaction/useDReactionServer';
 
 export const DeviceLogs: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
+  const { clearSelectedConnectionCommands } = useDReactionServer();
   const [filter, setFilter] = useState('all');
 
   const commands = useMemo(() => {
@@ -27,18 +36,36 @@ export const DeviceLogs: React.FC = React.memo(() => {
     );
   }, [selectedConnection, filter]);
 
+  const handleClear = () => {
+    clearSelectedConnectionCommands();
+  };
+
   return (
     <div>
-      <SegmentedControl
-        value={filter}
-        onChange={setFilter}
-        data={[
-          { label: 'All', value: 'all' },
-          { label: 'Logs', value: 'logs' },
-          { label: 'Network', value: 'network' },
-        ]}
-      />
+      <div className="flex items-center">
+        <SegmentedControl
+          value={filter}
+          onChange={setFilter}
+          data={[
+            { label: 'All', value: 'all' },
+            { label: 'Logs', value: 'logs' },
+            { label: 'Network', value: 'network' },
+          ]}
+        />
+
+        <div className="flex-1" />
+
+        <div>
+          <ActionIcon color={'gray'} variant="subtle" onClick={handleClear}>
+            <IconTrash />
+          </ActionIcon>
+        </div>
+      </div>
       <Accordion multiple={true}>
+        {commands.length === 0 && (
+          <div className="text-center opacity-60">No any logs yet.</div>
+        )}
+
         {commands.map((command) => (
           <div key={command.messageId}>
             <Item command={command} />
