@@ -36,7 +36,6 @@ export const DReactionServerProvider: React.FC<{
     connections,
     selectedClientId,
     selectConnection,
-    // clearSelectedConnectionCommands,
     serverStarted,
     serverStopped,
     connectionEstablished,

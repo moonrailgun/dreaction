@@ -5,7 +5,7 @@ export const DataRender: React.FC<{ data: unknown }> = React.memo((props) => {
   const { data } = props;
 
   if (typeof data === 'string') {
-    return <div>{data}</div>;
+    return <div className="break-words">{data}</div>;
   }
 
   if (typeof data === 'number') {
