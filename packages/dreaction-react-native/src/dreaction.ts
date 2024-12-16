@@ -60,10 +60,11 @@ export interface ReactotronReactNative
   useReactNative: (options?: UseReactNativeOptions) => this;
   asyncStorageHandler?: AsyncStorageStatic;
   setAsyncStorageHandler: (asyncStorage: AsyncStorageStatic) => this;
-  registerDataWatcher: (
+  registerDataWatcher: <T = unknown>(
     name: string,
     type: DataWatchPayload['type']
   ) => {
+    currentDebugValue: T | undefined;
     updateDebugValue: (data: unknown) => void;
     useDebugDataWatch: (target: unknown) => void;
   };
@@ -195,24 +196,35 @@ dreaction.setAsyncStorageHandler = (asyncStorage: AsyncStorageStatic) => {
   return dreaction;
 };
 
-dreaction.registerDataWatcher = (
+dreaction.registerDataWatcher = <T = unknown>(
   name: string,
   type: DataWatchPayload['type']
 ) => {
   if (!__DEV__) {
     return {
+      currentDebugValue: undefined,
       updateDebugValue: () => {},
       useDebugDataWatch: () => {},
     };
   }
 
-  const updateDebugValue = (data: unknown) => {
-    dreaction.send('dataWatch', { name, type, data });
+  let prev: T | undefined = undefined;
+
+  const updateDebugValue = (data: T | ((prev: T | undefined) => T)) => {
+    let newData = prev;
+    if (typeof data === 'function') {
+      newData = (data as (prev: T | undefined) => T)(prev);
+    } else {
+      newData = data;
+    }
+    prev = newData;
+    dreaction.send('dataWatch', { name, type, data: newData });
   };
 
   return {
+    currentDebugValue: prev,
     updateDebugValue,
-    useDebugDataWatch: (target: unknown) => {
+    useDebugDataWatch: (target: T) => {
       useEffect(() => {
         updateDebugValue(target);
       }, [target]);

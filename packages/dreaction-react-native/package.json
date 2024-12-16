@@ -1,6 +1,6 @@
 {
   "name": "dreaction-react-native",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "private": false,
   "description": "",
   "main": "lib/index.js",
@@ -11,6 +11,7 @@
     "test": "vitest"
   },
   "files": [
+    "assets",
     "lib",
     "src"
   ],
