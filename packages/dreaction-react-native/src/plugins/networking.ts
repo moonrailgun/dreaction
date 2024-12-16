@@ -12,7 +12,9 @@ export interface NetworkingOptions {
   ignoreUrls?: RegExp;
 }
 
-const DEFAULTS: NetworkingOptions = {};
+const DEFAULTS: NetworkingOptions = {
+  ignoreUrls: /symbolicate/,
+};
 
 const networking =
   (pluginConfig: NetworkingOptions = {}) =>

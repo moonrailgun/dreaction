@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Animated,
   PanResponder,
@@ -25,6 +25,17 @@ export const DraggableBall: React.FC = React.memo(() => {
   const lastPosition = useRef(initialPosition);
   const [isDragging, setIsDragging] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setConnected(dreaction.connected);
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   const handleClick = (value: string) => {
     try {
@@ -102,6 +113,7 @@ export const DraggableBall: React.FC = React.memo(() => {
           {
             transform: [{ translateX: position.x }, { translateY: position.y }],
             backgroundColor: isDragging ? '#eee' : '#fff',
+            borderColor: connected ? '#00ff00' : '#eee',
           },
         ]}
         {...panResponder.panHandlers}

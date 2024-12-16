@@ -102,6 +102,7 @@ type InferFeaturesFromPlugin<
 > = UnionToIntersection<PluginFeatures<Client, P>>;
 
 export interface DReactionCore {
+  connected: boolean;
   options: ClientOptions<this>;
   plugins: Plugin<this>[];
   startTimer: () => () => number;
@@ -253,7 +254,7 @@ export class ReactotronImpl
         createSocket: null as never,
         host: 'localhost',
         port: 9600,
-        name: 'reactotron-core-client',
+        name: 'dreaction-core-client',
         secure: false,
         plugins: corePlugins,
         safeRecursion: true,
