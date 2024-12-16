@@ -6,10 +6,13 @@ export const menu = [
   { key: 'dashboard', icon: IconGauge, label: 'Dashboard' },
   { key: 'dataWatch', icon: IconBinaryTree, label: 'DataWatch' },
 ] as const;
+
+export type ActivePage = (typeof menu)[number]['key'];
+
 export interface LayoutState {
-  activePage: (typeof menu)[number]['key'];
+  activePage: ActivePage;
 }
 
-export const useLayoutStore = create<LayoutState>((set) => ({
+export const useLayoutStore = create<LayoutState>(() => ({
   activePage: 'home',
 }));

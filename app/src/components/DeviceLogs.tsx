@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { Command } from 'dreaction-server-core';
 import { Accordion, Badge, SegmentedControl, Tabs } from '@mantine/core';
-import { JSONView } from './JsonView';
+import { JSONView } from './JSONView';
 import { renderDeviceLogsDate } from '../utils/date';
 import { CopyText } from './CopyText';
 import { apiRequestToCurl } from '../utils/api';

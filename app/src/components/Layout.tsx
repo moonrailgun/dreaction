@@ -4,7 +4,7 @@ import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import { MantineLogo } from '@mantinex/mantine-logo';
 import clsx from 'clsx';
 import { DeviceSwitcher } from './DeviceSwitcher';
-import { menu, useLayoutStore } from '../store/layout';
+import { ActivePage, menu, useLayoutStore } from '../store/layout';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -34,7 +34,7 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 export function Layout(props: PropsWithChildren) {
   const { activePage } = useLayoutStore();
 
-  const handleChangeTab = (key: string) => {
+  const handleChangeTab = (key: ActivePage) => {
     useLayoutStore.setState({ activePage: key });
   };
 

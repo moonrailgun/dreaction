@@ -1,14 +1,6 @@
 import React, { PropsWithChildren } from 'react';
-import { Button, Menu, rem, Text } from '@mantine/core';
-import {
-  IconArrowsLeftRight,
-  IconCheck,
-  IconMessageCircle,
-  IconPhoto,
-  IconSearch,
-  IconSettings,
-  IconTrash,
-} from '@tabler/icons-react';
+import { Menu, rem, Text } from '@mantine/core';
+import { IconCheck } from '@tabler/icons-react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { getConnectionName, getIcon } from '../utils/connection';
 

@@ -12,8 +12,9 @@ const devTools: any = () => () => {
       if (
         command.type !== 'devtools.open' &&
         command.type !== 'devtools.reload'
-      )
+      ) {
         return;
+      }
 
       if (command.type === 'devtools.open') {
         DevMenu.show();

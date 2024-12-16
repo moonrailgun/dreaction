@@ -1,5 +1,5 @@
 import React from 'react';
-import { JSONView } from './JsonView';
+import { JSONView } from './JSONView';
 
 export const DataRender: React.FC<{ data: unknown }> = React.memo((props) => {
   const { data } = props;

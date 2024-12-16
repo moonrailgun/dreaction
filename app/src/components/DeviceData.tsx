@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { entries, groupBy, last } from 'lodash-es';
-import { JSONView } from './JsonView';
+import { JSONView } from './JSONView';
 import { List } from '@mantine/core';
 import { DataRender } from './DataRender';
 import { repairSerialization } from '../utils/repairSerialization';

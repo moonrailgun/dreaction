@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Server, createServer } from 'dreaction-server-core';
 import { config } from '../../utils/config';
 
@@ -36,21 +36,21 @@ export const DReactionServerProvider: React.FC<{
     connections,
     selectedClientId,
     selectConnection,
-    clearSelectedConnectionCommands,
+    // clearSelectedConnectionCommands,
     serverStarted,
     serverStopped,
     connectionEstablished,
     commandReceived,
     connectionDisconnected,
-    addCommandListener,
+    // addCommandListener,
     portUnavailable,
   } = useDReactionServer();
 
-  const selectedConnection = connections.find(
-    (c) => c.clientId === selectedClientId
-  );
+  const selectedConnection =
+    connections.find((c) => c.clientId === selectedClientId) ?? null;
 
   useEffect(() => {
+    // @ts-ignore
     reactotronServer.current = createServer({
       port: config.serverPort,
     });
@@ -81,21 +81,21 @@ export const DReactionServerProvider: React.FC<{
     portUnavailable,
   ]);
 
-  const sendCommand = useCallback(
-    (type: string, payload: any, clientId?: string) => {
-      // TODO: Do better then just throwing these away...
-      if (!reactotronServer.current) {
-        return;
-      }
+  // const sendCommand = useCallback(
+  //   (type: string, payload: any, clientId?: string) => {
+  //     // TODO: Do better then just throwing these away...
+  //     if (!reactotronServer.current) {
+  //       return;
+  //     }
 
-      reactotronServer.current.send(
-        type,
-        payload,
-        clientId || selectedClientId
-      );
-    },
-    [reactotronServer, selectedClientId]
-  );
+  //     reactotronServer.current.send(
+  //       type,
+  //       payload,
+  //       clientId || selectedClientId || undefined
+  //     );
+  //   },
+  //   [reactotronServer, selectedClientId]
+  // );
 
   return (
     <DReactionServerContext.Provider
