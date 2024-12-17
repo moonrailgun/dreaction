@@ -7,11 +7,11 @@ import {
 } from 'dreaction-client-core';
 
 /**
- * Track calls to console.log, console.warn, and console.debug and send them to Reactotron logger
+ * Track calls to console.log, console.warn, and console.debug and send them to DReaction logger
  */
-const trackGlobalLogs = () => (reactotron: DReactionCore) => {
-  assertHasLoggerPlugin(reactotron);
-  const client = reactotron as DReactionCore &
+const trackGlobalLogs = () => (dreaction: DReactionCore) => {
+  assertHasLoggerPlugin(dreaction);
+  const client = dreaction as DReactionCore &
     InferFeatures<DReactionCore, LoggerPlugin>;
 
   return {

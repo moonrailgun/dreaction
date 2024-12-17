@@ -3,7 +3,7 @@ import type { DReactionCore, Plugin } from '../';
 /**
  * Sends API request/response information.
  */
-const apiResponse = () => (reactotron: DReactionCore) => {
+const apiResponse = () => (dreaction: DReactionCore) => {
   return {
     features: {
       apiResponse: (
@@ -18,7 +18,7 @@ const apiResponse = () => (reactotron: DReactionCore) => {
           response.status >= 200 &&
           response.status <= 299;
         const important = !ok;
-        reactotron.send(
+        dreaction.send(
           'api.response',
           // @ts-ignore
           { request, response, duration },

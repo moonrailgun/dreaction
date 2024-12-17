@@ -3,8 +3,8 @@ import type { DReactionCore, Plugin } from '../';
 /**
  * Runs small high-unscientific benchmarks for you.
  */
-const benchmark = () => (reactotron: DReactionCore) => {
-  const { startTimer } = reactotron;
+const benchmark = () => (dreaction: DReactionCore) => {
+  const { startTimer } = dreaction;
 
   const benchmark = (title: string) => {
     const steps = [] as Array<{ title: string; time: number; delta: number }>;
@@ -22,7 +22,7 @@ const benchmark = () => (reactotron: DReactionCore) => {
     steps.push({ title, time: 0, delta: 0 });
     const stop = (stopTitle: string) => {
       step(stopTitle);
-      reactotron.send('benchmark.report', { title, steps });
+      dreaction.send('benchmark.report', { title, steps });
     };
     return { step, stop, last: stop };
   };

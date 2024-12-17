@@ -163,8 +163,8 @@ type CorePluginFeatures = InferFeaturesFromPlugins<
   typeof corePlugins
 >;
 
-// export interface Reactotron extends ReactotronCore, CorePluginFeatures {}
-export interface Reactotron extends DReactionCore {}
+// export interface DReaction extends DReactionCore, CorePluginFeatures {}
+export interface DReaction extends DReactionCore {}
 
 // these are not for you.
 const reservedFeatures = [
@@ -186,7 +186,7 @@ function emptyPromise() {
   return Promise.resolve('');
 }
 
-export class ReactotronImpl
+export class DReactionImpl
   implements
     Omit<
       DReactionCore,
@@ -289,7 +289,7 @@ export class ReactotronImpl
   }
 
   /**
-   * Connect to the Reactotron server.
+   * Connect to the DReaction server.
    */
   connect() {
     this.connected = true;
@@ -447,7 +447,7 @@ export class ReactotronImpl
       } catch {
         this.isReady = false;
         console.log(
-          'An error occurred communicating with reactotron. Please reload your app'
+          'An error occurred communicating with dreaction. Please reload your app'
         );
       }
     } else {
@@ -651,6 +651,6 @@ export class ReactotronImpl
 export function createClient<Client extends DReactionCore = DReactionCore>(
   options?: ClientOptions<Client>
 ) {
-  const client = new ReactotronImpl();
+  const client = new DReactionImpl();
   return client.configure(options as never) as unknown as Client;
 }

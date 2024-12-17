@@ -10,7 +10,7 @@ const PLUGIN_DEFAULTS: AsyncStorageOptions = {
 };
 
 const asyncStorage =
-  (options?: AsyncStorageOptions) => (reactotron: DReactionCore) => {
+  (options?: AsyncStorageOptions) => (dreaction: DReactionCore) => {
     // setup configuration
     const config = Object.assign({}, PLUGIN_DEFAULTS, options || {});
     const ignore = config.ignore || PLUGIN_DEFAULTS.ignore;
@@ -24,8 +24,8 @@ const asyncStorage =
     let swizzMultiMerge: AsyncStorageStatic['multiMerge'];
     let isSwizzled = false;
 
-    const sendToReactotron = (action: string, data?: any) => {
-      reactotron.send('asyncStorage.mutation', { action, data });
+    const sendToDReaction = (action: string, data?: any) => {
+      dreaction.send('asyncStorage.mutation', { action, data });
     };
 
     const setItem: AsyncStorageStatic['setItem'] = async (
@@ -35,7 +35,7 @@ const asyncStorage =
     ) => {
       try {
         if (ignore!.indexOf(key) < 0) {
-          sendToReactotron('setItem', { key, value });
+          sendToDReaction('setItem', { key, value });
         }
       } catch (e) {}
       return swizzSetItem(key, value, callback);
@@ -47,7 +47,7 @@ const asyncStorage =
     ) => {
       try {
         if (ignore!.indexOf(key) < 0) {
-          sendToReactotron('removeItem', { key });
+          sendToDReaction('removeItem', { key });
         }
       } catch (e) {}
       return swizzRemoveItem(key, callback);
@@ -60,7 +60,7 @@ const asyncStorage =
     ) => {
       try {
         if (ignore!.indexOf(key) < 0) {
-          sendToReactotron('mergeItem', { key, value });
+          sendToDReaction('mergeItem', { key, value });
         }
       } catch (e) {}
       return swizzMergeItem(key, value, callback);
@@ -68,7 +68,7 @@ const asyncStorage =
 
     const clear: AsyncStorageStatic['clear'] = async (callback: any) => {
       try {
-        sendToReactotron('clear');
+        sendToDReaction('clear');
       } catch (e) {}
       return swizzClear(callback);
     };
@@ -82,7 +82,7 @@ const asyncStorage =
           (pair: any) => pair && pair[0] && ignore!.indexOf(pair[0]) < 0
         );
         if (shippablePairs.length > 0) {
-          sendToReactotron('multiSet', { pairs: shippablePairs });
+          sendToDReaction('multiSet', { pairs: shippablePairs });
         }
       } catch (e) {}
       return swizzMultiSet(pairs, callback);
@@ -97,7 +97,7 @@ const asyncStorage =
           (key: any) => ignore!.indexOf(key) < 0
         );
         if (shippableKeys.length > 0) {
-          sendToReactotron('multiRemove', { keys: shippableKeys });
+          sendToDReaction('multiRemove', { keys: shippableKeys });
         }
       } catch (e) {}
       return swizzMultiRemove(keys, callback);
@@ -112,7 +112,7 @@ const asyncStorage =
           (pair: any) => pair && pair[0] && ignore!.indexOf(pair[0]) < 0
         );
         if (shippablePairs.length > 0) {
-          sendToReactotron('multiMerge', { pairs: shippablePairs });
+          sendToDReaction('multiMerge', { pairs: shippablePairs });
         }
       } catch (e) {}
       return swizzMultiMerge(pairs, callback);
@@ -125,54 +125,54 @@ const asyncStorage =
       if (isSwizzled) return;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      swizzSetItem = reactotron.asyncStorageHandler.setItem;
+      // @ts-ignore: dreaction-apis
+      swizzSetItem = dreaction.asyncStorageHandler.setItem;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.setItem = setItem;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.setItem = setItem;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      swizzRemoveItem = reactotron.asyncStorageHandler.removeItem;
+      // @ts-ignore: dreaction-apis
+      swizzRemoveItem = dreaction.asyncStorageHandler.removeItem;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.removeItem = removeItem;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.removeItem = removeItem;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      swizzMergeItem = reactotron.asyncStorageHandler.mergeItem;
+      // @ts-ignore: dreaction-apis
+      swizzMergeItem = dreaction.asyncStorageHandler.mergeItem;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.mergeItem = mergeItem;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.mergeItem = mergeItem;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      swizzClear = reactotron.asyncStorageHandler.clear;
+      // @ts-ignore: dreaction-apis
+      swizzClear = dreaction.asyncStorageHandler.clear;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.clear = clear;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.clear = clear;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      swizzMultiSet = reactotron.asyncStorageHandler.multiSet;
+      // @ts-ignore: dreaction-apis
+      swizzMultiSet = dreaction.asyncStorageHandler.multiSet;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.multiSet = multiSet;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.multiSet = multiSet;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      swizzMultiRemove = reactotron.asyncStorageHandler.multiRemove;
+      // @ts-ignore: dreaction-apis
+      swizzMultiRemove = dreaction.asyncStorageHandler.multiRemove;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.multiRemove = multiRemove;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.multiRemove = multiRemove;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      swizzMultiMerge = reactotron.asyncStorageHandler.multiMerge;
+      // @ts-ignore: dreaction-apis
+      swizzMultiMerge = dreaction.asyncStorageHandler.multiMerge;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.multiMerge = multiMerge;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.multiMerge = multiMerge;
 
       isSwizzled = true;
     };
@@ -181,33 +181,33 @@ const asyncStorage =
       if (!isSwizzled) return;
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.setItem = swizzSetItem;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.setItem = swizzSetItem;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.removeItem = swizzRemoveItem;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.removeItem = swizzRemoveItem;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.mergeItem = swizzMergeItem;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.mergeItem = swizzMergeItem;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.clear = swizzClear;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.clear = swizzClear;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.multiSet = swizzMultiSet;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.multiSet = swizzMultiSet;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.multiRemove = swizzMultiRemove;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.multiRemove = swizzMultiRemove;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore: reactotron-apis
-      reactotron.asyncStorageHandler.multiMerge = swizzMultiMerge;
+      // @ts-ignore: dreaction-apis
+      dreaction.asyncStorageHandler.multiMerge = swizzMultiMerge;
 
       isSwizzled = false;
     };
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore: reactotron-apis
-    if (reactotron.asyncStorageHandler) {
+    // @ts-ignore: dreaction-apis
+    if (dreaction.asyncStorageHandler) {
       trackAsyncStorage();
     }
 

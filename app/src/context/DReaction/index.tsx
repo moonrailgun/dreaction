@@ -29,7 +29,7 @@ const DReactionServerContext = React.createContext<Context>({
 export const DReactionServerProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const reactotronServer = useRef<Server>(null);
+  const dreactionServer = useRef<Server>(null);
 
   const {
     serverStatus,
@@ -50,26 +50,26 @@ export const DReactionServerProvider: React.FC<{
 
   useEffect(() => {
     // @ts-ignore
-    reactotronServer.current = createServer({
+    dreactionServer.current = createServer({
       port: config.serverPort,
     });
 
-    reactotronServer.current.on('start', serverStarted);
-    reactotronServer.current.on('stop', serverStopped);
-    // need to sync these types between reactotron-core-server and reactotron-app
+    dreactionServer.current.on('start', serverStarted);
+    dreactionServer.current.on('stop', serverStopped);
+    // need to sync these types between dreaction-core-server and dreaction-app
     // @ts-ignore
-    reactotronServer.current.on('connectionEstablished', connectionEstablished);
-    reactotronServer.current.on('command', commandReceived);
-    // need to sync these types between reactotron-core-server and reactotron-app
+    dreactionServer.current.on('connectionEstablished', connectionEstablished);
+    dreactionServer.current.on('command', commandReceived);
+    // need to sync these types between dreaction-core-server and dreaction-app
 
     // @ts-ignore
-    reactotronServer.current.on('disconnect', connectionDisconnected);
-    reactotronServer.current.on('portUnavailable', portUnavailable);
+    dreactionServer.current.on('disconnect', connectionDisconnected);
+    dreactionServer.current.on('portUnavailable', portUnavailable);
 
-    reactotronServer.current.start();
+    dreactionServer.current.start();
 
     return () => {
-      reactotronServer.current?.stop();
+      dreactionServer.current?.stop();
     };
   }, [
     serverStarted,
@@ -83,17 +83,17 @@ export const DReactionServerProvider: React.FC<{
   // const sendCommand = useCallback(
   //   (type: string, payload: any, clientId?: string) => {
   //     // TODO: Do better then just throwing these away...
-  //     if (!reactotronServer.current) {
+  //     if (!dreactionServer.current) {
   //       return;
   //     }
 
-  //     reactotronServer.current.send(
+  //     dreactionServer.current.send(
   //       type,
   //       payload,
   //       clientId || selectedClientId || undefined
   //     );
   //   },
-  //   [reactotronServer, selectedClientId]
+  //   [dreactionServer, selectedClientId]
   // );
 
   return (

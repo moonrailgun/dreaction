@@ -59,13 +59,13 @@ const objectifyError = (error: Error) => {
 // const reactNativeFrameFinder = frame => contains('/node_modules/react-native/', frame.fileName)
 
 /**
- * Track global errors and send them to Reactotron logger.
+ * Track global errors and send them to DReaction logger.
  */
 const trackGlobalErrors =
-  (options?: TrackGlobalErrorsOptions) => (reactotron: DReactionCore) => {
+  (options?: TrackGlobalErrorsOptions) => (dreaction: DReactionCore) => {
     // make sure we have the logger plugin
-    assertHasLoggerPlugin(reactotron);
-    const client = reactotron as DReactionCore &
+    assertHasLoggerPlugin(dreaction);
+    const client = dreaction as DReactionCore &
       InferFeatures<DReactionCore, LoggerPlugin>;
 
     // setup configuration
@@ -130,7 +130,7 @@ const trackGlobalErrors =
         });
     }
 
-    // the reactotron plugin interface
+    // the dreaction plugin interface
     return {
       onConnect: () => {
         LogBox.addException = new Proxy(LogBox.addException, {
@@ -146,7 +146,7 @@ const trackGlobalErrors =
         });
       },
 
-      // attach these functions to the Reactotron
+      // attach these functions to the DReaction
       features: {
         reportError,
       },

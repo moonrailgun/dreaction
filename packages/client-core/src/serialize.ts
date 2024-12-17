@@ -20,7 +20,7 @@ const NEGATIVE_INFINITY = '~~~ -Infinity ~~~';
  * BigInts are not supported by JSON.stringify in Hermes android.
  * This is a workaround.
  * https://github.com/GoogleChromeLabs/jsbi/issues/30#issuecomment-953187833
- * https://github.com/infinitered/reactotron/issues/1436
+ * https://github.com/infinitered/dreaction/issues/1436
  */
 declare global {
   interface BigInt {

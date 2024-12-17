@@ -42,7 +42,7 @@ export const CommandType = {
   Clear: 'clear',
   ReplLsResponse: 'repl.ls.response',
   ReplExecuteResponse: 'repl.execute.response',
-  // these technically are commands only in reactotron-react-native, but I felt lazy so they can live here
+  // these technically are commands only in dreaction-react-native, but I felt lazy so they can live here
   DevtoolsOpen: 'devtools.open',
   DevtoolsReload: 'devtools.reload',
   EditorOpen: 'editor.open',

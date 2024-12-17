@@ -53,7 +53,7 @@ export const assertHasLoggerPlugin = (
   InferFeatures<DReactionCore, ReturnType<typeof logger>> => {
   if (!hasLoggerPlugin(dreaction)) {
     throw new Error(
-      'This Reactotron client has not had the logger plugin applied to it. Make sure that you add `use(logger())` before adding this plugin.'
+      'This DReaction client has not had the logger plugin applied to it. Make sure that you add `use(logger())` before adding this plugin.'
     );
   }
 };

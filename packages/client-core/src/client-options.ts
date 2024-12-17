@@ -4,7 +4,7 @@ import NodeWebSocket from 'ws';
 type BrowserWebSocket = WebSocket;
 
 /**
- * Configuration options for the Reactotron Client.
+ * Configuration options for the DReaction Client.
  */
 export interface ClientOptions<Client>
   extends Omit<LifeCycleMethods, 'onCommand'> {

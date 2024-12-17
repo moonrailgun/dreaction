@@ -12,13 +12,13 @@ export interface ImagePayload {
 /**
  * Provides an image.
  */
-const image = () => (reactotron: DReactionCore) => {
+const image = () => (dreaction: DReactionCore) => {
   return {
     features: {
       // expanded just to show the specs
       image: (payload: ImagePayload) => {
         const { uri, preview, filename, width, height, caption } = payload;
-        return reactotron.send('image', {
+        return dreaction.send('image', {
           uri,
           preview,
           filename,

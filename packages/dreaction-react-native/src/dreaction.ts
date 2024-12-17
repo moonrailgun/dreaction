@@ -4,7 +4,7 @@ import type {
   ClientOptions,
   InferFeaturesFromPlugins,
   PluginCreator,
-  Reactotron,
+  DReaction,
   DReactionCore,
 } from 'dreaction-client-core';
 // @ts-ignore
@@ -26,7 +26,7 @@ import { getHost } from './helpers/getHost';
 
 export type { ClientOptions };
 
-const DREACTION_ASYNC_CLIENT_ID = '@REACTOTRON/clientId';
+const DREACTION_ASYNC_CLIENT_ID = '@DREACTION/clientId';
 
 let tempClientId: string | null = null;
 
@@ -53,8 +53,8 @@ type ReactNativePluginFeatures = InferFeaturesFromPlugins<
   typeof reactNativeCorePlugins
 >;
 
-export interface ReactotronReactNative
-  extends Reactotron,
+export interface DReactionReactNative
+  extends DReaction,
     // @ts-ignore
     ReactNativePluginFeatures {
   useReactNative: (options?: UseReactNativeOptions) => this;
@@ -87,7 +87,7 @@ const {
   serial,
 } = getReactNativePlatformConstants();
 
-const DEFAULTS: ClientOptions<ReactotronReactNative> = {
+const DEFAULTS: ClientOptions<DReactionReactNative> = {
   createSocket: (path: string) => new WebSocket(path), // eslint-disable-line
   host: getHost('localhost'),
   port: 9600,
@@ -156,7 +156,7 @@ const DEFAULTS: ClientOptions<ReactotronReactNative> = {
   proxyHack: true,
 };
 
-export const dreaction = createClient<ReactotronReactNative>(DEFAULTS);
+export const dreaction = createClient<DReactionReactNative>(DEFAULTS);
 
 function getPluginOptions<T>(options?: T | boolean): T | null {
   return typeof options === 'object' ? options : null;

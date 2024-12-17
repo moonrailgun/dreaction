@@ -1,12 +1,12 @@
 import type { DReactionCore, Plugin } from '../';
 
 /**
- * Clears the reactotron server.
+ * Clears the dreaction server.
  */
-const clear = () => (reactotron: DReactionCore) => {
+const clear = () => (dreaction: DReactionCore) => {
   return {
     features: {
-      clear: () => reactotron.send('clear'),
+      clear: () => dreaction.send('clear'),
     },
   } satisfies Plugin<DReactionCore>;
 };

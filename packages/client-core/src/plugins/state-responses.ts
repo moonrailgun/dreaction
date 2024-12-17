@@ -10,7 +10,7 @@ import type { DReactionCore, Plugin, InferFeatures } from '../';
 /**
  * Provides helper functions for send state responses.
  */
-const stateResponse = () => (reactotron: DReactionCore) => {
+const stateResponse = () => (dreaction: DReactionCore) => {
   return {
     features: {
       stateActionComplete: (
@@ -18,27 +18,27 @@ const stateResponse = () => (reactotron: DReactionCore) => {
         action: StateActionCompletePayload['action'],
         important = false
       ) =>
-        reactotron.send('state.action.complete', { name, action }, !!important),
+        dreaction.send('state.action.complete', { name, action }, !!important),
 
       stateValuesResponse: (
         path: StateValuesResponsePayload['path'],
         value: StateValuesResponsePayload['value'],
         valid: StateValuesResponsePayload['value'] = true
-      ) => reactotron.send('state.values.response', { path, value, valid }),
+      ) => dreaction.send('state.values.response', { path, value, valid }),
 
       stateKeysResponse: (
         path: StateKeysResponsePayload['path'],
         keys: StateKeysResponsePayload['keys'],
         valid: StateKeysResponsePayload['valid'] = true
-      ) => reactotron.send('state.keys.response', { path, keys, valid }),
+      ) => dreaction.send('state.keys.response', { path, keys, valid }),
 
       stateValuesChange: (changes: StateValuesChangePayload['changes']) =>
         changes.length > 0 &&
-        reactotron.send('state.values.change', { changes }),
+        dreaction.send('state.values.change', { changes }),
 
       /** sends the state backup over to the server */
       stateBackupResponse: (state: StateBackupResponsePayload['state']) =>
-        reactotron.send('state.backup.response', { state }),
+        dreaction.send('state.backup.response', { state }),
     },
   } satisfies Plugin<DReactionCore>;
 };
@@ -48,28 +48,28 @@ export type StateResponsePlugin = ReturnType<typeof stateResponse>;
 export default stateResponse;
 
 export const hasStateResponsePlugin = (
-  reactotron: DReactionCore
-): reactotron is DReactionCore &
+  dreaction: DReactionCore
+): dreaction is DReactionCore &
   InferFeatures<DReactionCore, ReturnType<typeof stateResponse>> =>
-  reactotron &&
-  'stateActionComplete' in reactotron &&
-  typeof reactotron.stateActionComplete === 'function' &&
-  'stateValuesResponse' in reactotron &&
-  typeof reactotron.stateValuesResponse === 'function' &&
-  'stateKeysResponse' in reactotron &&
-  typeof reactotron.stateKeysResponse === 'function' &&
-  'stateValuesChange' in reactotron &&
-  typeof reactotron.stateValuesChange === 'function' &&
-  'stateBackupResponse' in reactotron &&
-  typeof reactotron.stateBackupResponse === 'function';
+  dreaction &&
+  'stateActionComplete' in dreaction &&
+  typeof dreaction.stateActionComplete === 'function' &&
+  'stateValuesResponse' in dreaction &&
+  typeof dreaction.stateValuesResponse === 'function' &&
+  'stateKeysResponse' in dreaction &&
+  typeof dreaction.stateKeysResponse === 'function' &&
+  'stateValuesChange' in dreaction &&
+  typeof dreaction.stateValuesChange === 'function' &&
+  'stateBackupResponse' in dreaction &&
+  typeof dreaction.stateBackupResponse === 'function';
 
 export const assertHasStateResponsePlugin = (
-  reactotron: DReactionCore
-): asserts reactotron is DReactionCore &
+  dreaction: DReactionCore
+): asserts dreaction is DReactionCore &
   InferFeatures<DReactionCore, ReturnType<typeof stateResponse>> => {
-  if (!hasStateResponsePlugin(reactotron)) {
+  if (!hasStateResponsePlugin(dreaction)) {
     throw new Error(
-      'This Reactotron client has not had the state responses plugin applied to it. Make sure that you add `use(stateResponse())` before adding this plugin.'
+      'This DReaction client has not had the state responses plugin applied to it. Make sure that you add `use(stateResponse())` before adding this plugin.'
     );
   }
 };

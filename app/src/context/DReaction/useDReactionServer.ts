@@ -15,7 +15,7 @@ export enum ActionTypes {
 
 export type ServerStatus = 'stopped' | 'portUnavailable' | 'started';
 
-export interface ReactotronConnection {
+export interface DReactionConnection {
   id: number;
   clientId: string;
   platform: 'ios' | 'android' | 'browser';
@@ -25,7 +25,7 @@ export interface ReactotronConnection {
   userAgent?: string;
 }
 
-export interface Connection extends ReactotronConnection {
+export interface Connection extends DReactionConnection {
   commands: Command[];
   connected: boolean;
 }
@@ -38,8 +38,8 @@ interface State {
   commandListeners: ((command: any) => void)[];
   serverStarted: () => void;
   serverStopped: () => void;
-  connectionEstablished: (connection: ReactotronConnection) => void;
-  connectionDisconnected: (connection: ReactotronConnection) => void;
+  connectionEstablished: (connection: DReactionConnection) => void;
+  connectionDisconnected: (connection: DReactionConnection) => void;
   commandReceived: (command: any) => void;
   clearSelectedConnectionCommands: () => void;
   selectConnection: (clientId: string) => void;

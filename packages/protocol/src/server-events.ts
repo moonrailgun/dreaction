@@ -30,7 +30,7 @@ export interface CertServerOptions {
 export type WssServerOptions = PfxServerOptions | CertServerOptions;
 
 /**
- * Configuration options for the Reactotron server.
+ * Configuration options for the DReaction server.
  */
 export interface ServerOptions {
   /**

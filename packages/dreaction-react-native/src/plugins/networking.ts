@@ -18,7 +18,7 @@ const DEFAULTS: NetworkingOptions = {
 
 const networking =
   (pluginConfig: NetworkingOptions = {}) =>
-  (reactotron: DReactionCore) => {
+  (dreaction: DReactionCore) => {
     const options = Object.assign({}, DEFAULTS, pluginConfig);
 
     // a RegExp to suppress adding the body cuz it costs a lot to serialize
@@ -26,7 +26,7 @@ const networking =
       options.ignoreContentTypes || DEFAULT_CONTENT_TYPES_RX;
 
     // a XHR call tracker
-    let reactotronCounter = 1000;
+    let dreactionCounter = 1000;
 
     // a temporary cache to hold requests so we can match up the data
     const requestCache = {};
@@ -39,21 +39,21 @@ const networking =
      */
     function onSend(data: any, xhr: any) {
       if (options.ignoreUrls && options.ignoreUrls.test(xhr._url)) {
-        xhr._skipReactotron = true;
+        xhr._skipDReaction = true;
         return;
       }
 
       // bump the counter
-      reactotronCounter++;
+      dreactionCounter++;
 
       // tag
-      xhr._trackingName = reactotronCounter;
+      xhr._trackingName = dreactionCounter;
 
       // cache
-      (requestCache as any)[reactotronCounter] = {
+      (requestCache as any)[dreactionCounter] = {
         data,
         xhr,
-        stopTimer: reactotron.startTimer(),
+        stopTimer: dreaction.startTimer(),
       };
     }
 
@@ -75,7 +75,7 @@ const networking =
       type: any,
       xhr: any
     ) {
-      if (xhr._skipReactotron) {
+      if (xhr._skipDReaction) {
         return;
       }
 
@@ -130,7 +130,7 @@ const networking =
           status,
           headers: xhr.responseHeaders || null,
         };
-        (reactotron as any).apiResponse(
+        (dreaction as any).apiResponse(
           tronRequest,
           tronResponse,
           stopTimer ? stopTimer() : null
