@@ -192,6 +192,10 @@ const Item: React.FC<{
                 <span className="text-sm">{payload.request.url}</span>
               </div>
               <div>
+                <span className="opacity-60 text-xs mr-2">Status Code:</span>
+                <Badge>{payload.response.status}</Badge>
+              </div>
+              <div>
                 <span className="opacity-60 text-xs mr-2">Method:</span>
                 <Badge>{payload.request.method}</Badge>
               </div>
