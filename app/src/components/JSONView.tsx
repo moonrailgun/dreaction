@@ -30,7 +30,7 @@ export const JSONView: React.FC<{ data: unknown; hideRoot?: boolean }> =
         theme={theme}
         data={repairSerialization(props.data)}
         invertTheme={true}
-        shouldExpandNodeInitially={(keyPath, data, level) => {
+        shouldExpandNodeInitially={(_keyPath, _data, level) => {
           return level < 2;
         }}
         hideRoot={props.hideRoot ?? false}

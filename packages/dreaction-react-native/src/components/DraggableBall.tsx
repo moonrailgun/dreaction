@@ -25,11 +25,11 @@ export const DraggableBall: React.FC = React.memo(() => {
   const lastPosition = useRef(initialPosition);
   const [isDragging, setIsDragging] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [connected, setConnected] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setConnected(dreaction.connected);
+      setIsReady(dreaction.isReady);
     }, 1000);
 
     return () => {
@@ -113,7 +113,7 @@ export const DraggableBall: React.FC = React.memo(() => {
           {
             transform: [{ translateX: position.x }, { translateY: position.y }],
             backgroundColor: isDragging ? '#eee' : '#fff',
-            borderColor: connected ? '#00ff00' : '#eee',
+            borderColor: isReady ? '#00ff00' : '#eee',
           },
         ]}
         {...panResponder.panHandlers}

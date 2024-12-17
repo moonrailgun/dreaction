@@ -103,6 +103,7 @@ type InferFeaturesFromPlugin<
 
 export interface DReactionCore {
   connected: boolean;
+  isReady: boolean;
   options: ClientOptions<this>;
   plugins: Plugin<this>[];
   startTimer: () => () => number;

@@ -62,7 +62,13 @@ export interface ReactotronReactNative
   setAsyncStorageHandler: (asyncStorage: AsyncStorageStatic) => this;
   registerDataWatcher: <T = unknown>(
     name: string,
-    type: DataWatchPayload['type']
+    type: DataWatchPayload['type'],
+    options?: {
+      /**
+       * Is data watcher enabled?
+       */
+      enabled?: boolean;
+    }
   ) => {
     currentDebugValue: T | undefined;
     updateDebugValue: (data: unknown) => void;
@@ -198,9 +204,16 @@ dreaction.setAsyncStorageHandler = (asyncStorage: AsyncStorageStatic) => {
 
 dreaction.registerDataWatcher = <T = unknown>(
   name: string,
-  type: DataWatchPayload['type']
+  type: DataWatchPayload['type'],
+  options?: {
+    /**
+     * Is data watcher enabled?
+     */
+    enabled?: boolean;
+  }
 ) => {
-  if (!__DEV__) {
+  const { enabled = __DEV__ } = options ?? {};
+  if (!enabled) {
     return {
       currentDebugValue: undefined,
       updateDebugValue: () => {},
