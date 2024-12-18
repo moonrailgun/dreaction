@@ -123,7 +123,7 @@ export interface DReactionCore {
    * Set the configuration options.
    */
   configure: (
-    options: ClientOptions<this>
+    options?: ClientOptions<this>
   ) => ClientOptions<this>['plugins'] extends PluginCreator<this>[]
     ? this & InferFeaturesFromPlugins<this, ClientOptions<this>['plugins']>
     : this;
@@ -245,27 +245,27 @@ export class DReactionImpl
    * Set the configuration options.
    */
   configure(
-    options: ClientOptions<this>
+    options: ClientOptions<this> = {}
   ): ClientOptions<this>['plugins'] extends PluginCreator<this>[]
     ? this & InferFeaturesFromPlugins<this, ClientOptions<this>['plugins']>
     : this {
     // options get merged & validated before getting set
-    const newOptions = Object.assign(
-      {
-        createSocket: null as never,
-        host: 'localhost',
-        port: 9600,
-        name: 'dreaction-core-client',
-        secure: false,
-        plugins: corePlugins,
-        safeRecursion: true,
-        onCommand: () => null,
-        onConnect: () => null,
-        onDisconnect: () => null,
-      } satisfies ClientOptions<DReactionCore>,
-      this.options,
-      options
-    );
+    const newOptions = {
+      createSocket: null as never,
+      host: 'localhost',
+      port: 9600,
+      name: 'dreaction-core-client',
+      secure: false,
+      plugins: corePlugins as any,
+      safeRecursion: true,
+      onCommand: () => null,
+      onConnect: () => null,
+      onDisconnect: () => null,
+
+      ...this.options,
+      ...options,
+    } satisfies ClientOptions<DReactionCore>;
+
     validate(newOptions);
     this.options = newOptions;
 
