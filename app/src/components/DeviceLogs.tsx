@@ -5,6 +5,7 @@ import {
   Accordion,
   ActionIcon,
   Badge,
+  Input,
   SegmentedControl,
   Tabs,
 } from '@mantine/core';
@@ -15,27 +16,50 @@ import { apiRequestToCurl } from '../utils/api';
 import { IconTrash } from '@tabler/icons-react';
 import { useDReactionServer } from '../context/DReaction/useDReactionServer';
 import { repairSerialization } from '../utils/repairSerialization';
+import { useDebounce } from 'ahooks';
 
 export const DeviceLogs: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
   const { clearSelectedConnectionCommands } = useDReactionServer();
-  const [filter, setFilter] = useState('all');
+  const [filterType, setFilterType] = useState('all');
+  const [filterText, setFilterText] = useState('');
+
+  const debouncedFilterText = useDebounce(filterText, {
+    wait: 300,
+    maxWait: 4000,
+  });
 
   const commands = useMemo(() => {
     const commands = selectedConnection?.commands ?? [];
+    let filteredCommands: (Command & { title: string })[] = [];
 
-    if (filter === 'logs') {
-      return commands.filter((command) => command.type === 'log');
+    if (filterType === 'logs') {
+      filteredCommands = commands
+        .filter((command) => command.type === 'log')
+        .map((command) => ({
+          ...command,
+          title: command.payload.message,
+        }));
+    } else if (filterType === 'network') {
+      filteredCommands = commands
+        .filter((command) => command.type === 'api.response')
+        .map((command) => ({
+          ...command,
+          title: command.payload.request.url,
+        }));
+    } else {
+      filteredCommands = commands
+        .filter((commands) => !['dataWatch'].includes(commands.type))
+        .map((command) => ({
+          ...command,
+          title: JSON.stringify(command.payload),
+        }));
     }
 
-    if (filter === 'network') {
-      return commands.filter((command) => command.type === 'api.response');
-    }
-
-    return commands.filter(
-      (commands) => !['dataWatch'].includes(commands.type)
-    );
-  }, [selectedConnection, filter]);
+    return filteredCommands.filter((command) => {
+      return command.title.includes(debouncedFilterText);
+    });
+  }, [selectedConnection, filterType, debouncedFilterText]);
 
   const handleClear = () => {
     clearSelectedConnectionCommands();
@@ -45,8 +69,8 @@ export const DeviceLogs: React.FC = React.memo(() => {
     <div>
       <div className="flex items-center">
         <SegmentedControl
-          value={filter}
-          onChange={setFilter}
+          value={filterType}
+          onChange={setFilterType}
           data={[
             { label: 'All', value: 'all' },
             { label: 'Logs', value: 'logs' },
@@ -54,13 +78,23 @@ export const DeviceLogs: React.FC = React.memo(() => {
           ]}
         />
 
-        <div className="flex-1" />
-
-        <div>
-          <ActionIcon color={'gray'} variant="subtle" onClick={handleClear}>
-            <IconTrash />
-          </ActionIcon>
+        <div className="flex-1">
+          <Input
+            className="w-full h-full"
+            placeholder="Input somthing to filter logs"
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
+          />
         </div>
+
+        <ActionIcon
+          color={'gray'}
+          variant="default"
+          size={38}
+          onClick={handleClear}
+        >
+          <IconTrash />
+        </ActionIcon>
       </div>
       <Accordion multiple={true}>
         {commands.length === 0 && (

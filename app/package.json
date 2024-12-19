@@ -15,6 +15,7 @@
     "@mantine/notifications": "^7.15.0",
     "@mantinex/mantine-logo": "^1.0.1",
     "@tabler/icons-react": "^3.24.0",
+    "ahooks": "^3.8.4",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "dreaction-server-core": "workspace:*",
