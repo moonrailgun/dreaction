@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { IconArrowsRightLeft, IconHome2 } from '@tabler/icons-react';
-import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
-import { MantineLogo } from '@mantinex/mantine-logo';
+import { Avatar, Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import clsx from 'clsx';
 import { DeviceSwitcher } from './DeviceSwitcher';
 import { ActivePage, menu, useLayoutStore } from '../store/layout';
@@ -51,7 +50,7 @@ export function Layout(props: PropsWithChildren) {
     <div className="flex h-full w-full">
       <nav className="w-20 h-full p-md flex flex-col border-r border-gray-300 dark:border-gray-700 p-4">
         <Center>
-          <MantineLogo type="mark" size={30} />
+          <Avatar src="/icon.svg" />
         </Center>
 
         <div className="flex-1 mt-[50px]">
