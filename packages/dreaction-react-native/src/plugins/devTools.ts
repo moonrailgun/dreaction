@@ -1,8 +1,11 @@
 import { Platform } from 'react-native';
 import type { DReactionCore, Plugin } from 'dreaction-client-core';
+import { isDev } from '../helpers/common';
 
 let DevMenu = { show: () => {}, reload: () => {} };
-if (Platform.OS === 'ios') {
+if (Platform.OS === 'ios' && isDev()) {
+  // this will be crash in ios release mode
+  // so add is dev check
   DevMenu = require('react-native/Libraries/NativeModules/specs/NativeDevMenu');
 }
 
