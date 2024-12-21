@@ -114,7 +114,7 @@ export interface DReactionCore {
     important?: boolean
   ) => void;
   display: (config: DisplayConfig) => void;
-  onCustomCommand: <
+  registerCustomCommand: <
     Args extends CustomCommandArg[] = Exclude<CustomCommand['args'], undefined>
   >(
     config: CustomCommand<Args>
@@ -540,7 +540,7 @@ export class DReactionImpl
     return this as this & PluginFeatures<this, typeof pluginCreator>;
   }
 
-  onCustomCommand(
+  registerCustomCommand(
     config: CustomCommand | string,
     optHandler?: () => void
   ): () => void {
