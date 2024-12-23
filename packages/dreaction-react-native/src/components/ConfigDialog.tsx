@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Modal, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { getHost } from '../helpers/getHost';
 
 interface ConfigDialogProps {
@@ -9,7 +16,10 @@ interface ConfigDialogProps {
 }
 export const ConfigDialog: React.FC<ConfigDialogProps> = React.memo((props) => {
   const { visible, onConfirm, onCancel } = props;
-  const [inputValue, setInputValue] = useState(getHost());
+  const defaultValue = getHost();
+  const [inputValue, setInputValue] = useState(defaultValue);
+
+  const selectTextOnFocus = inputValue === defaultValue;
 
   const handleConfirm = () => {
     onConfirm(inputValue);
@@ -27,14 +37,19 @@ export const ConfigDialog: React.FC<ConfigDialogProps> = React.memo((props) => {
           <Text style={styles.title}>DReaction Desktop Application Url</Text>
           <TextInput
             style={styles.input}
+            selectTextOnFocus={selectTextOnFocus}
             value={inputValue}
             keyboardType="url"
             onChangeText={setInputValue}
             placeholder={getHost()}
           />
           <View style={styles.buttonContainer}>
-            <Button title="Cancel" onPress={onCancel} />
-            <Button title="Confirm" onPress={handleConfirm} />
+            <TouchableOpacity style={styles.buttonView} onPress={onCancel}>
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonView} onPress={handleConfirm}>
+              <Text style={styles.buttonText}>Confirm</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -69,11 +84,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
+    color: 'black',
     padding: 10,
     marginBottom: 20,
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+  buttonView: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  buttonText: {
+    color: '#2563eb',
   },
 });
