@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { getHost } from '../helpers/getHost';
+import { dreaction } from '../dreaction';
+import { getHostFromUrl } from '../helpers/parseURL';
+
+const LOCAL_CACHE_HOST_NAME = '__dreaction-react-native-host';
 
 interface ConfigDialogProps {
   visible: boolean;
-  onConfirm: (value: string) => void;
+  onConfirm: (host: string) => void;
   onCancel: () => void;
 }
 export const ConfigDialog: React.FC<ConfigDialogProps> = React.memo((props) => {
@@ -21,8 +25,20 @@ export const ConfigDialog: React.FC<ConfigDialogProps> = React.memo((props) => {
 
   const selectTextOnFocus = inputValue === defaultValue;
 
+  useEffect(() => {
+    dreaction.asyncStorageHandler
+      ?.getItem(LOCAL_CACHE_HOST_NAME)
+      .then((host) => {
+        if (host) {
+          setInputValue(host);
+        }
+      });
+  }, []);
+
   const handleConfirm = () => {
-    onConfirm(inputValue);
+    const host = getHostFromUrl(inputValue);
+    dreaction.asyncStorageHandler?.setItem(LOCAL_CACHE_HOST_NAME, host);
+    onConfirm(host);
   };
 
   return (

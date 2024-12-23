@@ -7,7 +7,6 @@ import type {
   DReaction,
   DReactionCore,
 } from 'dreaction-client-core';
-// @ts-ignore
 import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage';
 import getReactNativeVersion from './helpers/getReactNativeVersion';
 import getReactNativeDimensions from './helpers/getReactNativeDimensions';

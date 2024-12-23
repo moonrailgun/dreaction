@@ -1,6 +1,11 @@
 import { dreaction } from 'dreaction-react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-dreaction.configure({}).useReactNative().connect();
+dreaction
+  .configure({})
+  .setAsyncStorageHandler(AsyncStorage)
+  .useReactNative()
+  .connect();
 
 export const { useDebugDataWatch: useDebugCounter } =
   dreaction.registerDataWatcher('counter', 'text');

@@ -1,5 +1,4 @@
 import type { DReactionCore, Plugin } from 'dreaction-client-core';
-// @ts-ignore
 import type { AsyncStorageStatic } from '@react-native-async-storage/async-storage';
 export interface AsyncStorageOptions {
   ignore?: string[];

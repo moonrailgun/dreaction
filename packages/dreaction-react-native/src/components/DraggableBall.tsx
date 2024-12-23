@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import { ConfigDialog } from './ConfigDialog';
 import { dreaction } from '../dreaction';
-import { getHostFromUrl } from '../helpers/parseURL';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const BALL_SIZE = 60;
@@ -37,10 +36,8 @@ export const DraggableBall: React.FC = React.memo(() => {
     };
   }, []);
 
-  const handleClick = (value: string) => {
+  const handleClick = (host: string) => {
     try {
-      const host = getHostFromUrl(value);
-
       dreaction
         .configure({
           host,

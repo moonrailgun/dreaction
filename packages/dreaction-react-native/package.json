@@ -25,7 +25,11 @@
     "dreaction-protocol": "workspace:*"
   },
   "devDependencies": {
+    "@react-native-async-storage/async-storage": "^2.1.0",
     "@types/react-native": "^0.73.0",
     "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "@react-native-async-storage/async-storage": ">=2.0.0"
   }
 }
