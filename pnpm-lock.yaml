@@ -34,6 +34,9 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      dreaction-protocol:
+        specifier: ^1.0.1
+        version: 1.0.1
       dreaction-server-core:
         specifier: workspace:*
         version: link:../packages/server-core
@@ -3027,6 +3030,9 @@ packages:
   dotenv@9.0.2:
     resolution: {integrity: sha512-I9OvvrHp4pIARv4+x9iuewrWycX6CcZtoAu1XrzPxc5UygMJXJZYmBsynku8IkrJwgypE5DGNjDPmPRhDCptUg==}
     engines: {node: '>=10'}
+
+  dreaction-protocol@1.0.1:
+    resolution: {integrity: sha512-vOE5Fg2ojJpgRm1YG+X8NyH5RxiLniAd7TiP6O5REEpFcCfQfGfaKRc172Z4vecasX7kOzre1qGHfIuqruiE9A==}
 
   dunder-proto@1.0.0:
     resolution: {integrity: sha512-9+Sj30DIu+4KvHqMfLUGLFYL2PkURSYMVXJyXe92nFRvlYq5hBjLEhblKB+vkd/WVlUYMWigiY07T91Fkk0+4A==}
@@ -10111,6 +10117,15 @@ snapshots:
   dotenv@16.4.7: {}
 
   dotenv@9.0.2: {}
+
+  dreaction-protocol@1.0.1:
+    dependencies:
+      '@types/ws': 8.5.13
+      eventemitter-strict: 1.0.1
+      ws: 8.18.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
 
   dunder-proto@1.0.0:
     dependencies:

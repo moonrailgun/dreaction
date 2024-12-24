@@ -1,3 +1,4 @@
+import { AsyncStorageMutationState } from './asyncStorage';
 import { DataWatchPayload } from './data';
 import type { LogPayload } from './log';
 import { NetworkPayload } from './network';
@@ -54,7 +55,7 @@ export type CommandTypeKey = (typeof CommandType)[keyof typeof CommandType];
 
 export interface CommandMap {
   [CommandType.ApiResponse]: NetworkPayload;
-  [CommandType.AsyncStorageMutation]: any;
+  [CommandType.AsyncStorageMutation]: AsyncStorageMutationState;
   [CommandType.Benchmark]: any;
   [CommandType.ClientIntro]: any;
   [CommandType.Display]: any;

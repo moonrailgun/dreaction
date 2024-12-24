@@ -17,6 +17,13 @@ import { IconTrash } from '@tabler/icons-react';
 import { useDReactionServer } from '../context/DReaction/useDReactionServer';
 import { repairSerialization } from '../utils/repairSerialization';
 import { useDebounce } from 'ahooks';
+import { CommandType, CommandTypeKey } from 'dreaction-protocol';
+
+const blacklistType: CommandTypeKey[] = [
+  CommandType.DataWatch,
+  CommandType.CustomCommandRegister,
+  CommandType.CustomCommandUnregister,
+];
 
 export const DeviceLogs: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
@@ -49,7 +56,7 @@ export const DeviceLogs: React.FC = React.memo(() => {
         }));
     } else {
       filteredCommands = commands
-        .filter((commands) => !['dataWatch'].includes(commands.type))
+        .filter((commands) => !blacklistType.includes(commands.type))
         .map((command) => ({
           ...command,
           title: JSON.stringify(command.payload),
@@ -153,21 +160,18 @@ const ItemDate: React.FC<{
 const Item: React.FC<{
   command: Command;
 }> = React.memo((props) => {
-  const command = props.command;
-  const payload = useMemo(
-    () => repairSerialization(command.payload),
-    [command.payload]
-  );
+  const command = { ...props.command };
+  command.payload = repairSerialization(command.payload);
 
-  if (command.type === 'log') {
+  if (command.type === CommandType.Log) {
     let color = 'blue';
-    if (payload.level === 'warn') {
+    if (command.payload.level === 'warn') {
       color = 'orange';
-    } else if (payload.level === 'error') {
+    } else if (command.payload.level === 'error') {
       color = 'red';
     }
 
-    const message = payload.message;
+    const message = command.payload.message;
     let body = <pre>{JSON.stringify(message, null, 4)}</pre>;
     if (typeof message === 'string') {
       body = <div className="text-neutral-600">{message}</div>;
@@ -182,30 +186,30 @@ const Item: React.FC<{
     return (
       <ItemContainer
         command={command}
-        tag={<Badge color={color}>{payload.level}</Badge>}
-        title={JSON.stringify(payload.message)}
+        tag={<Badge color={color}>{command.payload.level}</Badge>}
+        title={JSON.stringify(command.payload.message)}
         body={body}
       />
     );
   }
 
-  if (command.type === 'client.intro') {
+  if (command.type === CommandType.ClientIntro) {
     return (
       <ItemContainer
         command={command}
         tag={<Badge color="indigo">Connect</Badge>}
-        title={payload.clientId}
-        body={<JSONView data={payload} />}
+        title={command.payload.clientId ?? command.payload.name}
+        body={<JSONView data={command.payload} hideRoot={true} />}
       />
     );
   }
 
-  if (command.type === 'api.response') {
+  if (command.type === CommandType.ApiResponse) {
     return (
       <ItemContainer
         command={command}
-        tag={<Badge color="violet">{payload.request.method}</Badge>}
-        title={String(payload.request.url)}
+        tag={<Badge color="violet">{command.payload.request.method}</Badge>}
+        title={String(command.payload.request.url)}
         body={
           <Tabs defaultValue="summary">
             <Tabs.List className="items-center">
@@ -216,58 +220,79 @@ const Item: React.FC<{
               <div className="w-4" />
               <CopyText
                 label="Copy as curl"
-                value={apiRequestToCurl(payload)}
+                value={apiRequestToCurl(command.payload)}
               />
             </Tabs.List>
 
             <Tabs.Panel value="summary">
               <div>
                 <span className="opacity-60 text-xs mr-2">Url:</span>
-                <span className="text-sm">{payload.request.url}</span>
+                <span className="text-sm">{command.payload.request.url}</span>
               </div>
               <div>
                 <span className="opacity-60 text-xs mr-2">Status Code:</span>
-                <Badge>{payload.response.status}</Badge>
+                <Badge>{command.payload.response.status}</Badge>
               </div>
               <div>
                 <span className="opacity-60 text-xs mr-2">Method:</span>
-                <Badge>{payload.request.method}</Badge>
+                <Badge>{command.payload.request.method}</Badge>
               </div>
               <div>
                 <span className="opacity-60 text-xs mr-2">Duration:</span>
-                {Math.round(payload.duration)}
+                {Math.round(command.payload.duration)}
                 <span className="text-gray-500 ml-1">ms</span>
               </div>
               <div className="flex gap-1 items-center">
                 <span className="opacity-60 text-xs">Request Header</span>
 
                 <CopyText
-                  value={JSON.stringify(payload.request.headers || {}, null, 2)}
-                />
-              </div>
-              <JSONView data={payload.request.headers} hideRoot={true} />
-              <div className="flex gap-1 items-center">
-                <span className="opacity-60 text-xs">Response Header</span>
-                <CopyText
                   value={JSON.stringify(
-                    payload.response.headers || {},
+                    command.payload.request.headers || {},
                     null,
                     2
                   )}
                 />
               </div>
-              <JSONView data={payload.response.headers} hideRoot={true} />
+              <JSONView
+                data={command.payload.request.headers}
+                hideRoot={true}
+              />
+              <div className="flex gap-1 items-center">
+                <span className="opacity-60 text-xs">Response Header</span>
+                <CopyText
+                  value={JSON.stringify(
+                    command.payload.response.headers || {},
+                    null,
+                    2
+                  )}
+                />
+              </div>
+              <JSONView
+                data={command.payload.response.headers}
+                hideRoot={true}
+              />
             </Tabs.Panel>
 
             <Tabs.Panel value="request">
-              <JSONView data={payload.request.data} />
+              <JSONView data={command.payload.request.data} />
             </Tabs.Panel>
 
             <Tabs.Panel value="response">
-              <JSONView data={payload.response} />
+              <JSONView data={command.payload.response} />
             </Tabs.Panel>
           </Tabs>
         }
+      />
+    );
+  }
+
+  if (command.type === CommandType.AsyncStorageMutation) {
+    return (
+      <ItemContainer
+        command={command}
+        tag={<Badge color="teal">AsyncStorage</Badge>}
+        title={command.payload.action}
+        body={<JSONView data={command.payload.data} />}
       />
     );
   }
