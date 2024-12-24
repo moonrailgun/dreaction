@@ -18,12 +18,17 @@ import { useDReactionServer } from '../context/DReaction/useDReactionServer';
 import { repairSerialization } from '../utils/repairSerialization';
 import { useDebounce } from 'ahooks';
 import { CommandType, CommandTypeKey } from 'dreaction-protocol';
+import { get } from 'lodash-es';
 
 const blacklistType: CommandTypeKey[] = [
   CommandType.DataWatch,
   CommandType.CustomCommandRegister,
   CommandType.CustomCommandUnregister,
 ];
+
+type DeviceLogsCommand = Command & {
+  title: string;
+};
 
 export const DeviceLogs: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
@@ -36,31 +41,44 @@ export const DeviceLogs: React.FC = React.memo(() => {
     maxWait: 4000,
   });
 
-  const commands = useMemo(() => {
+  const commands: DeviceLogsCommand[] = useMemo(() => {
     const commands = selectedConnection?.commands ?? [];
-    let filteredCommands: (Command & { title: string })[] = [];
+    let filteredCommands: DeviceLogsCommand[] = commands
+      .filter((command) => !blacklistType.includes(command.type))
+      .map((command) => {
+        let title = JSON.stringify(command.payload);
+
+        if (command.type === 'log') {
+          title = command.payload.message;
+        }
+
+        if (command.type === 'api.response') {
+          title = command.payload.request.url;
+        }
+
+        if (command.type === 'asyncStorage.mutation') {
+          title =
+            command.payload.action + ': ' + get(command, 'payload.data.key');
+        }
+
+        return {
+          ...command,
+          title,
+        };
+      });
 
     if (filterType === 'logs') {
-      filteredCommands = commands
-        .filter((command) => command.type === 'log')
-        .map((command) => ({
-          ...command,
-          title: command.payload.message,
-        }));
+      filteredCommands = filteredCommands.filter(
+        (command) => command.type === 'log'
+      );
     } else if (filterType === 'network') {
-      filteredCommands = commands
-        .filter((command) => command.type === 'api.response')
-        .map((command) => ({
-          ...command,
-          title: command.payload.request.url,
-        }));
-    } else {
-      filteredCommands = commands
-        .filter((commands) => !blacklistType.includes(commands.type))
-        .map((command) => ({
-          ...command,
-          title: JSON.stringify(command.payload),
-        }));
+      filteredCommands = filteredCommands.filter(
+        (command) => command.type === 'api.response'
+      );
+    } else if (filterType === 'asyncStorage') {
+      filteredCommands = filteredCommands.filter(
+        (command) => command.type === 'asyncStorage.mutation'
+      );
     }
 
     return filteredCommands.filter((command) => {
@@ -74,21 +92,26 @@ export const DeviceLogs: React.FC = React.memo(() => {
 
   return (
     <div>
-      <div className="flex items-center">
+      <div className="flex items-center h-10">
         <SegmentedControl
+          className="rounded-none border-b border-[#ced4da]"
           value={filterType}
           onChange={setFilterType}
           data={[
             { label: 'All', value: 'all' },
             { label: 'Logs', value: 'logs' },
             { label: 'Network', value: 'network' },
+            { label: 'Async Storage', value: 'asyncStorage' },
           ]}
         />
 
-        <div className="flex-1">
+        <div className="flex-1 h-full">
           <Input
             className="w-full h-full"
             placeholder="Input somthing to filter logs"
+            classNames={{
+              input: 'h-full rounded-none border-r-0 border-l-0',
+            }}
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
           />
@@ -97,12 +120,16 @@ export const DeviceLogs: React.FC = React.memo(() => {
         <ActionIcon
           color={'gray'}
           variant="default"
-          size={38}
+          size="md"
+          classNames={{
+            root: 'w-10 h-10 rounded-none text-gray-500',
+          }}
           onClick={handleClear}
         >
           <IconTrash />
         </ActionIcon>
       </div>
+
       <Accordion multiple={true}>
         {commands.length === 0 && (
           <div className="text-center opacity-60">No any logs yet.</div>
@@ -120,12 +147,12 @@ export const DeviceLogs: React.FC = React.memo(() => {
 DeviceLogs.displayName = 'DeviceLogs';
 
 const ItemContainer: React.FC<{
-  command: Command;
+  command: DeviceLogsCommand;
   tag?: React.ReactNode;
-  title: React.ReactNode;
+  title?: React.ReactNode;
   body: React.ReactNode;
 }> = React.memo((props) => {
-  const { command, tag, title, body } = props;
+  const { command, tag, title = command.title, body } = props;
   const { messageId, date } = command;
 
   return (
@@ -158,7 +185,7 @@ const ItemDate: React.FC<{
 });
 
 const Item: React.FC<{
-  command: Command;
+  command: DeviceLogsCommand;
 }> = React.memo((props) => {
   const command = { ...props.command };
   command.payload = repairSerialization(command.payload);
@@ -291,7 +318,6 @@ const Item: React.FC<{
       <ItemContainer
         command={command}
         tag={<Badge color="teal">AsyncStorage</Badge>}
-        title={command.payload.action}
         body={<JSONView data={command.payload.data} />}
       />
     );
