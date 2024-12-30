@@ -24,7 +24,7 @@ const asyncStorage =
     let isSwizzled = false;
 
     const sendToDReaction = (action: string, data?: any) => {
-      dreaction.send('asyncStorage.mutation', { action, data });
+      dreaction.send('asyncStorage.mutation', { action: action as any, data });
     };
 
     const setItem: AsyncStorageStatic['setItem'] = async (
