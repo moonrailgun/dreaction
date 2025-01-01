@@ -301,7 +301,7 @@ const Item: React.FC<{
             </Tabs.Panel>
 
             <Tabs.Panel value="request">
-              <JSONView data={command.payload.request.data} />
+              <JSONView data={tryToParseJSON(command.payload.request.data)} />
             </Tabs.Panel>
 
             <Tabs.Panel value="response">
