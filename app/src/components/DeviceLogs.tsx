@@ -314,7 +314,7 @@ const Item: React.FC<{
     );
   }
 
-  if (command.type === CommandType.AsyncStorageMutation) {
+  if (command.type === 'asyncStorage.mutation') {
     return (
       <ItemContainer
         command={command}
