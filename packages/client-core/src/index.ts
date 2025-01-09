@@ -301,6 +301,7 @@ export class DReactionImpl
       port,
       name,
       client = {},
+      info = {},
       getClientId,
     } = this.options;
     const { onCommand, onConnect, onDisconnect } = this.options;
@@ -325,6 +326,7 @@ export class DReactionImpl
         this.send('client.intro', {
           environment,
           ...client,
+          ...info,
           name,
           clientId,
           dreactionCoreClientVersion: 'DREACTION_CORE_CLIENT_VERSION',

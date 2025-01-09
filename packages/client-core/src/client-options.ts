@@ -82,6 +82,12 @@ export interface ClientOptions<Client>
   client?: Record<string, string | number | boolean>;
 
   /**
+   * A way for the connect libraries to identify themselves.
+   * different with client because its should be a user side
+   */
+  info?: Record<string, string | number | boolean>;
+
+  /**
    * Save the client id provided by the server
    */
   setClientId?: (clientId: string) => Promise<void>;
