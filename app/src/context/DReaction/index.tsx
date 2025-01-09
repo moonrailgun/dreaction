@@ -1,4 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useRef, useEffect, useCallback } from 'react';
 import { Server, createServer } from 'dreaction-server-core';
 import { config } from '../../utils/config';
 
@@ -16,6 +17,11 @@ interface Context {
   connections: Connection[];
   selectedConnection: Connection | null;
   selectConnection: (clientId: string) => void;
+  sendCommand: (
+    type: string,
+    payload: Record<string, any>,
+    clientId?: string
+  ) => void;
 }
 
 const DReactionServerContext = React.createContext<Context>({
@@ -24,6 +30,7 @@ const DReactionServerContext = React.createContext<Context>({
   selectedConnection: null,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   selectConnection: () => {},
+  sendCommand: () => {},
 });
 
 export const DReactionServerProvider: React.FC<{
@@ -80,21 +87,21 @@ export const DReactionServerProvider: React.FC<{
     portUnavailable,
   ]);
 
-  // const sendCommand = useCallback(
-  //   (type: string, payload: any, clientId?: string) => {
-  //     // TODO: Do better then just throwing these away...
-  //     if (!dreactionServer.current) {
-  //       return;
-  //     }
+  const sendCommand = useCallback(
+    (type: string, payload: Record<string, any>, clientId?: string) => {
+      // TODO: Do better then just throwing these away...
+      if (!dreactionServer.current) {
+        return;
+      }
 
-  //     dreactionServer.current.send(
-  //       type,
-  //       payload,
-  //       clientId || selectedClientId || undefined
-  //     );
-  //   },
-  //   [dreactionServer, selectedClientId]
-  // );
+      dreactionServer.current.send(
+        type,
+        payload,
+        clientId ?? selectedClientId ?? undefined
+      );
+    },
+    [dreactionServer, selectedClientId]
+  );
 
   return (
     <DReactionServerContext.Provider
@@ -103,6 +110,7 @@ export const DReactionServerProvider: React.FC<{
         connections,
         selectedConnection,
         selectConnection,
+        sendCommand,
       }}
     >
       {children}

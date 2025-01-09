@@ -1,5 +1,10 @@
 import WebSocket from 'ws';
-import type { Command, CommandMap, CommandTypeKey } from 'dreaction-protocol';
+import type {
+  Command,
+  CommandMap,
+  CommandTypeKey,
+  CustomCommandArg,
+} from 'dreaction-protocol';
 import validate from './validate';
 import logger from './plugins/logger';
 import image from './plugins/image';
@@ -20,15 +25,6 @@ export {
   hasStateResponsePlugin,
 } from './plugins/state-responses';
 export type { StateResponsePlugin } from './plugins/state-responses';
-
-export enum ArgType {
-  String = 'string',
-}
-
-export interface CustomCommandArg {
-  name: string;
-  type: ArgType;
-}
 
 // #region Plugin Types
 export interface LifeCycleMethods {
@@ -56,7 +52,7 @@ interface DisplayConfig {
 }
 
 interface ArgTypeMap {
-  [ArgType.String]: string;
+  string: string;
 }
 
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
@@ -79,7 +75,7 @@ export interface CustomCommand<
 > {
   id?: number;
   command: string;
-  handler: (args?: CustomCommandArgs<Args>) => void;
+  handler: (args: CustomCommandArgs<Args>) => void;
 
   title?: string;
   description?: string;
@@ -547,7 +543,7 @@ export class DReactionImpl
     optHandler?: () => void
   ): () => void {
     let command: string;
-    let handler: () => void;
+    let handler: (args: Record<string, any>) => void;
     let title!: string;
     let description!: string;
     let args!: CustomCommandArg[];

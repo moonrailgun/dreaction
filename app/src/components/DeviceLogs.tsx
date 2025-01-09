@@ -17,13 +17,14 @@ import { IconTrash } from '@tabler/icons-react';
 import { useDReactionServer } from '../context/DReaction/useDReactionServer';
 import { repairSerialization } from '../utils/repairSerialization';
 import { useDebounce } from 'ahooks';
-import { CommandType, CommandTypeKey } from 'dreaction-protocol';
+import { CommandTypeKey } from 'dreaction-protocol';
 import { get } from 'lodash-es';
+import { tryToParseJSON } from '../utils/utils';
 
 const blacklistType: CommandTypeKey[] = [
-  CommandType.DataWatch,
-  CommandType.CustomCommandRegister,
-  CommandType.CustomCommandUnregister,
+  'dataWatch',
+  'customCommand.register',
+  'customCommand.unregister',
 ];
 
 type DeviceLogsCommand = Command & {
@@ -190,7 +191,7 @@ const Item: React.FC<{
   const command = { ...props.command };
   command.payload = repairSerialization(command.payload);
 
-  if (command.type === CommandType.Log) {
+  if (command.type === 'log') {
     let color = 'blue';
     if (command.payload.level === 'warn') {
       color = 'orange';
@@ -220,7 +221,7 @@ const Item: React.FC<{
     );
   }
 
-  if (command.type === CommandType.ClientIntro) {
+  if (command.type === 'client.intro') {
     return (
       <ItemContainer
         command={command}
@@ -231,7 +232,7 @@ const Item: React.FC<{
     );
   }
 
-  if (command.type === CommandType.ApiResponse) {
+  if (command.type === 'api.response') {
     return (
       <ItemContainer
         command={command}

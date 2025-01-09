@@ -6,6 +6,7 @@ import { DReactionServerProvider } from './context/DReaction';
 import { useLayoutStore } from './store/layout';
 import { DeviceLogs } from './components/DeviceLogs';
 import { DeviceData } from './components/DeviceData';
+import { DeviceCommand } from './components/DeviceCommand';
 
 import '@mantine/core/styles.css';
 
@@ -21,6 +22,8 @@ export const App: React.FC = () => {
           {activePage === 'dashboard' && <DeviceLogs />}
 
           {activePage === 'dataWatch' && <DeviceData />}
+
+          {activePage === 'command' && <DeviceCommand />}
         </Layout>
       </MantineProvider>
     </DReactionServerProvider>

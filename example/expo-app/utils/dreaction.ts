@@ -21,8 +21,16 @@ export const { useDebugDataWatch: useDebugObject } =
   dreaction.registerDataWatcher('object', 'json');
 
 dreaction.registerCustomCommand({
+  title: 'Foo',
   command: 'foo',
-  handler: () => {
-    console.log('print foo');
+  description: 'Some foo infomation',
+  args: [
+    {
+      name: 'bar' as const,
+      type: 'string',
+    },
+  ],
+  handler: (args) => {
+    console.log('print foo', args);
   },
 });
