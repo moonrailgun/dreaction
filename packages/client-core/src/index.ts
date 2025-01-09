@@ -302,6 +302,11 @@ export class DReactionImpl
     } = this.options;
     const { onCommand, onConnect, onDisconnect } = this.options;
 
+    if (!host) {
+      console.log('host is not config, skip connect.');
+      return;
+    }
+
     // establish a connection to the server
     const protocol = secure ? 'wss' : 'ws';
     const socket = createSocket!(`${protocol}://${host}:${port}`);
