@@ -49,15 +49,18 @@ export const DeviceLogs: React.FC = React.memo(() => {
       .map((command) => {
         let title = JSON.stringify(command.payload);
 
-        if (command.type === 'log') {
+        if (command.type === 'log' && command.payload.message) {
           title = command.payload.message;
         }
 
-        if (command.type === 'api.response') {
+        if (command.type === 'api.response' && command.payload.request.url) {
           title = command.payload.request.url;
         }
 
-        if (command.type === 'asyncStorage.mutation') {
+        if (
+          command.type === 'asyncStorage.mutation' &&
+          command.payload.action
+        ) {
           title =
             command.payload.action + ': ' + get(command, 'payload.data.key');
         }
