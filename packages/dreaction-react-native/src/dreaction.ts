@@ -89,7 +89,7 @@ const {
 
 const DEFAULTS: ClientOptions<DReactionReactNative> = {
   createSocket: (path: string) => new WebSocket(path), // eslint-disable-line
-  host: getHost(''),
+  host: getHost('localhost'),
   port: 9600,
   name: 'React Native App',
   environment: process.env.NODE_ENV || (isDev() ? 'development' : 'production'),
