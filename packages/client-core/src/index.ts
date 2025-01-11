@@ -75,7 +75,7 @@ export interface CustomCommand<
 > {
   id?: number;
   command: string;
-  handler: (args: CustomCommandArgs<Args>) => void;
+  handler: (args: CustomCommandArgs<Args>) => any | Promise<any>;
 
   title?: string;
   description?: string;
@@ -383,13 +383,19 @@ export class DReactionImpl
 
             return cc.command === command.payload.command;
           })
-          .forEach((cc) =>
-            cc.handler(
-              typeof command.payload === 'object'
-                ? command.payload.args
-                : undefined
-            )
-          );
+          .forEach(async (cc) => {
+            const res = await cc.handler(
+              typeof command.payload === 'object' ? command.payload.args : {}
+            );
+
+            if (res) {
+              // has return value
+              this.send('customCommand.response', {
+                command: cc.command,
+                payload: res,
+              });
+            }
+          });
       } else if (command.type === 'setClientId') {
         this.options.setClientId && this.options.setClientId(command.payload);
       }

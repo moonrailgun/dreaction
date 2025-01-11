@@ -14,7 +14,7 @@ export const DeviceData: React.FC = React.memo(() => {
   const [maximizeName, setMaximizeName] = useState<string | null>(null);
 
   const dataList = useMemo(() => {
-    const list = selectedConnection?.commands
+    const list = [...(selectedConnection?.commands ?? [])]
       .filter((command) => command.type === 'dataWatch')
       .reverse();
 

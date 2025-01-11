@@ -31,7 +31,11 @@ dreaction.registerCustomCommand({
     },
   ],
   handler: (args) => {
-    console.log('print foo', args);
+    const res = Math.random();
+
+    console.log('res', res, args);
+
+    return String(res);
   },
 });
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useRef, useEffect, useCallback } from 'react';
-import { Server, createServer } from 'dreaction-server-core';
+import React, { useRef, useEffect, useCallback, useMemo } from 'react';
+import { Command, Server, createServer } from 'dreaction-server-core';
 import { config } from '../../utils/config';
 
 import {
@@ -8,6 +8,8 @@ import {
   Connection,
   ServerStatus,
 } from './useDReactionServer';
+import { first } from 'lodash-es';
+import { CommandMap } from 'dreaction-protocol';
 
 export { type Connection };
 
@@ -127,4 +129,33 @@ export function useDReactionServerContext() {
   }
 
   return context;
+}
+
+export function useSelectedConnectionCommmands(filter: Command['type'][]) {
+  const { selectedConnection } = useDReactionServerContext();
+
+  const commandList = useMemo(() => {
+    const list = selectedConnection?.commands.filter((command) =>
+      filter.includes(command.type)
+    );
+
+    return list;
+  }, [filter, selectedConnection?.commands]);
+
+  return commandList;
+}
+
+export function useLatestSelectedConnectionCommmand<T extends Command['type']>(
+  type: T,
+  filterFn?: (command: CommandMap[T]) => boolean
+) {
+  const commandList = useSelectedConnectionCommmands([type]);
+
+  console.log('commandList', commandList);
+
+  if (filterFn) {
+    return first(commandList?.filter((command) => filterFn(command.payload)));
+  } else {
+    return first(commandList);
+  }
 }

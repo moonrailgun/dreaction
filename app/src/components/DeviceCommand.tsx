@@ -1,19 +1,23 @@
 import React, { useMemo } from 'react';
-import { useDReactionServerContext } from '../context/DReaction';
+import {
+  useDReactionServerContext,
+  useLatestSelectedConnectionCommmand,
+} from '../context/DReaction';
 import { entries, groupBy, last } from 'lodash-es';
 import { ActionIcon, ScrollArea, TextInput } from '@mantine/core';
 import { repairSerialization } from '../utils/repairSerialization';
 import clsx from 'clsx';
 import { IconSend } from '@tabler/icons-react';
-import { CustomCommandPayload } from 'dreaction-protocol';
+import { CustomCommandRegisterPayload } from 'dreaction-protocol';
 import { useForm } from '@mantine/form';
 import { Markdown } from './Markdown';
+import { DataRender } from './DataRender';
 
 export const DeviceCommand: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
 
   const commandList = useMemo(() => {
-    const list = selectedConnection?.commands
+    const list = [...(selectedConnection?.commands ?? [])]
       .filter(
         (command) =>
           command.type === 'customCommand.register' ||
@@ -52,59 +56,66 @@ export const DeviceCommand: React.FC = React.memo(() => {
 });
 DeviceCommand.displayName = 'DeviceCommand';
 
-export const DeviceCommandCard: React.FC<{ payload: CustomCommandPayload }> =
-  React.memo((props) => {
-    const payload = props.payload;
-    const { sendCommand } = useDReactionServerContext();
-    const form = useForm({
-      mode: 'uncontrolled',
-      initialValues: {},
-    });
-
-    const handleSubmit = () => {
-      sendCommand('custom', {
-        command: payload.command,
-        args: {
-          ...form.getValues(),
-        },
-      });
-    };
-
-    return (
-      <form
-        className={clsx(
-          'p-2 rounded-lg border border-black border-opacity-20 overflow-auto flex flex-col gap-1'
-        )}
-        onSubmit={form.onSubmit(handleSubmit)}
-      >
-        <div className="text-lg font-semibold flex">
-          <div className="flex-1">{payload.title ?? payload.command}</div>
-
-          <ActionIcon color="gray" variant="subtle" type="submit">
-            <IconSend />
-          </ActionIcon>
-        </div>
-
-        {payload.description && (
-          <Markdown className="text-xs opacity-60" raw={payload.description} />
-        )}
-
-        <div>
-          {payload.args &&
-            payload.args.map(({ name, type }) => {
-              if (type === 'string') {
-                return (
-                  <TextInput
-                    {...form.getInputProps(name)}
-                    key={form.key(name)}
-                    placeholder={name}
-                    label={name}
-                  />
-                );
-              }
-            })}
-        </div>
-      </form>
-    );
+export const DeviceCommandCard: React.FC<{
+  payload: CustomCommandRegisterPayload;
+}> = React.memo((props) => {
+  const payload = props.payload;
+  const { sendCommand } = useDReactionServerContext();
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {},
   });
+  const response = useLatestSelectedConnectionCommmand(
+    'customCommand.response',
+    (p) => p.command === payload.command
+  );
+
+  const handleSubmit = () => {
+    sendCommand('custom', {
+      command: payload.command,
+      args: {
+        ...form.getValues(),
+      },
+    });
+  };
+
+  return (
+    <form
+      className={clsx(
+        'p-2 rounded-lg border border-black border-opacity-20 overflow-auto flex flex-col gap-1'
+      )}
+      onSubmit={form.onSubmit(handleSubmit)}
+    >
+      <div className="text-lg font-semibold flex">
+        <div className="flex-1">{payload.title ?? payload.command}</div>
+
+        <ActionIcon color="gray" variant="subtle" type="submit">
+          <IconSend />
+        </ActionIcon>
+      </div>
+
+      {payload.description && (
+        <Markdown className="text-xs opacity-60" raw={payload.description} />
+      )}
+
+      <div>
+        {payload.args &&
+          payload.args.map(({ name, type }) => {
+            if (type === 'string') {
+              return (
+                <TextInput
+                  {...form.getInputProps(name)}
+                  key={form.key(name)}
+                  placeholder={name}
+                  label={name}
+                />
+              );
+            }
+          })}
+      </div>
+
+      {response && <DataRender data={response.payload} />}
+    </form>
+  );
+});
 DeviceCommandCard.displayName = 'DeviceCommandCard';

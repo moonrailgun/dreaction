@@ -1,5 +1,8 @@
 import { AsyncStorageMutationState } from './asyncStorage';
-import { CustomCommandPayload } from './customCommand';
+import {
+  CustomCommandRegisterPayload,
+  CustomCommandResponsePayload,
+} from './customCommand';
 import { DataWatchPayload } from './data';
 import type { LogPayload } from './log';
 import { NetworkPayload } from './network';
@@ -41,6 +44,7 @@ export const CommandType = {
   StateValuesRequest: 'state.values.request',
   CustomCommandRegister: 'customCommand.register',
   CustomCommandUnregister: 'customCommand.unregister',
+  CustomCommandResponse: 'customCommand.response',
   Clear: 'clear',
   ReplLsResponse: 'repl.ls.response',
   ReplExecuteResponse: 'repl.execute.response',
@@ -75,8 +79,9 @@ export interface CommandMap {
   [CommandType.StateValuesSubscribe]: StateValuesSubscribePayload;
   [CommandType.StateKeysRequest]: StateKeysRequestPayload;
   [CommandType.StateValuesRequest]: StateValuesRequestPayload;
-  [CommandType.CustomCommandRegister]: CustomCommandPayload;
+  [CommandType.CustomCommandRegister]: CustomCommandRegisterPayload;
   [CommandType.CustomCommandUnregister]: any;
+  [CommandType.CustomCommandResponse]: CustomCommandResponsePayload;
   [CommandType.Clear]: undefined;
   [CommandType.ReplLsResponse]: any;
   [CommandType.ReplExecuteResponse]: any;

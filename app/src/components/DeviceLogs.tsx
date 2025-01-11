@@ -25,6 +25,7 @@ const blacklistType: CommandTypeKey[] = [
   'dataWatch',
   'customCommand.register',
   'customCommand.unregister',
+  'customCommand.response',
 ];
 
 type DeviceLogsCommand = Command & {
@@ -86,7 +87,7 @@ export const DeviceLogs: React.FC = React.memo(() => {
     }
 
     return filteredCommands.filter((command) => {
-      return command.title.includes(debouncedFilterText);
+      return String(command.title).includes(debouncedFilterText);
     });
   }, [selectedConnection, filterType, debouncedFilterText]);
 
