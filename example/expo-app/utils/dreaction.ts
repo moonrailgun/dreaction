@@ -34,3 +34,12 @@ dreaction.registerCustomCommand({
     console.log('print foo', args);
   },
 });
+
+dreaction.registerCustomCommand({
+  title: 'Foo2',
+  command: 'foo2',
+  description: 'Should **support** `markdown`',
+  handler: (args) => {
+    console.log('print foo', args);
+  },
+});

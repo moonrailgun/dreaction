@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { entries, groupBy, last } from 'lodash-es';
-import { ActionIcon, TextInput } from '@mantine/core';
+import { ActionIcon, ScrollArea, TextInput } from '@mantine/core';
 import { repairSerialization } from '../utils/repairSerialization';
 import clsx from 'clsx';
 import { IconSend } from '@tabler/icons-react';
 import { CustomCommandPayload } from 'dreaction-protocol';
 import { useForm } from '@mantine/form';
+import { Markdown } from './Markdown';
 
 export const DeviceCommand: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
@@ -26,10 +27,12 @@ export const DeviceCommand: React.FC = React.memo(() => {
   }, [selectedConnection?.commands]);
 
   return (
-    <div className="h-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-2 gap-2">
-      {commandList.length === 0 && <div>No any command has been register</div>}
+    <ScrollArea>
+      <div className="h-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-2 gap-2">
+        {commandList.length === 0 && (
+          <div>No any command has been register</div>
+        )}
 
-      <div>
         {commandList.map(([, list]) => {
           const command = repairSerialization(last(list));
 
@@ -39,10 +42,12 @@ export const DeviceCommand: React.FC = React.memo(() => {
 
           const payload = command.payload;
 
-          return <DeviceCommandCard payload={payload} />;
+          return (
+            <DeviceCommandCard key={command.messageId} payload={payload} />
+          );
         })}
       </div>
-    </div>
+    </ScrollArea>
   );
 });
 DeviceCommand.displayName = 'DeviceCommand';
@@ -80,7 +85,9 @@ export const DeviceCommandCard: React.FC<{ payload: CustomCommandPayload }> =
           </ActionIcon>
         </div>
 
-        <div className="text-xs opacity-60">{payload.description}</div>
+        {payload.description && (
+          <Markdown className="text-xs opacity-60" raw={payload.description} />
+        )}
 
         <div>
           {payload.args &&
