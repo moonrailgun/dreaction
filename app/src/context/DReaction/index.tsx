@@ -151,8 +151,6 @@ export function useLatestSelectedConnectionCommmand<T extends Command['type']>(
 ) {
   const commandList = useSelectedConnectionCommmands([type]);
 
-  console.log('commandList', commandList);
-
   if (filterFn) {
     return first(commandList?.filter((command) => filterFn(command.payload)));
   } else {

@@ -4,6 +4,7 @@ import type {
   CommandMap,
   CommandTypeKey,
   CustomCommandArg,
+  CustomCommandRegisterPayload,
 } from 'dreaction-protocol';
 import validate from './validate';
 import logger from './plugins/logger';
@@ -72,13 +73,9 @@ export type CustomCommandArgs<Args extends CustomCommandArg[]> =
 
 export interface CustomCommand<
   Args extends CustomCommandArg[] = CustomCommandArg[]
-> {
+> extends Omit<CustomCommandRegisterPayload, 'id' | 'args'> {
   id?: number;
-  command: string;
   handler: (args: CustomCommandArgs<Args>) => any | Promise<any>;
-
-  title?: string;
-  description?: string;
   args?: Args;
 }
 
@@ -550,7 +547,7 @@ export class DReactionImpl
   }
 
   registerCustomCommand(
-    config: CustomCommand | string,
+    config: CustomCommand,
     optHandler?: () => void
   ): () => void {
     let command: string;
@@ -627,6 +624,7 @@ export class DReactionImpl
       title,
       description,
       args,
+      responseViewType: config.responseViewType,
     };
 
     // Increment our id counter
@@ -641,6 +639,7 @@ export class DReactionImpl
       title: customHandler.title,
       description: customHandler.description,
       args: customHandler.args,
+      responseViewType: customHandler.responseViewType,
     });
 
     return () => {

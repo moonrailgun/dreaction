@@ -3,7 +3,7 @@ import {
   useDReactionServerContext,
   useLatestSelectedConnectionCommmand,
 } from '../context/DReaction';
-import { entries, groupBy, last } from 'lodash-es';
+import { entries, get, groupBy, last } from 'lodash-es';
 import { ActionIcon, ScrollArea, TextInput } from '@mantine/core';
 import { repairSerialization } from '../utils/repairSerialization';
 import clsx from 'clsx';
@@ -114,7 +114,12 @@ export const DeviceCommandCard: React.FC<{
           })}
       </div>
 
-      {response && <DataRender data={response.payload} />}
+      {response && (
+        <DataRender
+          data={get(response.payload, 'payload')}
+          useTableMode={payload.responseViewType === 'table'}
+        />
+      )}
     </form>
   );
 });

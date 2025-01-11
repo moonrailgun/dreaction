@@ -47,3 +47,31 @@ dreaction.registerCustomCommand({
     console.log('print foo', args);
   },
 });
+
+dreaction.registerCustomCommand({
+  title: 'Render Table response',
+  command: 'returnTable',
+  description: 'This command will return ',
+  responseViewType: 'table',
+  handler: (args) => {
+    return [
+      {
+        a: 1,
+        b: 2,
+        c: 2,
+        d: 2,
+        eeeeeeeeee: 2,
+        f: 2,
+        g: 2,
+      },
+      {
+        a: 2,
+        b: 3,
+      },
+      {
+        a: 4,
+        b: 5,
+      },
+    ];
+  },
+});

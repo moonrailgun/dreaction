@@ -8,6 +8,7 @@ export interface CustomCommandRegisterPayload {
   command: string;
   title: string | undefined;
   description: string | undefined;
+  responseViewType?: 'auto' | 'table';
   args: CustomCommandArg[] | undefined;
 }
 
