@@ -151,13 +151,12 @@ export type InferPluginsFromCreators<
   : never;
 // #endregion
 
-type CorePluginFeatures = InferFeaturesFromPlugins<
+export type CorePluginFeatures = InferFeaturesFromPlugins<
   DReactionCore,
   typeof corePlugins
 >;
 
-// export interface DReaction extends DReactionCore, CorePluginFeatures {}
-export interface DReaction extends DReactionCore {}
+export interface DReaction extends DReactionCore, CorePluginFeatures {}
 
 // these are not for you.
 const reservedFeatures = [

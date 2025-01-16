@@ -6,10 +6,10 @@ export interface CustomCommandArg {
 export interface CustomCommandRegisterPayload {
   id: number;
   command: string;
-  title: string | undefined;
-  description: string | undefined;
+  title?: string;
+  description?: string;
   responseViewType?: 'auto' | 'table';
-  args: CustomCommandArg[] | undefined;
+  args?: CustomCommandArg[];
 }
 
 export interface CustomCommandResponsePayload {
