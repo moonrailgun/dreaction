@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { Command } from 'dreaction-server-core';
+import { notifications } from '@mantine/notifications';
 
 export enum ActionTypes {
   ServerStarted = 'SERVER_STARTED',
@@ -164,6 +165,11 @@ export const useDReactionServer = create<State>((set) => ({
   portUnavailable: () =>
     set((state) => {
       console.error('Port unavailable!');
+      notifications.show({
+        title: 'Server Init Failed',
+        message: 'Port unavailable!',
+      });
+
       return {
         ...state,
         serverStatus: 'portUnavailable',

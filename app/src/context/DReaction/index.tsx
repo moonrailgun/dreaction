@@ -58,10 +58,16 @@ export const DReactionServerProvider: React.FC<{
     connections.find((c) => c.clientId === selectedClientId) ?? null;
 
   useEffect(() => {
+    if (dreactionServer.current) {
+      dreactionServer.current.stop();
+    }
+
     // @ts-ignore
     dreactionServer.current = createServer({
       port: config.serverPort,
     });
+
+    window.__server = dreactionServer.current;
 
     dreactionServer.current.on('start', serverStarted);
     dreactionServer.current.on('stop', serverStopped);
@@ -131,16 +137,24 @@ export function useDReactionServerContext() {
   return context;
 }
 
-export function useSelectedConnectionCommmands(filter: Command['type'][]) {
+export function useSelectedConnectionCommmands(
+  filter: Command['type'][],
+  onlyPayload = false
+) {
   const { selectedConnection } = useDReactionServerContext();
 
   const commandList = useMemo(() => {
-    const list = selectedConnection?.commands.filter((command) =>
-      filter.includes(command.type)
-    );
+    const list =
+      selectedConnection?.commands.filter((command) =>
+        filter.includes(command.type)
+      ) ?? [];
+
+    if (onlyPayload) {
+      return list.map((item) => item.payload);
+    }
 
     return list;
-  }, [filter, selectedConnection?.commands]);
+  }, [filter, onlyPayload, selectedConnection?.commands]);
 
   return commandList;
 }
