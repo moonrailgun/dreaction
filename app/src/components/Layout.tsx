@@ -3,7 +3,8 @@ import { IconArrowsRightLeft, IconHome2 } from '@tabler/icons-react';
 import { Avatar, Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import clsx from 'clsx';
 import { DeviceSwitcher } from './DeviceSwitcher';
-import { ActivePage, menu, useLayoutStore } from '../store/layout';
+import { ActivePage, useLayoutStore } from '../store/layout';
+import { menu } from '../utils/menu';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;

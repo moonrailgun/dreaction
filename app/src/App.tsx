@@ -1,12 +1,11 @@
 import React from 'react';
 import { MantineProvider } from '@mantine/core';
 import { Layout } from './components/Layout';
-import { Home } from './components/Home';
 import { DReactionServerProvider } from './context/DReaction';
 import { useLayoutStore } from './store/layout';
-import { DeviceLogs } from './components/DeviceLogs';
-import { DeviceData } from './components/DeviceData';
-import { DeviceCommand } from './components/DeviceCommand';
+import { Notifications } from '@mantine/notifications';
+import clsx from 'clsx';
+import { menu } from './utils/menu';
 
 import '@mantine/core/styles.css';
 
@@ -16,14 +15,13 @@ export const App: React.FC = () => {
   return (
     <DReactionServerProvider>
       <MantineProvider>
+        <Notifications />
         <Layout>
-          {activePage === 'home' && <Home />}
-
-          {activePage === 'dashboard' && <DeviceLogs />}
-
-          {activePage === 'dataWatch' && <DeviceData />}
-
-          {activePage === 'command' && <DeviceCommand />}
+          {menu.map((item) => (
+            <div className={clsx(item.key !== activePage && 'hidden')}>
+              {item.component}
+            </div>
+          ))}
         </Layout>
       </MantineProvider>
     </DReactionServerProvider>
