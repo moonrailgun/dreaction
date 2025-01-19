@@ -1,11 +1,11 @@
 import { Blockquote, Code } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { getIp } from '../utils/ip';
-import { port } from '../service/server';
 import { useDReactionServerContext } from '../context/DReaction';
-import { omit } from 'lodash-es';
+import { omit, upperFirst } from 'lodash-es';
 import { getConnectionName, getIcon } from '../utils/connection';
 import { JSONView } from './JSONView';
+import { config } from '../utils/config';
 
 export const Home: React.FC = React.memo(() => {
   const [ip, setIp] = useState('');
@@ -15,17 +15,27 @@ export const Home: React.FC = React.memo(() => {
     });
   }, []);
 
-  const { selectedConnection } = useDReactionServerContext();
+  const { serverStatus, connections, selectedConnection } =
+    useDReactionServerContext();
 
   return (
     <div className="h-full flex flex-col">
       <div>
         <Blockquote color="blue" mt="xl">
-          Connect to{' '}
-          <Code color="blue.9" c="white">
-            {ip}:{port}
-          </Code>{' '}
-          to start debugging.
+          <div className="mb-2">
+            Connect to{' '}
+            <Code color="blue.9" c="white">
+              {ip}:{config.serverPort}
+            </Code>{' '}
+            to start debugging.
+          </div>
+          <div className="mb-2">
+            Server Status:{' '}
+            <span className="font-bold">{upperFirst(serverStatus)}</span>
+          </div>
+          <div>
+            Connections: <span className="font-bold">{connections.length}</span>
+          </div>
         </Blockquote>
       </div>
 
