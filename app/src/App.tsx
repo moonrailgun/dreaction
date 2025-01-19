@@ -18,7 +18,13 @@ export const App: React.FC = () => {
         <Notifications />
         <Layout>
           {menu.map((item) => (
-            <div className={clsx(item.key !== activePage && 'hidden')}>
+            <div
+              key={item.key}
+              className={clsx(
+                'h-full w-full',
+                item.key !== activePage && 'hidden'
+              )}
+            >
               {item.component}
             </div>
           ))}

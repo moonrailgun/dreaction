@@ -6,6 +6,7 @@ import {
   useDebugList,
   useDebugObject,
 } from '@/utils/dreaction';
+import { DReactionProfiler } from 'dreaction-react-native';
 
 export default function TabOneScreen() {
   const [counter, setCounter] = useState(0);
@@ -67,15 +68,17 @@ export default function TabOneScreen() {
         <Text>Click here to send network request</Text>
       </TouchableOpacity>
 
-      <View>
-        <Text>Counter: {counter}</Text>
-      </View>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => setCounter(counter + 1)}
-      >
-        <Text>Click here to increase counter</Text>
-      </TouchableOpacity>
+      <DReactionProfiler id="tab-one">
+        <View>
+          <Text>Counter: {counter}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setCounter(counter + 1)}
+        >
+          <Text>Click here to increase counter</Text>
+        </TouchableOpacity>
+      </DReactionProfiler>
 
       <TouchableOpacity style={styles.button} onPress={handleRandomArray}>
         <Text>Click here to set random array</Text>

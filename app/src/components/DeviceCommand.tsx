@@ -32,11 +32,13 @@ export const DeviceCommand: React.FC = React.memo(() => {
 
   return (
     <ScrollArea>
-      <div className="h-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-2 gap-2">
-        {commandList.length === 0 && (
-          <div>No any command has been register</div>
-        )}
+      {commandList.length === 0 && (
+        <div className="w-full py-10 text-center">
+          No any command has been register
+        </div>
+      )}
 
+      <div className="h-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-2 gap-2">
         {commandList.map(([, list]) => {
           const command = repairSerialization(last(list));
 
