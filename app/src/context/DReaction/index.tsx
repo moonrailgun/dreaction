@@ -67,6 +67,7 @@ export const DReactionServerProvider: React.FC<{
       port: config.serverPort,
     });
 
+    // @ts-ignore
     window.__server = dreactionServer.current;
 
     dreactionServer.current.on('start', serverStarted);
