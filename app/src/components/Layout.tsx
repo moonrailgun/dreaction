@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { DeviceSwitcher } from './DeviceSwitcher';
 import { ActivePage, useLayoutStore } from '../store/layout';
 import { menu } from '../utils/menu';
+import logoUrl from '../assets/icon.svg';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -51,7 +52,7 @@ export function Layout(props: PropsWithChildren) {
     <div className="flex h-full w-full">
       <nav className="w-20 h-full p-md flex flex-col border-r border-gray-300 dark:border-gray-700 p-4">
         <Center>
-          <Avatar src="/icon.svg" />
+          <Avatar src={logoUrl} />
         </Center>
 
         <div className="flex-1 mt-[50px]">
