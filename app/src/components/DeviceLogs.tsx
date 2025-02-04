@@ -23,6 +23,8 @@ import { tryToParseJSON } from '../utils/utils';
 
 const blacklistType: CommandTypeKey[] = [
   'dataWatch',
+  'profiler.render',
+  'profiler.fps',
   'customCommand.register',
   'customCommand.unregister',
   'customCommand.response',

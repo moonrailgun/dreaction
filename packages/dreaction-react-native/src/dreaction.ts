@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { createClient } from 'dreaction-client-core';
+import { createClient, runFPSMeter } from 'dreaction-client-core';
 import type {
   ClientOptions,
   InferFeaturesFromPlugins,
@@ -244,3 +244,11 @@ dreaction.registerDataWatcher = <T = unknown>(
     },
   };
 };
+
+export function watchFPS() {
+  return runFPSMeter((fps) => {
+    dreaction.send('profiler.fps', {
+      fps,
+    });
+  });
+}

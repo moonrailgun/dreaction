@@ -1,5 +1,7 @@
-import { dreaction } from 'dreaction-react-native';
+import { dreaction, watchFPS } from 'dreaction-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+watchFPS();
 
 dreaction
   .configure({

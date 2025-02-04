@@ -7,7 +7,7 @@ import { DataWatchPayload } from './data';
 import type { LogPayload } from './log';
 import { NetworkPayload } from './network';
 import { EditorOpenPayload } from './openInEditor';
-import { ProfilerRenderPayload } from './profiler';
+import { ProfilerFPSPayload, ProfilerRenderPayload } from './profiler';
 import type {
   StateActionCompletePayload,
   StateActionDispatchPayload,
@@ -32,6 +32,7 @@ export const CommandType = {
   Log: 'log',
   DataWatch: 'dataWatch',
   ProfilerRender: 'profiler.render',
+  ProfilerFPS: 'profiler.fps',
   SagaTaskComplete: 'saga.task.complete',
   StateActionComplete: 'state.action.complete',
   StateKeysResponse: 'state.keys.response',
@@ -70,6 +71,7 @@ export interface CommandMap {
   [CommandType.Log]: LogPayload;
   [CommandType.DataWatch]: DataWatchPayload;
   [CommandType.ProfilerRender]: ProfilerRenderPayload;
+  [CommandType.ProfilerFPS]: ProfilerFPSPayload;
   [CommandType.SagaTaskComplete]: any;
   [CommandType.StateActionComplete]: StateActionCompletePayload;
   [CommandType.StateKeysResponse]: StateKeysResponsePayload;
@@ -96,16 +98,18 @@ export interface CommandMap {
 }
 
 export type Command = {
-  [Type in keyof CommandMap]: {
-    type: Type;
-    connectionId: number;
-    clientId?: string;
-    date: Date;
-    deltaTime: number;
-    important: boolean;
-    messageId: number;
-    payload: CommandMap[Type];
-  };
+  [Type in keyof CommandMap]: CommandInferType<Type>;
 }[keyof CommandMap];
 
 export type CommandEvent = (command: Command) => void;
+
+export type CommandInferType<T extends keyof CommandMap> = {
+  type: T;
+  connectionId: number;
+  clientId?: string;
+  date: Date;
+  deltaTime: number;
+  important: boolean;
+  messageId: number;
+  payload: CommandMap[T];
+};

@@ -26,6 +26,7 @@ export {
   hasStateResponsePlugin,
 } from './plugins/state-responses';
 export type { StateResponsePlugin } from './plugins/state-responses';
+export { runFPSMeter } from './utils/fps';
 
 // #region Plugin Types
 export interface LifeCycleMethods {

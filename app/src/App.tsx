@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { menu } from './utils/menu';
 
 import '@mantine/core/styles.css';
+import '@mantine/charts/styles.css';
 
 export const App: React.FC = () => {
   const activePage = useLayoutStore((state) => state.activePage);

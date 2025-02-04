@@ -9,3 +9,7 @@ export interface ProfilerRenderPayload {
   startTime: number;
   commitTime: number;
 }
+
+export interface ProfilerFPSPayload {
+  fps: number;
+}
