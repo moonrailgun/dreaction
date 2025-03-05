@@ -4,7 +4,9 @@
   "description": "",
   "scripts": {
     "dev": "cd app && pnpm dev",
-    "release": "pnpm -r --filter \"./packages/*\" publish --registry=https://registry.npmjs.com/ --no-git-checks",
+    "release": "cd app && pnpm release",
+    "release:patch": "cd app && pnpm release:patch",
+    "release:packages": "pnpm -r --filter \"./packages/*\" publish --registry=https://registry.npmjs.com/ --no-git-checks",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

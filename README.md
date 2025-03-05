@@ -13,7 +13,9 @@ Your best debug tool in `react-native`
 
 ### Install Client
 
-`TODO`
+Download binary client in release page.
+
+[https://github.com/moonrailgun/dreaction/releases](https://github.com/moonrailgun/dreaction/releases)
 
 ### React Native
 
@@ -35,7 +37,7 @@ if(__DEV__) {
 }
 ```
 
-or use a ball which can custom ip in mobile
+or use a ball which can custom ip in mobile, its very helpful for your application is running in a non-developer's phone.
 
 ```tsx
 import { DReactionDraggableBall } from 'dreaction-react-native';

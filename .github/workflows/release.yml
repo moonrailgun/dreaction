@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: ./app
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 20
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 9.7.1
+
+    - name: Build and Release
+      env:
+        NODE_ENV: production
+      run:
+        npm run build -mwl
+
+    - name: Upload Release Assets
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          release/**/*.dmg
+          release/**/*.zip
+          release/**/*.exe
+          release/**/*.AppImage
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
