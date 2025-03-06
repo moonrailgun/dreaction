@@ -25,12 +25,13 @@ jobs:
       uses: pnpm/action-setup@v2
       with:
         version: 9.7.1
+        run_install: true
 
     - name: Build and Release
       env:
         NODE_ENV: production
       run:
-        npm run build -mwl
+        pnpm run build -mwl
 
     - name: Upload Release Assets
       uses: softprops/action-gh-release@v1
