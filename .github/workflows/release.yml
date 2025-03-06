@@ -8,6 +8,7 @@ on:
 jobs:
   release:
     runs-on: macos-latest
+    permissions: write-all
     defaults:
       run:
         working-directory: ./app
@@ -37,9 +38,9 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          release/**/*.dmg
-          release/**/*.zip
-          release/**/*.exe
-          release/**/*.AppImage
+          app/release/**/*.dmg
+          app/release/**/*.zip
+          app/release/**/*.exe
+          app/release/**/*.AppImage
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
