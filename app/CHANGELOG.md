@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.2](https://github.com/moonrailgun/dreaction/compare/v1.5.1...v1.5.2) (2025-03-06)
+
+### Others
+
+* update pnpm install script ([8105332](https://github.com/moonrailgun/dreaction/commit/8105332c4d9755a307c324dc7ef18214b5e45d93))
+
 ## 1.5.1 (2025-03-06)
 
 ### Features
