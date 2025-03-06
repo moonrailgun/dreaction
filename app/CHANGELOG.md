@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.5.3](https://github.com/moonrailgun/dreaction/compare/v1.5.2...v1.5.3) (2025-03-06)
+
+### Others
+
+* update release yml ([b3cdf32](https://github.com/moonrailgun/dreaction/commit/b3cdf3215294ad6423361b485afd509b949ba6e9))
+
 ## [1.5.2](https://github.com/moonrailgun/dreaction/compare/v1.5.1...v1.5.2) (2025-03-06)
 
 ### Others
