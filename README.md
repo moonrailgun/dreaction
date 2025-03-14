@@ -41,13 +41,13 @@ This is a summary of current connections.
 
 ## Get start
 
-### Install Client
+### Install Client in your Desktop
 
 Download binary client in release page.
 
 [https://github.com/moonrailgun/dreaction/releases](https://github.com/moonrailgun/dreaction/releases)
 
-### React Native
+### Install package for React Native
 
 ```bash
 npm install dreaction-react-native
