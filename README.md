@@ -7,6 +7,36 @@ Your best debug tool in `react-native`
 - network interceptor
 - data watcher
 - custom command
+- performance monitor
+
+## Screenshot
+
+![](./docs/demo.gif)
+
+#### Draggable ball
+
+This is a draggable ball, you can drag it to anywhere you want. useful for your application is running in a non-developer's phone.
+
+![](./docs/1.png)
+
+#### Summary
+
+This is a summary of current connections.
+
+![](./docs/2.png)
+
+#### Logs and Network
+![](./docs/3.png)
+
+#### Data Watcher
+![](./docs/4.png)
+
+#### Custom Command
+![](./docs/5.png)
+
+#### Performance Monitor
+![](./docs/6.png)
+
 
 
 ## Get start
@@ -51,3 +81,18 @@ function AppContainer() {
   );
 }
 ```
+
+## Example
+
+Check here to learn how to use those feature in code
+
+[https://github.com/moonrailgun/dreaction/blob/master/example/expo-app/utils/dreaction.ts](https://github.com/moonrailgun/dreaction/blob/master/example/expo-app/utils/dreaction.ts) 
+
+
+## Special Thanks
+
+This Project is quick start from [reactotron](https://github.com/infinitered/reactotron), most protocol is same. thanks for provide so easy to use tools. This project just add more easy to use feature and improve UI.
+
+## License
+
+This project is licensed under the MIT License.
