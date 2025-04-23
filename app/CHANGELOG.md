@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.4](https://github.com/moonrailgun/dreaction/compare/v1.5.3...v1.5.4) (2025-04-23)
+
+### Document
+
+* enhance README and improve DeviceLogs component ([dccbfd2](https://github.com/moonrailgun/dreaction/commit/dccbfd2150423eee3e2eab10d9f450d8938997c0))
+* update README ([6bf07ba](https://github.com/moonrailgun/dreaction/commit/6bf07baf2e4fea58b3d9c1c679387f5bbeed11ca))
+* update README ([ecb07d0](https://github.com/moonrailgun/dreaction/commit/ecb07d051b8044d627a0a61a0b019fa3a609ee57))
+
 ## [1.5.3](https://github.com/moonrailgun/dreaction/compare/v1.5.2...v1.5.3) (2025-03-06)
 
 ### Others
