@@ -2,12 +2,13 @@
 
 Your best debug tool in `react-native`
 
-**feature**:
-- show logs
-- network interceptor
-- data watcher
-- custom command
-- performance monitor
+**Highlight**:
+
+- 🟠 Debug Ball (Suuuuuper useful for QA!) 👀
+- 📜 Logs/Network (Easily track logs and network requests) 🌐
+- 🔍 Data Watcher (Keep an eye on your data in real-time) 📊
+- ⚡ Custom Command (Run your own custom commands to make debugging even smoother) 🖥️
+- 📈 Performance Monitor (Monitor your app’s performance and optimize like a pro) 💪
 
 ## Screenshot
 

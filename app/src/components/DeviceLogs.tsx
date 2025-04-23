@@ -205,6 +205,8 @@ const Item: React.FC<{
       color = 'red';
     }
 
+    const tag = <Badge color={color}>{command.payload.level}</Badge>;
+
     const message = command.payload.message;
     let body = <pre>{JSON.stringify(message, null, 4)}</pre>;
     if (typeof message === 'string') {
@@ -220,7 +222,7 @@ const Item: React.FC<{
     return (
       <ItemContainer
         command={command}
-        tag={<Badge color={color}>{command.payload.level}</Badge>}
+        tag={tag}
         title={JSON.stringify(command.payload.message)}
         body={body}
       />
@@ -239,10 +241,28 @@ const Item: React.FC<{
   }
 
   if (command.type === 'api.response') {
+    const statusCode = command.payload.response.status;
+    const statusColor =
+      statusCode < 300
+        ? 'green'
+        : statusCode < 400
+        ? 'blue'
+        : statusCode < 500
+        ? 'yellow'
+        : 'red';
+
     return (
       <ItemContainer
         command={command}
-        tag={<Badge color="violet">{command.payload.request.method}</Badge>}
+        tag={
+          <div className="space-x-2 flex">
+            <Badge color="violet">{command.payload.request.method}</Badge>
+
+            {statusColor !== 'green' && (
+              <Badge color={statusColor}>{statusCode}</Badge>
+            )}
+          </div>
+        }
         title={String(command.payload.request.url)}
         body={
           <Tabs defaultValue="summary">
@@ -312,7 +332,7 @@ const Item: React.FC<{
             </Tabs.Panel>
 
             <Tabs.Panel value="response">
-              <JSONView data={command.payload.response} />
+              <JSONView data={command.payload.response} hideRoot={true} />
             </Tabs.Panel>
           </Tabs>
         }
