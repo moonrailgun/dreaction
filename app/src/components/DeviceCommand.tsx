@@ -1,13 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   useDReactionServerContext,
   useLatestSelectedConnectionCommmand,
 } from '../context/DReaction';
 import { entries, get, groupBy, last } from 'lodash-es';
-import { ActionIcon, ScrollArea, TextInput } from '@mantine/core';
+import { ActionIcon, ScrollArea, TextInput, Button } from '@mantine/core';
 import { repairSerialization } from '../utils/repairSerialization';
 import clsx from 'clsx';
-import { IconSend } from '@tabler/icons-react';
+import { IconSend, IconChevronRight } from '@tabler/icons-react';
 import { CustomCommandRegisterPayload } from 'dreaction-protocol';
 import { useForm } from '@mantine/form';
 import { Markdown } from './Markdown';
@@ -15,6 +15,7 @@ import { DataRender } from './DataRender';
 
 export const DeviceCommand: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
+  const [selectedCommand, setSelectedCommand] = useState<string | null>(null);
 
   const commandList = useMemo(() => {
     const list = [...(selectedConnection?.commands ?? [])]
@@ -26,37 +27,213 @@ export const DeviceCommand: React.FC = React.memo(() => {
       .reverse();
 
     return entries(groupBy(list, (item) => item.payload.command));
-
-    // return entries(groupBy(list, (item) => item.payload.name));
   }, [selectedConnection?.commands]);
 
-  return (
-    <ScrollArea>
-      {commandList.length === 0 && (
-        <div className="w-full py-10 text-center">
+  const availableCommands = useMemo(() => {
+    return commandList
+      .map(([, list]) => {
+        const command = repairSerialization(last(list));
+        if (!command || command.type === 'customCommand.unregister') {
+          return null;
+        }
+        return command;
+      })
+      .filter(Boolean);
+  }, [commandList]);
+
+  React.useEffect(() => {
+    if (
+      availableCommands.length > 0 &&
+      !selectedCommand &&
+      availableCommands[0]
+    ) {
+      setSelectedCommand(availableCommands[0].payload.command);
+    }
+  }, [availableCommands, selectedCommand]);
+
+  const currentCommand = availableCommands.find(
+    (cmd) => cmd?.payload.command === selectedCommand
+  );
+
+  if (commandList.length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <div className="text-center text-gray-500">
           No any command has been register
         </div>
-      )}
-
-      <div className="h-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-2 gap-2">
-        {commandList.map(([, list]) => {
-          const command = repairSerialization(last(list));
-
-          if (!command || command.type === 'customCommand.unregister') {
-            return null;
-          }
-
-          const payload = command.payload;
-
-          return (
-            <DeviceCommandCard key={command.messageId} payload={payload} />
-          );
-        })}
       </div>
-    </ScrollArea>
+    );
+  }
+
+  return (
+    <div className="h-full flex">
+      <div className="w-80 border-r border-gray-200 flex flex-col flex-shrink-0">
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="text-lg font-semibold">Commands</h3>
+          <p className="text-sm text-gray-500">
+            {availableCommands.length} command(s) available
+          </p>
+        </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-2">
+            {availableCommands.map((command) => {
+              if (!command) return null;
+
+              const payload = command.payload;
+              const isSelected = selectedCommand === payload.command;
+
+              return (
+                <div
+                  key={command.messageId}
+                  className={clsx(
+                    'p-3 rounded-lg mb-2 cursor-pointer transition-colors',
+                    'border border-transparent hover:bg-gray-50',
+                    isSelected && 'bg-blue-50 border-blue-200'
+                  )}
+                  onClick={() => setSelectedCommand(payload.command)}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <div className="font-medium text-sm">
+                        {payload.title ?? payload.command}
+                      </div>
+                      {payload.description && (
+                        <div className="text-xs text-gray-500 mt-1 line-clamp-2">
+                          {payload.description}
+                        </div>
+                      )}
+                    </div>
+                    <IconChevronRight
+                      className={clsx(
+                        'w-4 h-4 text-gray-400 transition-colors',
+                        isSelected && 'text-blue-500'
+                      )}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </ScrollArea>
+      </div>
+
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {currentCommand ? (
+          <DeviceCommandDetail payload={currentCommand.payload} />
+        ) : (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center text-gray-500">
+              Select a command to view details
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 });
 DeviceCommand.displayName = 'DeviceCommand';
+
+export const DeviceCommandDetail: React.FC<{
+  payload: CustomCommandRegisterPayload;
+}> = React.memo((props) => {
+  const payload = props.payload;
+  const { sendCommand } = useDReactionServerContext();
+  const form = useForm({
+    mode: 'uncontrolled',
+    initialValues: {},
+  });
+  const response = useLatestSelectedConnectionCommmand(
+    'customCommand.response',
+    (p) => p.command === payload.command
+  );
+
+  const handleSubmit = () => {
+    sendCommand('custom', {
+      command: payload.command,
+      args: {
+        ...form.getValues(),
+      },
+    });
+  };
+
+  return (
+    <div className="h-full flex flex-col">
+      <div className="p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-xl font-semibold">
+            {payload.title ?? payload.command}
+          </h2>
+          <Button
+            leftSection={<IconSend size={16} />}
+            onClick={handleSubmit}
+            size="sm"
+          >
+            Execute
+          </Button>
+        </div>
+
+        {payload.description && (
+          <Markdown
+            className="text-sm text-gray-600"
+            raw={payload.description}
+          />
+        )}
+      </div>
+
+      {payload.args && payload.args.length > 0 && (
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="text-lg font-medium mb-3">Parameters</h3>
+          <form onSubmit={form.onSubmit(handleSubmit)} className="space-y-3">
+            {payload.args.map(({ name, type }) => {
+              if (type === 'string') {
+                return (
+                  <TextInput
+                    {...form.getInputProps(name)}
+                    key={form.key(name)}
+                    placeholder={`Enter ${name}`}
+                    label={name}
+                    size="sm"
+                  />
+                );
+              }
+              return null;
+            })}
+          </form>
+        </div>
+      )}
+
+      <div className="flex-1 flex flex-col">
+        <div className="p-4 border-b border-gray-200">
+          <h3 className="text-lg font-medium">Response</h3>
+        </div>
+
+        <div className="flex-1 overflow-hidden">
+          {response ? (
+            <ScrollArea className="h-full">
+              <div className="p-4">
+                <DataRender
+                  data={get(response.payload, 'payload')}
+                  useTableMode={payload.responseViewType === 'table'}
+                />
+              </div>
+            </ScrollArea>
+          ) : (
+            <div className="h-full flex items-center justify-center">
+              <div className="text-center text-gray-500">
+                <p>No response yet</p>
+                <p className="text-sm mt-1">
+                  Execute the command to see results
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+});
+DeviceCommandDetail.displayName = 'DeviceCommandDetail';
 
 export const DeviceCommandCard: React.FC<{
   payload: CustomCommandRegisterPayload;
