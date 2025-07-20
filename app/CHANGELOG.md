@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.6.0](https://github.com/moonrailgun/dreaction/compare/v1.5.4...v1.6.0) (2025-07-20)
+
+### Others
+
+* redesign command and data watch layout ([953723c](https://github.com/moonrailgun/dreaction/commit/953723ce7f37dd7e89f1e25ecd9f56f2c3f0e796))
+
 ## [1.5.4](https://github.com/moonrailgun/dreaction/compare/v1.5.3...v1.5.4) (2025-04-23)
 
 ### Document
