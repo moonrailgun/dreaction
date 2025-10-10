@@ -1,5 +1,5 @@
 // @ts-ignore
-import XHRInterceptor from 'react-native/Libraries/Network/XHRInterceptor';
+import { XHRInterceptor } from './xhrInterceptor';
 import type { DReactionCore, Plugin } from 'dreaction-client-core';
 
 /**
