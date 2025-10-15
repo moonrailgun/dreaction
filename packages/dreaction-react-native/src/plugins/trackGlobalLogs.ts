@@ -14,21 +14,26 @@ const trackGlobalLogs = () => (dreaction: DReactionCore) => {
   const client = dreaction as DReactionCore &
     InferFeatures<DReactionCore, LoggerPlugin>;
 
+  const originalConsoleLog = console.log;
+  const originalConsoleWarn = console.warn;
+  const originalConsoleDebug = console.debug;
+  const originalConsoleInfo = console.info;
+
   return {
     onConnect: () => {
-      const originalConsoleLog = console.log;
       console.log = (...args: Parameters<typeof console.log>) => {
         originalConsoleLog(...args);
         client.log(...args);
       };
-
-      const originalConsoleWarn = console.warn;
+      console.info = (...args: Parameters<typeof console.info>) => {
+        originalConsoleInfo(...args);
+        client.log(...args);
+      };
       console.warn = (...args: Parameters<typeof console.warn>) => {
         originalConsoleWarn(...args);
         client.warn(args[0]);
       };
 
-      const originalConsoleDebug = console.debug;
       console.debug = (...args: Parameters<typeof console.debug>) => {
         originalConsoleDebug(...args);
         client.debug(args[0]);
@@ -36,6 +41,12 @@ const trackGlobalLogs = () => (dreaction: DReactionCore) => {
 
       // console.error is taken care of by ./trackGlobalErrors.ts
     },
+    onDisconnect: () => {
+      console.log = originalConsoleLog;
+      console.warn = originalConsoleWarn;
+      console.debug = originalConsoleDebug;
+      console.info = originalConsoleInfo;
+    }
   } satisfies Plugin<DReactionCore>;
 };
 
