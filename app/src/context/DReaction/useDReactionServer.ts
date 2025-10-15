@@ -106,7 +106,7 @@ export const useDReactionServer = create<State>((set) => ({
         state.selectedClientId === connection.clientId
           ? filteredConnections.length > 0
             ? filteredConnections[0].clientId
-            : null
+            : state.selectedClientId
           : state.selectedClientId;
 
       return {
