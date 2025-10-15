@@ -1,3 +1,6 @@
+import os from "os"
+import path from "path"
+import fs from "fs"
 import React, { useMemo, useState } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { Command } from 'dreaction-server-core';
@@ -13,7 +16,7 @@ import { JSONView } from './JSONView';
 import { renderDeviceLogsDate } from '../utils/date';
 import { CopyText } from './CopyText';
 import { apiRequestToCurl } from '../utils/api';
-import { IconTrash } from '@tabler/icons-react';
+import { IconTrash, IconDownload } from '@tabler/icons-react';
 import { useDReactionServer } from '../context/DReaction/useDReactionServer';
 import { repairSerialization } from '../utils/repairSerialization';
 import { useDebounce } from 'ahooks';
@@ -93,13 +96,24 @@ export const DeviceLogs: React.FC = React.memo(() => {
     });
   }, [selectedConnection, filterType, debouncedFilterText]);
 
+  const handleDowload = () => {
+    const homeDir = os.homedir()
+    const downloadDir = path.join(homeDir, "Downloads")
+    fs.writeFileSync(
+      path.resolve(downloadDir, `dreaction-timeline-log-${Date.now()}.json`),
+      JSON.stringify(commands || []),
+      "utf8"
+    )
+    console.log(`Exported timeline log to ${downloadDir}`)
+  };
+
   const handleClear = () => {
     clearSelectedConnectionCommands();
   };
 
   return (
     <div>
-      <div className="flex items-center h-10">
+      <div className="flex items-center h-10 sticky top-0 z-10">
         <SegmentedControl
           className="rounded-none border-b border-[#ced4da]"
           value={filterType}
@@ -124,6 +138,17 @@ export const DeviceLogs: React.FC = React.memo(() => {
           />
         </div>
 
+        <ActionIcon
+          color={'gray'}
+          variant="default"
+          size="md"
+          classNames={{
+            root: 'w-10 h-10 rounded-none text-gray-500',
+          }}
+          onClick={handleDowload}
+        >
+          <IconDownload />
+        </ActionIcon>
         <ActionIcon
           color={'gray'}
           variant="default"
