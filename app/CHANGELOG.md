@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.6.2](https://github.com/moonrailgun/dreaction/compare/v1.6.0...v1.6.2) (2025-10-16)
+
+### Features
+
+* support export logs ([e1cbcbb](https://github.com/moonrailgun/dreaction/commit/e1cbcbbe3f7cf73395a27d3eccbfdbb72da2a5ce))
+
+### Bug Fixes
+
+* fix React Native 0.79 network interception ([8722044](https://github.com/moonrailgun/dreaction/commit/87220443bbafbf5b1f4fce3808486f090b62a29f))
+* keep selected client on disconnect for <= connections ([d32aeb1](https://github.com/moonrailgun/dreaction/commit/d32aeb1e4893936b6652ae3c6e7a9d882236fd3d))
+* restore original console on onDisconnect ([e7cddc8](https://github.com/moonrailgun/dreaction/commit/e7cddc83accd0606a1d81079c78666fb8e0d65cd))
+
+### Others
+
+* update DeviceCommand layout ([3d2fc36](https://github.com/moonrailgun/dreaction/commit/3d2fc3619c94ec7e8db57cd410d42075470dc783))
+* update dreaction-react-native version to 1.7.1 ([af0e886](https://github.com/moonrailgun/dreaction/commit/af0e88685f4ff87672b957beba0b559a691335b4))
+* update version of dreaction-react-native ([d2bc02e](https://github.com/moonrailgun/dreaction/commit/d2bc02ec8c5c3e355878aa68a0ea6e12e4fa7d65))
+
 ## [1.6.0](https://github.com/moonrailgun/dreaction/compare/v1.5.4...v1.6.0) (2025-07-20)
 
 ### Others
