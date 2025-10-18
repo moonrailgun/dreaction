@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { getHost } from '../helpers/getHost';
 import { dreaction } from '../dreaction';
-import { getHostFromUrl } from '../helpers/parseURL';
+import { getHostWithPortFromUrl } from '../helpers/parseURL';
 
 const LOCAL_CACHE_HOST_NAME = '__dreaction-react-native-host';
 
@@ -36,7 +36,7 @@ export const ConfigDialog: React.FC<ConfigDialogProps> = React.memo((props) => {
   }, []);
 
   const handleConfirm = () => {
-    const host = getHostFromUrl(inputValue);
+    const host = getHostWithPortFromUrl(inputValue);
     dreaction.asyncStorageHandler?.setItem(LOCAL_CACHE_HOST_NAME, host);
     onConfirm(host);
   };
