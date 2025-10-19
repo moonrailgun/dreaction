@@ -36,15 +36,9 @@ export const DraggableBall: React.FC = React.memo(() => {
     };
   }, []);
 
-  const handleClick = (host: string) => {
+  const handleClick = (config: { host: string; port?: number }) => {
     try {
-      dreaction
-        .configure({
-          host,
-        })
-        .close()
-        .connect();
-
+      dreaction.configure(config).close().connect();
       setModalVisible(false);
     } catch (e) {
       Alert.alert('Connected Failed', 'Please check your url');

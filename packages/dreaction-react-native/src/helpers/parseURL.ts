@@ -35,3 +35,25 @@ export function getHostWithPortFromUrl(url: string) {
 
   return hostWithPort;
 }
+
+/**
+ * Parse host and port separately
+ */
+export function parseHostAndPort(url: string): { host: string; port?: number } {
+  const hostWithPort = getHostWithPortFromUrl(url);
+  const lastColonIndex = hostWithPort.lastIndexOf(':');
+
+  if (lastColonIndex === -1) {
+    return { host: hostWithPort };
+  }
+
+  const host = hostWithPort.substring(0, lastColonIndex);
+  const portStr = hostWithPort.substring(lastColonIndex + 1);
+  const port = parseInt(portStr, 10);
+
+  if (isNaN(port) || port <= 0 || port > 65535) {
+    return { host: hostWithPort };
+  }
+
+  return { host, port };
+}
