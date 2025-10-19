@@ -11,29 +11,9 @@ export function getHostFromUrl(url: string) {
   // Group 2: host
   // Group 3: port
   // Group 4: rest
-  const host = url.match(
-    /^(?:https?:\/\/)?(\[[^\]]+\]|[^/:\s]+)(?::\d+)?(?:[/?#]|$)/
-  )?.[1];
+  const host = url.match(/^(?:https?:\/\/)?(\[[^\]]+\]|[^/:\s]+)(?::\d+)?(?:[/?#]|$)/)?.[1]
 
-  if (typeof host !== 'string') throw new Error('Invalid URL - host not found');
+  if (typeof host !== "string") throw new Error("Invalid URL - host not found")
 
-  return host;
-}
-
-/**
- * Extract host:port from URL
- * @param url URL string
- * @returns host:port string or throws if invalid
- */
-export function getHostWithPortFromUrl(url: string) {
-  const hostWithPort = url
-    .replace(/^(?:https?:\/\/)?/, '')
-    .split(/[/?#]/)[0]
-    .trim();
-
-  if (!hostWithPort) {
-    throw new Error('Invalid URL - host not found');
-  }
-
-  return hostWithPort;
+  return host
 }
