@@ -16,7 +16,7 @@ import trackGlobalErrors, {
   TrackGlobalErrorsOptions,
 } from './plugins/trackGlobalErrors';
 import networking, { NetworkingOptions } from './plugins/networking';
-import devTools from './plugins/devTools';
+// import devTools from './plugins/devTools';
 import trackGlobalLogs from './plugins/trackGlobalLogs';
 import getReactNativePlatformConstants from './helpers/getReactNativePlatformConstants';
 import { DataWatchPayload } from 'dreaction-protocol';
@@ -36,7 +36,7 @@ export const reactNativeCorePlugins = [
   trackGlobalLogs(),
   openInEditor(),
   networking(),
-  devTools(),
+  // devTools(),
 ] satisfies PluginCreator<DReactionCore>[];
 
 export interface UseReactNativeOptions {
@@ -45,7 +45,7 @@ export interface UseReactNativeOptions {
   editor?: OpenInEditorOptions | boolean;
   asyncStorage?: AsyncStorageOptions | boolean;
   networking?: NetworkingOptions | boolean;
-  devTools?: boolean;
+  // devTools?: boolean;
 }
 
 type ReactNativePluginFeatures = InferFeaturesFromPlugins<
@@ -189,9 +189,9 @@ dreaction.useReactNative = (options: UseReactNativeOptions = {}) => {
     );
   }
 
-  if (options.devTools !== false) {
-    dreaction.use(devTools());
-  }
+  // if (options.devTools !== false) {
+  //   dreaction.use(devTools());
+  // }
 
   return dreaction;
 };

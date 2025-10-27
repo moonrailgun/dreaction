@@ -1,5 +1,5 @@
 // @ts-ignore
-import NativeSourceCode from 'react-native/Libraries/NativeModules/specs/NativeSourceCode';
+import { NativeModules } from 'react-native';
 import { getHostFromUrl } from './parseURL';
 
 /**
@@ -12,7 +12,7 @@ import { getHostFromUrl } from './parseURL';
 export const getHost = (defaultHost = 'localhost') => {
   try {
     // RN Reference: https://github.com/facebook/react-native/blob/main/packages/react-native/src/private/specs/modules/NativeSourceCode.js
-    const scriptURL = NativeSourceCode.getConstants().scriptURL;
+    const scriptURL = NativeModules?.SourceCode?.getConstants?.().scriptURL;
 
     if (typeof scriptURL !== 'string') {
       throw new Error('Invalid non-string URL');

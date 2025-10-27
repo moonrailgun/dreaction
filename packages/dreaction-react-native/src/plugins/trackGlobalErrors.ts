@@ -8,24 +8,50 @@ import {
   assertHasLoggerPlugin,
   Plugin,
 } from 'dreaction-client-core';
-import _LogBox, {
-  LogBoxStatic as LogBoxStaticPublic,
-  // eslint-disable-next-line import/default, import/namespace
-} from 'react-native/Libraries/LogBox/LogBox';
+// import { LogBox as _LogBox } from 'react-native';
+// import _LogBox, {
+//   LogBoxStatic as LogBoxStaticPublic,
+//   // eslint-disable-next-line import/default, import/namespace
+// } from 'react-native/Libraries/LogBox/LogBox';
 // eslint-disable-next-line import/namespace
 // import type { ExtendedExceptionData } from 'react-native/Libraries/LogBox/Data/parseLogBoxLog';
 import type { SymbolicateStackTraceFn } from '../helpers/symbolicateStackTrace';
 import type { ParseErrorStackFn } from '../helpers/parseErrorStack';
 
-interface LogBoxStaticPrivate extends LogBoxStaticPublic {
-  /**
-   * @see https://github.com/facebook/react-native/blob/v0.72.1/packages/react-native/Libraries/LogBox/LogBox.js#L29
-   */
-  // addException: (error: ExtendedExceptionData) => void;
-  addException: (error: any) => void;
+interface ILogBox {
+  install(): void;
+  uninstall(): void;
+  isInstalled(): boolean;
+  ignoreLogs(patterns: (string | RegExp)[]): void;
+  ignoreAllLogs(ignore?: boolean): void;
+  clearAllLogs(): void;
+  addLog(log: any): void;
+  addException(error: any): void;
 }
 
-const LogBox = _LogBox as unknown as LogBoxStaticPrivate;
+// const LogBox = _LogBox as unknown as ILogBox;
+
+function getRN() {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const RN = require('react-native');
+  return RN;
+}
+function getLogBox(): ILogBox | null {
+  if (!__DEV__) return null;
+  const RN = getRN();
+  const hasPlatformConstants = !!RN?.NativeModules?.PlatformConstants;
+  return hasPlatformConstants ? (RN.LogBox as ILogBox) : null;
+}
+
+// interface LogBoxStaticPrivate extends LogBoxStaticPublic {
+//   /**
+//    * @see https://github.com/facebook/react-native/blob/v0.72.1/packages/react-native/Libraries/LogBox/LogBox.js#L29
+//    */
+//   // addException: (error: ExtendedExceptionData) => void;
+//   addException: (error: any) => void;
+// }
+
+// const LogBox = _LogBox as unknown as LogBoxStaticPrivate;
 
 // a few functions to help source map errors -- these seem to be not available immediately
 // so we're lazy loading.
@@ -72,7 +98,7 @@ const trackGlobalErrors =
     const config = Object.assign({}, PLUGIN_DEFAULTS, options || {});
 
     // manually fire an error
-    function reportError(error: Parameters<typeof LogBox.addException>[0]) {
+    function reportError(error: Parameters<ILogBox['addException']>[0]) {
       try {
         parseErrorStack =
           parseErrorStack ||
@@ -133,6 +159,11 @@ const trackGlobalErrors =
     // the dreaction plugin interface
     return {
       onConnect: () => {
+        const LogBox = getLogBox();
+        if (!LogBox) {
+          return;
+        }
+
         LogBox.addException = new Proxy(LogBox.addException, {
           apply: function (
             target,
