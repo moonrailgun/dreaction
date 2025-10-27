@@ -31,8 +31,8 @@ export function getPlatformName(connection: Connection) {
       return 'iOS';
     case 'android':
       return 'Android';
-    case 'browser':
-      return getBrowserApp(connection) || 'Browser';
+    case 'web':
+      return getBrowserApp(connection) || 'Web';
     default:
       return connection.platform || 'Unknown platform';
   }
@@ -96,7 +96,7 @@ const BROWSER_ICONS = {
 };
 
 export function getIcon(connection: Connection) {
-  if (connection.platform === 'browser') {
+  if (connection.platform === 'web') {
     return BROWSER_ICONS[getBrowserApp(connection)] || IconDefault;
   } else {
     return PHONE_ICONS[connection.platform] || IconDefault;

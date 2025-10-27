@@ -1,0 +1,36 @@
+{
+  "name": "dreaction-react",
+  "version": "1.0.0",
+  "private": false,
+  "description": "DReaction client for React web applications",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "prepare": "tsc"
+  },
+  "files": [
+    "lib",
+    "src"
+  ],
+  "keywords": [
+    "dreaction",
+    "react",
+    "debug"
+  ],
+  "author": "moonrailgun <moonrailgun@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dreaction-client-core": "workspace:*",
+    "dreaction-protocol": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  }
+}

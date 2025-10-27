@@ -19,7 +19,7 @@ export type ServerStatus = 'stopped' | 'portUnavailable' | 'started';
 export interface DReactionConnection {
   id: number;
   clientId: string;
-  platform: 'ios' | 'android' | 'browser';
+  platform: 'ios' | 'android' | 'web';
   name?: string;
   platformVersion?: string;
   osRelease?: string;

@@ -105,7 +105,7 @@ const networking =
         url: url || cachedRequest.xhr._url,
         method: xhr._method || null,
         data,
-        headers: xhr._headers || null,
+        headers: xhr._headers || {},
         params,
       };
 
