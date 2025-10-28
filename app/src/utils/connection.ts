@@ -54,7 +54,7 @@ export function getPlatformDetails(connection: Connection) {
       }
     }
 
-    case 'browser': {
+    case 'web': {
       if (platformVersion === 'MacIntel') {
         return 'macOS';
       } else {
