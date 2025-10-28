@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.7.0](https://github.com/moonrailgun/dreaction/compare/v1.6.2...v1.7.0) (2025-10-28)
+
+### Features
+
+* add dreaction-react package which add dreaction support for react ([c48bcc8](https://github.com/moonrailgun/dreaction/commit/c48bcc880ebeed62c499efcb9c770b4e2a344356))
+* add new theme for dark mode ([e100300](https://github.com/moonrailgun/dreaction/commit/e1003007cb1780e5253b7b8c722b3fc37c558eaa))
+* add waitForConnect and improve connect status display ([f8fdb1f](https://github.com/moonrailgun/dreaction/commit/f8fdb1fa634907a45ba299137354770ac00eab00))
+
+### Bug Fixes
+
+* preserve port in ConfigDialog host input ([b5690c4](https://github.com/moonrailgun/dreaction/commit/b5690c49ebece175a04ca00c34877ee91e4fe13f))
+
+### Others
+
+* dump dreaction-react-native version ([0e612e0](https://github.com/moonrailgun/dreaction/commit/0e612e027ca399c271adedaa38ce252f9ee8e021))
+* improve readme and version and keyword info ([5c26321](https://github.com/moonrailgun/dreaction/commit/5c2632168bfa4d322a2135b6e1b5b9d777ceffbd))
+* init nextjs example ([d5234e4](https://github.com/moonrailgun/dreaction/commit/d5234e456b93bea642a2b92d9c58284b7d8a6a6b))
+* simplify URL host extraction logic in parseURL helper ([587d298](https://github.com/moonrailgun/dreaction/commit/587d2989bb0f3aea329ed48135f6386ae3ff2395))
+
 ## [1.6.2](https://github.com/moonrailgun/dreaction/compare/v1.6.0...v1.6.2) (2025-10-16)
 
 ### Features
