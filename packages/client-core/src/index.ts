@@ -127,6 +127,11 @@ export interface DReactionCore {
   ) => this & InferFeaturesFromPlugin<this, P>;
 
   connect: () => this;
+
+  /**
+   * Wait for connection to be established
+   */
+  waitForConnect: () => Promise<void>;
 }
 
 export type InferFeatures<
@@ -230,6 +235,13 @@ export class DReactionImpl
   customCommandLatestId = 1;
 
   /**
+   * Promise resolvers for connection wait
+   */
+  private connectPromiseResolve: (() => void) | null = null;
+  private connectPromiseReject: ((error: Error) => void) | null = null;
+  private connectPromise: Promise<void> | null = null;
+
+  /**
    * Starts a timer and returns a function you can call to stop it and return the elapsed time.
    */
   startTimer = () => start();
@@ -278,6 +290,13 @@ export class DReactionImpl
     this.connected = false;
     this.socket && this.socket.close && this.socket.close();
 
+    // Reject any pending connection promise
+    if (this.connectPromiseReject) {
+      this.connectPromiseReject(new Error('Connection closed'));
+      this.connectPromiseResolve = null;
+      this.connectPromiseReject = null;
+    }
+
     return this;
   }
 
@@ -286,6 +305,13 @@ export class DReactionImpl
    */
   connect() {
     this.connected = true;
+
+    // Create a new promise for this connection attempt
+    this.connectPromise = new Promise<void>((resolve, reject) => {
+      this.connectPromiseResolve = resolve;
+      this.connectPromiseReject = reject;
+    });
+
     const {
       createSocket,
       secure,
@@ -301,7 +327,12 @@ export class DReactionImpl
 
     if (!host) {
       console.log('host is not config, skip connect.');
-      return;
+      if (this.connectPromiseReject) {
+        this.connectPromiseReject(new Error('Host is not configured'));
+        this.connectPromiseResolve = null;
+        this.connectPromiseReject = null;
+      }
+      return this;
     }
 
     // establish a connection to the server
@@ -316,8 +347,14 @@ export class DReactionImpl
       // trigger our plugins onConnect
       this.plugins.forEach((p) => p.onConnect && p.onConnect());
 
-      const getClientIdPromise = getClientId || emptyPromise;
+      // Resolve the connection promise
+      if (this.connectPromiseResolve) {
+        this.connectPromiseResolve();
+        this.connectPromiseResolve = null;
+        this.connectPromiseReject = null;
+      }
 
+      const getClientIdPromise = getClientId || emptyPromise;
       getClientIdPromise(name!).then((clientId) => {
         this.isReady = true;
         // introduce ourselves
@@ -342,6 +379,14 @@ export class DReactionImpl
     // fires when we disconnect
     const onClose = () => {
       this.isReady = false;
+
+      // Reject connection promise if still pending
+      if (this.connectPromiseReject) {
+        this.connectPromiseReject(new Error('Connection failed or closed'));
+        this.connectPromiseResolve = null;
+        this.connectPromiseReject = null;
+      }
+
       // trigger our disconnect handler
       onDisconnect && onDisconnect();
 
@@ -652,6 +697,25 @@ export class DReactionImpl
         command: customHandler.command,
       });
     };
+  }
+
+  /**
+   * Wait for connection to be established.
+   * Returns a promise that resolves when the connection is ready.
+   */
+  waitForConnect(): Promise<void> {
+    if (this.isReady) {
+      // Already connected, resolve immediately
+      return Promise.resolve();
+    }
+
+    if (this.connectPromise) {
+      // Return existing promise
+      return this.connectPromise;
+    }
+
+    // No connection attempt in progress
+    return Promise.reject(new Error('Not connected. Call connect() first.'));
   }
 }
 

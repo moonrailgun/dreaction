@@ -13,7 +13,7 @@ export function useConnectionStatus() {
 
   useEffect(() => {
     const checkConnection = () => {
-      setIsConnected(dreaction.connected);
+      setIsConnected(dreaction.isReady);
     };
 
     // Check connection status periodically
@@ -57,13 +57,7 @@ export function useDReactionConfig() {
       );
       if (shouldAutoConnect === 'true' && !dreaction.connected) {
         hasAutoConnected.current = true;
-        // Auto-reconnect with saved settings
-        dreaction.configure({
-          host,
-          port,
-        });
-        dreaction.connect();
-        setIsConnected(true);
+        connect();
       }
     }
   }, [host, port]);
@@ -97,9 +91,12 @@ export function useDReactionConfig() {
     dreaction.configure({
       host,
       port,
+      secure: window.location.protocol === 'https:',
     });
     dreaction.connect();
-    setIsConnected(true);
+    dreaction.waitForConnect().then(() => {
+      setIsConnected(true);
+    });
 
     // Save auto-connect preference
     if (typeof window !== 'undefined' && window.localStorage) {
