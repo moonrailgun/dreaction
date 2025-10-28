@@ -11,23 +11,23 @@ export const DataRender: React.FC<DataRenderProps> = React.memo((props) => {
   const { data, useTableMode } = props;
 
   if (typeof data === 'string') {
-    return <div className="break-words">{data}</div>;
+    return <div className="break-words dark:text-gray-300">{data}</div>;
   }
 
   if (typeof data === 'number') {
-    return <div>{data}</div>;
+    return <div className="dark:text-gray-300">{data}</div>;
   }
 
   if (typeof data === 'undefined') {
-    return <div className="text-neutral-500">undefined</div>;
+    return <div className="text-neutral-500 dark:text-gray-600">undefined</div>;
   }
 
   if (typeof data === 'symbol') {
-    return <div>{String(data)}</div>;
+    return <div className="dark:text-gray-300">{String(data)}</div>;
   }
 
   if (data === null) {
-    return <div className="text-neutral-500">null</div>;
+    return <div className="text-neutral-500 dark:text-gray-600">null</div>;
   }
 
   if (useTableMode && Array.isArray(data)) {
@@ -53,11 +53,15 @@ export const TableDataRender: React.FC<{ data: Record<string, unknown>[] }> =
           highlightOnHover={true}
           withTableBorder={true}
           withColumnBorders={true}
+          className="dark:border-gray-800"
         >
-          <Table.Thead>
+          <Table.Thead className="dark:bg-gray-900">
             <Table.Tr>
               {keys.map((k) => (
-                <Table.Th key={k} className="min-w-20">
+                <Table.Th
+                  key={k}
+                  className="min-w-20 dark:border-gray-800 dark:text-gold-400"
+                >
                   {k}
                 </Table.Th>
               ))}
@@ -65,9 +69,17 @@ export const TableDataRender: React.FC<{ data: Record<string, unknown>[] }> =
           </Table.Thead>
           <Table.Tbody>
             {data.map((item, i) => (
-              <Table.Tr key={i}>
+              <Table.Tr
+                key={i}
+                className="dark:border-gray-800 dark:hover:bg-gray-900"
+              >
                 {keys.map((k) => (
-                  <Table.Td key={k}>{String(item[k] ?? '')}</Table.Td>
+                  <Table.Td
+                    key={k}
+                    className="dark:border-gray-800 dark:text-gray-300"
+                  >
+                    {String(item[k] ?? '')}
+                  </Table.Td>
                 ))}
               </Table.Tr>
             ))}

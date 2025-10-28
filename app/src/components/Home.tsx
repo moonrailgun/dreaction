@@ -19,29 +19,38 @@ export const Home: React.FC = React.memo(() => {
     useDReactionServerContext();
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col p-4">
       <div>
-        <Blockquote color="blue" mt="xl">
+        <Blockquote
+          color="gold"
+          mt="xl"
+          className="border-l-4 border-gold-400 dark:border-gold-600"
+        >
           <div className="mb-2">
             Connect to{' '}
-            <Code color="blue.9" c="white">
+            <Code className="bg-gold-800 text-gold-50 px-2 py-1 rounded font-mono">
               {ip}:{config.serverPort}
             </Code>{' '}
             to start debugging.
           </div>
           <div className="mb-2">
             Server Status:{' '}
-            <span className="font-bold">{upperFirst(serverStatus)}</span>
+            <span className="font-bold text-gold-600 dark:text-gold-400">
+              {upperFirst(serverStatus)}
+            </span>
           </div>
           <div>
-            Connections: <span className="font-bold">{connections.length}</span>
+            Connections:{' '}
+            <span className="font-bold text-gold-600 dark:text-gold-400">
+              {connections.length}
+            </span>
           </div>
         </Blockquote>
       </div>
 
       {selectedConnection && (
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <div className="pl-4 font-semibold opacity-60 flex items-center gap-2">
+        <div className="flex flex-col flex-1 overflow-hidden mt-4">
+          <div className="pl-4 font-semibold text-gold-700 dark:text-gold-400 flex items-center gap-2 mb-2">
             Current Connnection:
             {React.createElement(getIcon(selectedConnection))}
             {getConnectionName(selectedConnection)}

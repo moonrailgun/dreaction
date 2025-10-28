@@ -58,7 +58,7 @@ export const DeviceCommand: React.FC = React.memo(() => {
   if (commandList.length === 0) {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <div className="text-center text-gray-500">
+        <div className="text-center text-gray-500 dark:text-gray-600">
           No any command has been register
         </div>
       </div>
@@ -67,10 +67,10 @@ export const DeviceCommand: React.FC = React.memo(() => {
 
   return (
     <div className="h-full flex">
-      <div className="w-80 border-r border-gray-200 flex flex-col flex-shrink-0">
-        <div className="p-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold">Commands</h3>
-          <p className="text-sm text-gray-500">
+      <div className="w-80 border-r border-gray-200 dark:border-gray-800 flex flex-col flex-shrink-0">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+          <h3 className="text-lg font-semibold dark:text-gold-400">Commands</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-600">
             {availableCommands.length} command(s) available
           </p>
         </div>
@@ -87,27 +87,45 @@ export const DeviceCommand: React.FC = React.memo(() => {
                 <div
                   key={command.messageId}
                   className={clsx(
-                    'p-3 rounded-lg mb-2 cursor-pointer transition-colors',
-                    'border border-transparent hover:bg-gray-50',
-                    isSelected && 'bg-blue-50 border-blue-200'
+                    'p-3 rounded-lg mb-2 cursor-pointer transition-all',
+                    'border border-transparent hover:bg-gray-50 dark:hover:bg-gray-800',
+                    isSelected && [
+                      'bg-gradient-to-br from-gold-400/20 to-gold-800/20',
+                      'border-gold-600 dark:border-gold-700',
+                      'shadow-md shadow-gold/20',
+                    ]
                   )}
                   onClick={() => setSelectedCommand(payload.command)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <div className="font-medium text-sm">
+                      <div
+                        className={clsx(
+                          'font-medium text-sm',
+                          isSelected && 'text-gold-700 dark:text-gold-400'
+                        )}
+                      >
                         {payload.title ?? payload.command}
                       </div>
                       {payload.description && (
-                        <div className="text-xs text-gray-500 mt-1 line-clamp-2">
+                        <div
+                          className={clsx(
+                            'text-xs mt-1 line-clamp-2',
+                            isSelected
+                              ? 'text-gold-600 dark:text-gold-500'
+                              : 'text-gray-500 dark:text-gray-600'
+                          )}
+                        >
                           {payload.description}
                         </div>
                       )}
                     </div>
                     <IconChevronRight
                       className={clsx(
-                        'w-4 h-4 text-gray-400 transition-colors',
-                        isSelected && 'text-blue-500'
+                        'w-4 h-4 transition-colors',
+                        isSelected
+                          ? 'text-gold-600 dark:text-gold-500'
+                          : 'text-gray-400 dark:text-gray-600'
                       )}
                     />
                   </div>
@@ -159,9 +177,9 @@ export const DeviceCommandDetail: React.FC<{
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-xl font-semibold dark:text-gold-400">
             {payload.title ?? payload.command}
           </h2>
           <Button
@@ -175,15 +193,17 @@ export const DeviceCommandDetail: React.FC<{
 
         {payload.description && (
           <Markdown
-            className="text-sm text-gray-600"
+            className="text-sm text-gray-600 dark:text-gray-500"
             raw={payload.description}
           />
         )}
       </div>
 
       {payload.args && payload.args.length > 0 && (
-        <div className="p-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium mb-3">Parameters</h3>
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+          <h3 className="text-lg font-medium mb-3 dark:text-gold-400">
+            Parameters
+          </h3>
           <form onSubmit={form.onSubmit(handleSubmit)} className="space-y-3">
             {payload.args.map(({ name, type }) => {
               if (type === 'string') {
@@ -204,8 +224,8 @@ export const DeviceCommandDetail: React.FC<{
       )}
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="p-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium">Response</h3>
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
+          <h3 className="text-lg font-medium dark:text-gold-400">Response</h3>
         </div>
 
         <div className="flex-1 overflow-hidden">
@@ -220,7 +240,7 @@ export const DeviceCommandDetail: React.FC<{
             </ScrollArea>
           ) : (
             <div className="h-full flex items-center justify-center">
-              <div className="text-center text-gray-500">
+              <div className="text-center text-gray-500 dark:text-gray-600">
                 <p>No response yet</p>
                 <p className="text-sm mt-1">
                   Execute the command to see results

@@ -61,7 +61,7 @@ const DevicePerformanceFPS: React.FC = React.memo(() => {
       {commands.length === 0 && (
         <div className="w-full py-10 text-center">
           Please call{' '}
-          <Code color="blue.9" c="white">
+          <Code className="bg-gold-800 text-gold-50 px-2 py-1 rounded font-mono">
             watchFPS()
           </Code>{' '}
           to start meter application performance
@@ -70,8 +70,10 @@ const DevicePerformanceFPS: React.FC = React.memo(() => {
 
       {commands.length > 0 && (
         <div className="py-10 px-2">
-          <h2 className="text-lg text-center font-bold mb-2">FPS Meter</h2>
-          <p className="mb-4 text-center text-sm opacity-60">
+          <h2 className="text-lg text-center font-bold mb-2 dark:text-gold-400">
+            FPS Meter
+          </h2>
+          <p className="mb-4 text-center text-sm opacity-60 dark:text-gray-500">
             This is base on `requestAnimationFrame` to meter fps in js thread.
           </p>
 
@@ -79,7 +81,7 @@ const DevicePerformanceFPS: React.FC = React.memo(() => {
             h={300}
             data={lock ?? data}
             dataKey="date"
-            series={[{ name: 'fps', color: 'indigo.6', label: 'FPS' }]}
+            series={[{ name: 'fps', color: 'gold.6', label: 'FPS' }]}
             xAxisProps={{ padding: { left: 10, right: 10 } }}
             curveType="monotone"
             referenceLines={[{ y: 30, label: '30fps', color: 'orange.6' }]}
@@ -140,7 +142,7 @@ const DevicePerformanceRender: React.FC = React.memo(() => {
       {commands.length === 0 && (
         <div className="w-full py-10 text-center">
           Please use{' '}
-          <Code color="blue.9" c="white">
+          <Code className="bg-gold-800 text-gold-50 px-2 py-1 rounded font-mono">
             DReactionProfiler
           </Code>{' '}
           to send performance info
@@ -149,10 +151,10 @@ const DevicePerformanceRender: React.FC = React.memo(() => {
 
       {commands.length > 0 && (
         <div className="py-10">
-          <h2 className="text-lg text-center font-bold mb-2">
+          <h2 className="text-lg text-center font-bold mb-2 dark:text-gold-400">
             Render Profiler
           </h2>
-          <p className="mb-4 text-center text-sm opacity-60">
+          <p className="mb-4 text-center text-sm opacity-60 dark:text-gray-500">
             This is base on `Profiler` feature in React which can get detail
             info in react render process.
           </p>

@@ -40,7 +40,7 @@ export const DeviceData: React.FC = React.memo(() => {
   if (dataList.length === 0) {
     return (
       <div className="w-full h-full flex items-center justify-center">
-        <div className="text-center text-gray-500">
+        <div className="text-center text-gray-500 dark:text-gray-600">
           No any data has been register
         </div>
       </div>
@@ -51,21 +51,23 @@ export const DeviceData: React.FC = React.memo(() => {
     <div className="h-full flex">
       <div
         className={clsx(
-          'border-r border-gray-200 flex flex-col transition-all duration-300',
+          'border-r border-gray-200 dark:border-gray-800 flex flex-col transition-all duration-300',
           isMaximized ? 'w-16' : 'w-80'
         )}
       >
-        <div className="p-4 border-b border-gray-200">
+        <div className="p-4 border-b border-gray-200 dark:border-gray-800">
           {!isMaximized ? (
             <>
-              <h3 className="text-lg font-semibold">Data Sources</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="text-lg font-semibold dark:text-gold-400">
+                Data Sources
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-600">
                 {dataList.length} data source(s) available
               </p>
             </>
           ) : (
             <div className="text-center">
-              <h3 className="text-xs font-semibold">Data</h3>
+              <h3 className="text-xs font-semibold dark:text-gold-400">Data</h3>
             </div>
           )}
         </div>
@@ -80,9 +82,13 @@ export const DeviceData: React.FC = React.memo(() => {
                 <div
                   key={name}
                   className={clsx(
-                    'p-3 rounded-lg mb-2 cursor-pointer transition-colors',
-                    'border border-transparent hover:bg-gray-50',
-                    isSelected && 'bg-blue-50 border-blue-200'
+                    'p-3 rounded-lg mb-2 cursor-pointer transition-all',
+                    'border border-transparent hover:bg-gray-50 dark:hover:bg-gray-800',
+                    isSelected && [
+                      'bg-gradient-to-br from-gold-400/20 to-gold-800/20',
+                      'border-gold-600 dark:border-gold-700',
+                      'shadow-md shadow-gold/20',
+                    ]
                   )}
                   onClick={() => setSelectedDataName(name)}
                   title={isMaximized ? name : undefined}
@@ -92,13 +98,21 @@ export const DeviceData: React.FC = React.memo(() => {
                       <div
                         className={clsx(
                           'font-medium',
-                          isMaximized ? 'text-xs truncate' : 'text-sm'
+                          isMaximized ? 'text-xs truncate' : 'text-sm',
+                          isSelected && 'text-gold-700 dark:text-gold-400'
                         )}
                       >
                         {name}
                       </div>
                       {!isMaximized && payload && (
-                        <div className="text-xs text-gray-500 mt-1">
+                        <div
+                          className={clsx(
+                            'text-xs mt-1',
+                            isSelected
+                              ? 'text-gold-600 dark:text-gold-500'
+                              : 'text-gray-500 dark:text-gray-600'
+                          )}
+                        >
                           Type: {payload.type}
                         </div>
                       )}
@@ -106,8 +120,10 @@ export const DeviceData: React.FC = React.memo(() => {
                     {!isMaximized && (
                       <IconChevronRight
                         className={clsx(
-                          'w-4 h-4 text-gray-400 transition-colors',
-                          isSelected && 'text-blue-500'
+                          'w-4 h-4 transition-colors',
+                          isSelected
+                            ? 'text-gold-600 dark:text-gold-500'
+                            : 'text-gray-400 dark:text-gray-600'
                         )}
                       />
                     )}
@@ -153,11 +169,11 @@ export const DeviceDataDetail: React.FC<{
 
   return (
     <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">{name}</h2>
+          <h2 className="text-xl font-semibold dark:text-gold-400">{name}</h2>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+            <span className="text-sm text-gray-700 dark:text-gold-600 bg-gray-100 dark:bg-gold-900/30 px-2 py-1 rounded">
               {payload.type}
             </span>
             <ActionIcon
@@ -165,6 +181,7 @@ export const DeviceDataDetail: React.FC<{
               variant="subtle"
               onClick={onToggleMaximize}
               title={isMaximized ? 'Show sidebar' : 'Hide sidebar'}
+              className="dark:text-gold-500 dark:hover:bg-gray-800"
             >
               {isMaximized ? <IconMaximizeOff /> : <IconMaximize />}
             </ActionIcon>
@@ -176,8 +193,8 @@ export const DeviceDataDetail: React.FC<{
         <ScrollArea className="h-full">
           <div className="p-4">
             {payload.type === 'text' && (
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <pre className="whitespace-pre-wrap font-mono text-sm">
+              <div className="bg-gray-50 dark:bg-gray-900 p-4 rounded-lg">
+                <pre className="whitespace-pre-wrap font-mono text-sm dark:text-gray-300">
                   {String(payload.data)}
                 </pre>
               </div>
@@ -186,7 +203,7 @@ export const DeviceDataDetail: React.FC<{
             {payload.type === 'list' &&
               (Array.isArray(payload.data) ? (
                 <div className="space-y-2">
-                  <div className="text-sm text-gray-600 mb-3">
+                  <div className="text-sm text-gray-600 dark:text-gray-500 mb-3">
                     {payload.data.length} item(s)
                   </div>
                   <AutoScrollContainer className="w-full max-h-96 overflow-auto">
@@ -194,9 +211,9 @@ export const DeviceDataDetail: React.FC<{
                       (item: unknown, index: number) => (
                         <div
                           key={index}
-                          className="odd:bg-neutral-100 hover:bg-neutral-200 transition-all px-4 py-3 rounded border-l-4 border-blue-200 mb-2"
+                          className="odd:bg-neutral-100 dark:odd:bg-gray-800 hover:bg-neutral-200 dark:hover:bg-gray-700 transition-all px-4 py-3 rounded border-l-4 border-gold-400 dark:border-gold-600 mb-2"
                         >
-                          <div className="text-xs text-gray-500 mb-1">
+                          <div className="text-xs text-gray-500 dark:text-gray-600 mb-1">
                             Item #{index + 1}
                           </div>
                           <DataRender data={item} />
@@ -211,7 +228,9 @@ export const DeviceDataDetail: React.FC<{
 
             {payload.type === 'json' && (
               <div>
-                <div className="text-sm text-gray-600 mb-3">JSON Data</div>
+                <div className="text-sm text-gray-600 dark:text-gray-500 mb-3">
+                  JSON Data
+                </div>
                 <JSONView data={payload.data} />
               </div>
             )}

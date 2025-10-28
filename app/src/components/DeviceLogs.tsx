@@ -1,9 +1,11 @@
-import os from "os"
-import path from "path"
-import fs from "fs"
+import os from 'os';
+import path from 'path';
+import fs from 'fs';
 import React, { useMemo, useState } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
+import { useThemeStore } from '../store/theme';
 import { Command } from 'dreaction-server-core';
+import { GOLD_GRADIENT, GOLD_SHADOW } from '../constants/theme';
 import {
   Accordion,
   ActionIcon,
@@ -40,6 +42,8 @@ type DeviceLogsCommand = Command & {
 export const DeviceLogs: React.FC = React.memo(() => {
   const { selectedConnection } = useDReactionServerContext();
   const { clearSelectedConnectionCommands } = useDReactionServer();
+  const colorScheme = useThemeStore((state) => state.colorScheme);
+  const isDark = colorScheme === 'dark';
   const [filterType, setFilterType] = useState('all');
   const [filterText, setFilterText] = useState('');
 
@@ -85,7 +89,7 @@ export const DeviceLogs: React.FC = React.memo(() => {
       filteredCommands = filteredCommands.filter(
         (command) => command.type === 'api.response'
       );
-    } else if (filterType === 'asyncStorage') {
+    } else if (filterType === 'storage') {
       filteredCommands = filteredCommands.filter(
         (command) => command.type === 'asyncStorage.mutation'
       );
@@ -97,14 +101,14 @@ export const DeviceLogs: React.FC = React.memo(() => {
   }, [selectedConnection, filterType, debouncedFilterText]);
 
   const handleDowload = () => {
-    const homeDir = os.homedir()
-    const downloadDir = path.join(homeDir, "Downloads")
+    const homeDir = os.homedir();
+    const downloadDir = path.join(homeDir, 'Downloads');
     fs.writeFileSync(
       path.resolve(downloadDir, `dreaction-timeline-log-${Date.now()}.json`),
       JSON.stringify(commands || []),
-      "utf8"
-    )
-    console.log(`Exported timeline log to ${downloadDir}`)
+      'utf8'
+    );
+    console.log(`Exported timeline log to ${downloadDir}`);
   };
 
   const handleClear = () => {
@@ -113,17 +117,30 @@ export const DeviceLogs: React.FC = React.memo(() => {
 
   return (
     <div>
-      <div className="flex items-center h-10 sticky top-0 z-10">
+      <div className="flex items-center h-10 sticky top-0 z-10 bg-white dark:bg-[#0A0A0A]">
         <SegmentedControl
-          className="rounded-none border-b border-[#ced4da]"
+          className="rounded-none border-b border-[#ced4da] dark:border-gray-800"
           value={filterType}
           onChange={setFilterType}
           data={[
             { label: 'All', value: 'all' },
             { label: 'Logs', value: 'logs' },
             { label: 'Network', value: 'network' },
-            { label: 'Async Storage', value: 'asyncStorage' },
+            { label: 'Storage', value: 'storage' },
           ]}
+          styles={
+            isDark
+              ? {
+                  root: {
+                    backgroundColor: '#0A0A0A',
+                  },
+                  indicator: {
+                    background: GOLD_GRADIENT,
+                    boxShadow: GOLD_SHADOW,
+                  },
+                }
+              : undefined
+          }
         />
 
         <div className="flex-1 h-full">
@@ -131,7 +148,8 @@ export const DeviceLogs: React.FC = React.memo(() => {
             className="w-full h-full"
             placeholder="Input somthing to filter logs"
             classNames={{
-              input: 'h-full rounded-none border-r-0 border-l-0',
+              input:
+                'h-full rounded-none border-r-0 border-l-0 dark:border-gray-800 dark:bg-[#0A0A0A]',
             }}
             value={filterText}
             onChange={(e) => setFilterText(e.target.value)}
@@ -143,7 +161,7 @@ export const DeviceLogs: React.FC = React.memo(() => {
           variant="default"
           size="md"
           classNames={{
-            root: 'w-10 h-10 rounded-none text-gray-500',
+            root: 'w-10 h-10 rounded-none text-gray-500 dark:text-gold-500 dark:hover:bg-gray-800',
           }}
           onClick={handleDowload}
         >
@@ -154,7 +172,7 @@ export const DeviceLogs: React.FC = React.memo(() => {
           variant="default"
           size="md"
           classNames={{
-            root: 'w-10 h-10 rounded-none text-gray-500',
+            root: 'w-10 h-10 rounded-none text-gray-500 dark:text-gold-500 dark:hover:bg-gray-800',
           }}
           onClick={handleClear}
         >
@@ -164,7 +182,9 @@ export const DeviceLogs: React.FC = React.memo(() => {
 
       <Accordion multiple={true}>
         {commands.length === 0 && (
-          <div className="text-center opacity-60">No any logs yet.</div>
+          <div className="text-center opacity-60 dark:text-gray-600 py-4">
+            No any logs yet.
+          </div>
         )}
 
         {commands.map((command) => (
@@ -189,16 +209,16 @@ const ItemContainer: React.FC<{
 
   return (
     <Accordion.Item key={messageId} value={String(messageId)}>
-      <Accordion.Control>
+      <Accordion.Control className="dark:hover:bg-gray-900">
         <div className="flex gap-2 items-center">
           <ItemDate date={date} />
           {tag}
-          <div className="flex-1 overflow-hidden whitespace-nowrap text-ellipsis">
+          <div className="flex-1 overflow-hidden whitespace-nowrap text-ellipsis dark:text-gray-300">
             {title}
           </div>
         </div>
       </Accordion.Control>
-      <Accordion.Panel>
+      <Accordion.Panel className="dark:bg-gray-950">
         <div className="overflow-auto">{body}</div>
       </Accordion.Panel>
     </Accordion.Item>
@@ -212,7 +232,9 @@ const ItemDate: React.FC<{
   const { date } = props;
 
   return (
-    <div className="text-xs text-gray-500">{renderDeviceLogsDate(date)}</div>
+    <div className="text-xs text-gray-500 dark:text-gray-600">
+      {renderDeviceLogsDate(date)}
+    </div>
   );
 });
 
@@ -233,13 +255,21 @@ const Item: React.FC<{
     const tag = <Badge color={color}>{command.payload.level}</Badge>;
 
     const message = command.payload.message;
-    let body = <pre>{JSON.stringify(message, null, 4)}</pre>;
+    let body = (
+      <pre className="dark:text-gray-300">
+        {JSON.stringify(message, null, 4)}
+      </pre>
+    );
     if (typeof message === 'string') {
-      body = <div className="text-neutral-600">{message}</div>;
+      body = (
+        <div className="text-neutral-600 dark:text-gray-300">{message}</div>
+      );
     } else if (typeof message === 'number' || typeof message === 'boolean') {
-      body = <div className="text-yellow-800">{message}</div>;
+      body = (
+        <div className="text-yellow-800 dark:text-yellow-400">{message}</div>
+      );
     } else if (typeof message === 'undefined' || message === null) {
-      body = <div className="text-red-400">{message}</div>;
+      body = <div className="text-red-400 dark:text-red-500">{message}</div>;
     } else if (typeof message === 'object') {
       body = <JSONView data={message} />;
     }
@@ -305,24 +335,40 @@ const Item: React.FC<{
 
             <Tabs.Panel value="summary">
               <div>
-                <span className="opacity-60 text-xs mr-2">Url:</span>
-                <span className="text-sm">{command.payload.request.url}</span>
+                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
+                  Url:
+                </span>
+                <span className="text-sm dark:text-gray-300">
+                  {command.payload.request.url}
+                </span>
               </div>
               <div>
-                <span className="opacity-60 text-xs mr-2">Status Code:</span>
+                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
+                  Status Code:
+                </span>
                 <Badge>{command.payload.response.status}</Badge>
               </div>
               <div>
-                <span className="opacity-60 text-xs mr-2">Method:</span>
+                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
+                  Method:
+                </span>
                 <Badge>{command.payload.request.method}</Badge>
               </div>
               <div>
-                <span className="opacity-60 text-xs mr-2">Duration:</span>
-                {Math.round(command.payload.duration)}
-                <span className="text-gray-500 ml-1">ms</span>
+                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
+                  Duration:
+                </span>
+                <span className="dark:text-gray-300">
+                  {Math.round(command.payload.duration)}
+                </span>
+                <span className="text-gray-500 dark:text-gray-600 ml-1">
+                  ms
+                </span>
               </div>
               <div className="flex gap-1 items-center">
-                <span className="opacity-60 text-xs">Request Header</span>
+                <span className="opacity-60 text-xs dark:text-gray-500">
+                  Request Header
+                </span>
 
                 <CopyText
                   value={JSON.stringify(
@@ -337,7 +383,9 @@ const Item: React.FC<{
                 hideRoot={true}
               />
               <div className="flex gap-1 items-center">
-                <span className="opacity-60 text-xs">Response Header</span>
+                <span className="opacity-60 text-xs dark:text-gray-500">
+                  Response Header
+                </span>
                 <CopyText
                   value={JSON.stringify(
                     command.payload.response.headers || {},
