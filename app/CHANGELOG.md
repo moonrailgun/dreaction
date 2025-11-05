@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.8.1](https://github.com/moonrailgun/dreaction/compare/v1.8.0...v1.8.1) (2025-11-05)
+
+### Others
+
+* update electron build config ([3135cf3](https://github.com/moonrailgun/dreaction/commit/3135cf33bdf1d613de797ec89d47f283b135166f))
+
 ## [1.8.0](https://github.com/moonrailgun/dreaction/compare/v1.7.1...v1.8.0) (2025-11-05)
 
 ### Features
