@@ -13,10 +13,7 @@
   ],
   "mac": {
     "target": [
-      {
-        "target": "dmg",
-        "arch": ["x64", "arm64"]
-      }
+      "dmg"
     ],
     "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
   },
