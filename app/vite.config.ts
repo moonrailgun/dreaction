@@ -34,6 +34,21 @@ export default defineConfig({
                 ws: {
                   type: 'cjs',
                 },
+                '@ngrok/ngrok': {
+                  type: 'cjs',
+                },
+                '@ngrok/ngrok-darwin-arm64': {
+                  type: 'cjs',
+                },
+                '@ngrok/ngrok-darwin-universal': {
+                  type: 'cjs',
+                },
+                '@ngrok/ngrok-linux-x64-gnu': {
+                  type: 'cjs',
+                },
+                '@ngrok/ngrok-win32-x64-msvc': {
+                  type: 'cjs',
+                },
               },
             },
     }),

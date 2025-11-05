@@ -18,6 +18,7 @@
     "@mantine/hooks": "^7.16.2",
     "@mantine/notifications": "^7.16.2",
     "@mantinex/mantine-logo": "^1.0.1",
+    "@ngrok/ngrok": "^1.4.1",
     "@tabler/icons-react": "^3.24.0",
     "ahooks": "^3.8.4",
     "clsx": "^2.1.1",
