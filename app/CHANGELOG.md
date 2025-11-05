@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.8.0](https://github.com/moonrailgun/dreaction/compare/v1.7.1...v1.8.0) (2025-11-05)
+
+### Features
+
+* add builtin ngrok intergate ([b38824d](https://github.com/moonrailgun/dreaction/commit/b38824d168a5c3b529bbea33606807d87c24e43f))
+
+### Others
+
+* update mac building arch type ([4f0990e](https://github.com/moonrailgun/dreaction/commit/4f0990eaff6b04537458a5788020662ff2c9cc84))
+
 ## [1.7.1](https://github.com/moonrailgun/dreaction/compare/v1.7.0...v1.7.1) (2025-10-28)
 
 ### Bug Fixes
