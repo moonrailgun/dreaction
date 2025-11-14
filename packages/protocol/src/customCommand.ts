@@ -1,6 +1,7 @@
 export interface CustomCommandArg {
   name: string;
   type: 'string';
+  options?: ({ label: string; value: string } | string)[];
 }
 
 export interface CustomCommandRegisterPayload {

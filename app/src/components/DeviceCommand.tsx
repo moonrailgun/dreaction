@@ -4,7 +4,13 @@ import {
   useLatestSelectedConnectionCommmand,
 } from '../context/DReaction';
 import { entries, get, groupBy, last } from 'lodash-es';
-import { ActionIcon, ScrollArea, TextInput, Button } from '@mantine/core';
+import {
+  ActionIcon,
+  ScrollArea,
+  TextInput,
+  Button,
+  Select,
+} from '@mantine/core';
 import { repairSerialization } from '../utils/repairSerialization';
 import clsx from 'clsx';
 import { IconSend, IconChevronRight } from '@tabler/icons-react';
@@ -205,8 +211,28 @@ export const DeviceCommandDetail: React.FC<{
             Parameters
           </h3>
           <form onSubmit={form.onSubmit(handleSubmit)} className="space-y-3">
-            {payload.args.map(({ name, type }) => {
+            {payload.args.map(({ name, type, options }) => {
               if (type === 'string') {
+                if (options) {
+                  return (
+                    <Select
+                      {...form.getInputProps(name)}
+                      key={form.key(name)}
+                      placeholder={`Select ${name}`}
+                      label={name}
+                      size="sm"
+                      searchable
+                      clearable
+                      data={options.map((option) => ({
+                        label:
+                          typeof option === 'string' ? option : option.label,
+                        value:
+                          typeof option === 'string' ? option : option.value,
+                      }))}
+                    />
+                  );
+                }
+
                 return (
                   <TextInput
                     {...form.getInputProps(name)}
