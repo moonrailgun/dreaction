@@ -12,7 +12,10 @@ import 'react-native-reanimated';
 import '../utils/dreaction';
 
 import { useColorScheme } from '@/components/useColorScheme';
-import { DReactionDraggableBall } from 'dreaction-react-native';
+import {
+  DReactionDraggableBall,
+  DReactionOverlayImage,
+} from 'dreaction-react-native';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -61,6 +64,7 @@ function RootLayoutNav() {
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
       <DReactionDraggableBall />
+      <DReactionOverlayImage />
     </ThemeProvider>
   );
 }

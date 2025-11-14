@@ -1,6 +1,6 @@
 {
   "name": "dreaction-react-native",
-  "version": "1.7.3",
+  "version": "1.8.0",
   "private": false,
   "description": "DReaction client for React Native applications with draggable debug ball and powerful debugging tools",
   "main": "lib/index.js",
@@ -38,7 +38,8 @@
   "homepage": "https://github.com/moonrailgun/dreaction#readme",
   "dependencies": {
     "dreaction-client-core": "workspace:*",
-    "dreaction-protocol": "workspace:*"
+    "dreaction-protocol": "workspace:*",
+    "mitt": "^3.0.1"
   },
   "devDependencies": {
     "@react-native-async-storage/async-storage": "^2.1.0",

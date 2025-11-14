@@ -23,8 +23,11 @@ import { DataWatchPayload } from 'dreaction-protocol';
 import { useEffect } from 'react';
 import { getHost } from './helpers/getHost';
 import { isDev } from './helpers/common';
+import overlay from './plugins/overlay';
 
 export type { ClientOptions };
+
+export { overlay };
 
 const DREACTION_ASYNC_CLIENT_ID = '@DREACTION/clientId';
 
@@ -43,6 +46,7 @@ export interface UseReactNativeOptions {
   errors?: TrackGlobalErrorsOptions | boolean;
   log?: boolean;
   editor?: OpenInEditorOptions | boolean;
+  overlay?: boolean;
   asyncStorage?: AsyncStorageOptions | boolean;
   networking?: NetworkingOptions | boolean;
   devTools?: boolean;
@@ -175,6 +179,10 @@ dreaction.useReactNative = (options: UseReactNativeOptions = {}) => {
 
   if (options.editor !== false) {
     dreaction.use(openInEditor(getPluginOptions(options.editor as any)));
+  }
+
+  if (options.overlay !== false) {
+    dreaction.use(overlay());
   }
 
   if (options.asyncStorage !== false) {

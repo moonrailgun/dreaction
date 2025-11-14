@@ -10,7 +10,9 @@ dreaction
     },
   })
   .setAsyncStorageHandler(AsyncStorage)
-  .useReactNative()
+  .useReactNative({
+    overlay: true,
+  })
   .connect();
 
 export const { useDebugDataWatch: useDebugCounter } =
