@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.8.2](https://github.com/moonrailgun/dreaction/compare/v1.8.1...v1.8.2) (2025-11-14)
+
+### Features
+
+* add custom command support options ([5ee66c9](https://github.com/moonrailgun/dreaction/commit/5ee66c9793c039da1d4b4aaf8d72b6d2ff728c22))
+* add hotkey for send command ([c297c3d](https://github.com/moonrailgun/dreaction/commit/c297c3d8f66e6e2f2cd8b1ece1a3ef55574e04cb))
+
+### Others
+
+* add @tanstack/react-virtual to improve display for large list in device logs ([2605915](https://github.com/moonrailgun/dreaction/commit/26059151ac975868d3334222d8d041d4129f20cd))
+
 ## [1.8.1](https://github.com/moonrailgun/dreaction/compare/v1.8.0...v1.8.1) (2025-11-05)
 
 ### Others
