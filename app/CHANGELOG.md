@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.9.0](https://github.com/moonrailgun/dreaction/compare/v1.8.2...v1.9.0) (2025-11-14)
+
+### Features
+
+* add image overlay feature ([ec62a27](https://github.com/moonrailgun/dreaction/commit/ec62a278587ad70fdc8e40553dddf47159711297))
+
 ## [1.8.2](https://github.com/moonrailgun/dreaction/compare/v1.8.1...v1.8.2) (2025-11-14)
 
 ### Features
