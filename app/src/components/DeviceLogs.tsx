@@ -1,7 +1,7 @@
 import os from 'os';
 import path from 'path';
 import fs from 'fs';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { useThemeStore } from '../store/theme';
 import { Command } from 'dreaction-server-core';
@@ -25,6 +25,7 @@ import { useDebounce } from 'ahooks';
 import { CommandTypeKey } from 'dreaction-protocol';
 import { get } from 'lodash-es';
 import { tryToParseJSON } from '../utils/utils';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 const blacklistType: CommandTypeKey[] = [
   'dataWatch',
@@ -46,6 +47,7 @@ export const DeviceLogs: React.FC = React.memo(() => {
   const isDark = colorScheme === 'dark';
   const [filterType, setFilterType] = useState('all');
   const [filterText, setFilterText] = useState('');
+  const parentRef = useRef<HTMLDivElement>(null);
 
   const debouncedFilterText = useDebounce(filterText, {
     wait: 300,
@@ -99,6 +101,18 @@ export const DeviceLogs: React.FC = React.memo(() => {
       return String(command.title).includes(debouncedFilterText);
     });
   }, [selectedConnection, filterType, debouncedFilterText]);
+
+  const virtualizer = useVirtualizer({
+    count: commands.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 60,
+    overscan: 5,
+    measureElement:
+      typeof window !== 'undefined' &&
+      navigator.userAgent.indexOf('Firefox') === -1
+        ? (element) => element?.getBoundingClientRect().height
+        : undefined,
+  });
 
   const handleDowload = () => {
     const homeDir = os.homedir();
@@ -180,19 +194,49 @@ export const DeviceLogs: React.FC = React.memo(() => {
         </ActionIcon>
       </div>
 
-      <Accordion multiple={true}>
+      <div
+        ref={parentRef}
+        className="overflow-auto"
+        style={{ height: 'calc(100vh - 40px)' }}
+      >
         {commands.length === 0 && (
           <div className="text-center opacity-60 dark:text-gray-600 py-4">
             No any logs yet.
           </div>
         )}
 
-        {commands.map((command) => (
-          <div key={command.messageId}>
-            <Item command={command} />
-          </div>
-        ))}
-      </Accordion>
+        {commands.length > 0 && (
+          <Accordion multiple={true}>
+            <div
+              style={{
+                height: `${virtualizer.getTotalSize()}px`,
+                width: '100%',
+                position: 'relative',
+              }}
+            >
+              {virtualizer.getVirtualItems().map((virtualItem) => {
+                const command = commands[virtualItem.index];
+                return (
+                  <div
+                    key={command.messageId}
+                    data-index={virtualItem.index}
+                    ref={virtualizer.measureElement}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      transform: `translateY(${virtualItem.start}px)`,
+                    }}
+                  >
+                    <Item command={command} />
+                  </div>
+                );
+              })}
+            </div>
+          </Accordion>
+        )}
+      </div>
     </div>
   );
 });
