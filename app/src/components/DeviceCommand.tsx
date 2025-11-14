@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   useDReactionServerContext,
   useLatestSelectedConnectionCommmand,
@@ -16,6 +16,7 @@ import clsx from 'clsx';
 import { IconSend, IconChevronRight } from '@tabler/icons-react';
 import { CustomCommandRegisterPayload } from 'dreaction-protocol';
 import { useForm } from '@mantine/form';
+import { useHotkeys } from '@mantine/hooks';
 import { Markdown } from './Markdown';
 import { DataRender } from './DataRender';
 
@@ -172,14 +173,16 @@ export const DeviceCommandDetail: React.FC<{
     (p) => p.command === payload.command
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     sendCommand('custom', {
       command: payload.command,
       args: {
         ...form.getValues(),
       },
     });
-  };
+  }, [sendCommand, payload.command, form]);
+
+  useHotkeys([['mod+Enter', () => handleSubmit()]]);
 
   return (
     <div className="h-full flex flex-col">
@@ -194,6 +197,7 @@ export const DeviceCommandDetail: React.FC<{
             size="sm"
           >
             Execute
+            <span className="ml-1 opacity-60 text-xs">(⌘⏎)</span>
           </Button>
         </div>
 
