@@ -4,7 +4,6 @@ import {
   IconHome2,
   IconCommand,
   IconList,
-  IconPictureInPicture,
   IconPhoto,
 } from '@tabler/icons-react';
 import { Home } from '../components/Home';
