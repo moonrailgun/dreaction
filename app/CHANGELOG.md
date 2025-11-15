@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.9.1](https://github.com/moonrailgun/dreaction/compare/v1.9.0...v1.9.1) (2025-11-15)
+
+### Others
+
+* fix ci issue ([810338c](https://github.com/moonrailgun/dreaction/commit/810338ca8b3acf0dae2463e99e7bf37150fbec2c))
+
 ## [1.9.0](https://github.com/moonrailgun/dreaction/compare/v1.8.2...v1.9.0) (2025-11-14)
 
 ### Features
