@@ -1,7 +1,7 @@
 import os from 'os';
 import path from 'path';
 import fs from 'fs';
-import React, { useMemo, useState, useRef } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { useThemeStore } from '../store/theme';
 import { Command } from 'dreaction-server-core';
@@ -25,7 +25,10 @@ import { useDebounce } from 'ahooks';
 import { CommandTypeKey } from 'dreaction-protocol';
 import { get } from 'lodash-es';
 import { tryToParseJSON } from '../utils/utils';
-import { useVirtualizer } from '@tanstack/react-virtual';
+import {
+  useVirtualizer,
+  type Virtualizer as TanstackVirtualizer,
+} from '@tanstack/react-virtual';
 
 const blacklistType: CommandTypeKey[] = [
   'dataWatch',
@@ -217,20 +220,13 @@ export const DeviceLogs: React.FC = React.memo(() => {
               {virtualizer.getVirtualItems().map((virtualItem) => {
                 const command = commands[virtualItem.index];
                 return (
-                  <div
+                  <VirtualRow
                     key={command.messageId}
-                    data-index={virtualItem.index}
-                    ref={virtualizer.measureElement}
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      transform: `translateY(${virtualItem.start}px)`,
-                    }}
+                    virtualItem={virtualItem}
+                    virtualizer={virtualizer}
                   >
                     <Item command={command} />
-                  </div>
+                  </VirtualRow>
                 );
               })}
             </div>
@@ -477,3 +473,63 @@ const Item: React.FC<{
   );
 });
 Item.displayName = 'Item';
+
+type VirtualizerInstance = TanstackVirtualizer<HTMLDivElement, Element>;
+type VirtualItemInstance = ReturnType<
+  VirtualizerInstance['getVirtualItems']
+>[number];
+
+const VirtualRow: React.FC<{
+  virtualizer: VirtualizerInstance;
+  virtualItem: VirtualItemInstance;
+  children: React.ReactNode;
+}> = React.memo((props) => {
+  const { virtualizer, virtualItem, children } = props;
+  const rowRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const element = rowRef.current;
+    if (!element) {
+      return;
+    }
+
+    const measure = () => {
+      virtualizer.measureElement(element);
+    };
+
+    measure();
+
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [virtualizer, virtualItem.index]);
+
+  return (
+    <div
+      data-index={virtualItem.index}
+      ref={(element) => {
+        rowRef.current = element;
+        if (element) {
+          virtualizer.measureElement(element);
+        }
+      }}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        transform: `translateY(${virtualItem.start}px)`,
+      }}
+    >
+      {children}
+    </div>
+  );
+});
+VirtualRow.displayName = 'VirtualRow';
