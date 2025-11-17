@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.9.2](https://github.com/moonrailgun/dreaction/compare/v1.9.1...v1.9.2) (2025-11-17)
+
+### Bug Fixes
+
+* fix a bug for virtual list which will overlay in high item render ([9a594b6](https://github.com/moonrailgun/dreaction/commit/9a594b6b4ec05a05bccbfb817bbb75f03704a806))
+
 ## [1.9.1](https://github.com/moonrailgun/dreaction/compare/v1.9.0...v1.9.1) (2025-11-15)
 
 ### Others
