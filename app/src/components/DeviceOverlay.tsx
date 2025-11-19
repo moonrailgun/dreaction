@@ -7,6 +7,8 @@ import {
   IconTrash,
   IconEye,
   IconEyeOff,
+  IconArrowsHorizontal,
+  IconArrowsVertical,
 } from '@tabler/icons-react';
 import { useDebounceFn } from 'ahooks';
 
@@ -70,6 +72,8 @@ export const DeviceOverlay: React.FC = React.memo(() => {
   }, [width, height]);
 
   const frameSize = calculateFrameSize();
+  const frameWidth = frameSize.width;
+  const frameHeight = frameSize.height;
 
   // Crop and send image to device
   const _cropAndSendImage = useCallback(() => {
@@ -150,6 +154,12 @@ export const DeviceOverlay: React.FC = React.memo(() => {
   const { run: cropAndSendImage } = useDebounceFn(_cropAndSendImage, {
     wait: 1000,
   });
+
+  const syncAfterTransform = useCallback(() => {
+    requestAnimationFrame(() => {
+      cropAndSendImage();
+    });
+  }, [cropAndSendImage]);
 
   // Handle file upload
   const handleFileSelect = useCallback(
@@ -262,6 +272,41 @@ export const DeviceOverlay: React.FC = React.memo(() => {
     sendCommand('overlay', { uri: '' });
   }, [sendCommand]);
 
+  const handleFitToFrame = useCallback(
+    (dimension: 'width' | 'height') => {
+      if (!image) return;
+      const sourceSize =
+        dimension === 'width' ? imageSize.width : imageSize.height;
+      const targetSize = dimension === 'width' ? frameWidth : frameHeight;
+      if (!sourceSize || !targetSize) return;
+
+      const newScale = targetSize / sourceSize;
+      if (!Number.isFinite(newScale) || newScale <= 0) return;
+
+      setPosition({ x: 0, y: 0 });
+      setScale(newScale);
+      syncAfterTransform();
+    },
+    [
+      frameHeight,
+      frameWidth,
+      image,
+      imageSize.height,
+      imageSize.width,
+      syncAfterTransform,
+    ]
+  );
+
+  const handleMatchWidth = useCallback(
+    () => handleFitToFrame('width'),
+    [handleFitToFrame]
+  );
+
+  const handleMatchHeight = useCallback(
+    () => handleFitToFrame('height'),
+    [handleFitToFrame]
+  );
+
   // Auto send image when loaded
   useEffect(() => {
     if (
@@ -354,30 +399,40 @@ export const DeviceOverlay: React.FC = React.memo(() => {
           </Button>
         </div>
         {image && (
-          <div className="flex gap-3 items-center mb-2">
-            <span className="text-sm text-gray-600 dark:text-gray-400 min-w-[70px]">
-              Opacity:
-            </span>
-            <Slider
-              className="flex-1 max-w-[200px]"
-              value={opacity}
-              onChange={(value) => {
-                setOpacity(value);
-                cropAndSendImage();
-              }}
-              min={0}
-              max={1}
-              step={0.05}
-              label={(value) => `${(value * 100).toFixed(0)}%`}
-              marks={[
-                { value: 0, label: '0%' },
-                { value: 0.5, label: '50%' },
-                { value: 1, label: '100%' },
-              ]}
-            />
-            <span className="text-sm text-gray-500 dark:text-gray-600 min-w-[40px]">
-              {(opacity * 100).toFixed(0)}%
-            </span>
+          <div className="flex flex-wrap gap-3 items-center mb-2 justify-between">
+            <div className="flex flex-1 flex-wrap gap-3 items-center min-w-[250px]">
+              <span className="text-sm text-gray-600 dark:text-gray-400 min-w-[70px]">
+                Opacity:
+              </span>
+              <Slider
+                className="flex-1 min-w-[150px]"
+                value={opacity}
+                onChange={(value) => {
+                  setOpacity(value);
+                  cropAndSendImage();
+                }}
+                min={0}
+                max={1}
+                step={0.05}
+                label={(value) => `${(value * 100).toFixed(0)}%`}
+                marks={[
+                  { value: 0, label: '0%' },
+                  { value: 0.5, label: '50%' },
+                  { value: 1, label: '100%' },
+                ]}
+              />
+              <span className="text-sm text-gray-500 dark:text-gray-600 min-w-[40px]">
+                {(opacity * 100).toFixed(0)}%
+              </span>
+            </div>
+            <div className="flex flex-nowrap gap-2">
+              <Button size="sm" variant="light" onClick={handleMatchWidth}>
+                <IconArrowsHorizontal size={16} />
+              </Button>
+              <Button size="sm" variant="light" onClick={handleMatchHeight}>
+                <IconArrowsVertical size={16} />
+              </Button>
+            </div>
           </div>
         )}
       </div>
@@ -388,7 +443,7 @@ export const DeviceOverlay: React.FC = React.memo(() => {
         <div className="flex flex-col items-center">
           <div
             ref={frameRef}
-            className="relative border-4 border-gold-500 dark:border-gold-600 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-900 shadow-2xl"
+            className="relative border-4 border-gold-500 dark:border-gold-600 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-900 shadow-2xl box-content"
             style={{
               width: `${frameSize.width}px`,
               height: `${frameSize.height}px`,
