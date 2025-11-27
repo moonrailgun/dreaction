@@ -1,5 +1,29 @@
 # Changelog
 
+## [1.9.3](https://github.com/moonrailgun/dreaction/compare/v1.9.2...v1.9.3) (2025-11-27)
+
+### Features
+
+* add annotation support ([ed04ecb](https://github.com/moonrailgun/dreaction/commit/ed04ecbb17d870a07bce3bd4cd7b77dff679e800))
+* add dreaction android sdk ([009db02](https://github.com/moonrailgun/dreaction/commit/009db021b023a615635a003011f7c9681ae0d5ad))
+* add fit-to-frame with width or height feature ([8b4159e](https://github.com/moonrailgun/dreaction/commit/8b4159eaf9fe87817ddc30fee57c1e19af5ac4a1))
+
+### Bug Fixes
+
+* fix a bug which android network sdk can not pass correct network payload ([1328b61](https://github.com/moonrailgun/dreaction/commit/1328b616c85d385dfef4bc6a0237ea271a612e8a))
+
+### Others
+
+* dump android 1.0.3 ([f2eb82f](https://github.com/moonrailgun/dreaction/commit/f2eb82f8a9dc4213f83c07ac0926a3c6065c1d35))
+* dump android sdk 1.0.4 ([7e7b107](https://github.com/moonrailgun/dreaction/commit/7e7b10765ccd9247a943f5ba8ae07609f728c721))
+* try to resolve android sdk publish issue and dump version to 1.0.5 ([78157c7](https://github.com/moonrailgun/dreaction/commit/78157c7d35a8ce059b0ecc8fa101da2d0f54d8b3))
+* update android sdk groupId and artifactId ([438ac7c](https://github.com/moonrailgun/dreaction/commit/438ac7caca1ff6035c78ea929e64a6d9c5fc86b5))
+* update jitpack config ([f7293aa](https://github.com/moonrailgun/dreaction/commit/f7293aa1e8034b2a30b74b29d1bc4a4fb859ac52))
+* update jitpack issue ([238bfde](https://github.com/moonrailgun/dreaction/commit/238bfde38294352b0d1099151f5fcb588d5f34c1))
+* update release script ([df66971](https://github.com/moonrailgun/dreaction/commit/df6697161b73929a86fd228cc8b6185ebe47284a))
+* update release version and script ([3670030](https://github.com/moonrailgun/dreaction/commit/3670030abd5d9be328633ae2e2982ee51c898252))
+* update version 1.0.2 ([f97bf52](https://github.com/moonrailgun/dreaction/commit/f97bf52c9ff6dd289840ad135ee86937611017a9))
+
 ## [1.9.2](https://github.com/moonrailgun/dreaction/compare/v1.9.1...v1.9.2) (2025-11-17)
 
 ### Bug Fixes
