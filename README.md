@@ -85,11 +85,17 @@ function AppContainer() {
 
 ### Install SDK for Native Android
 
-Add to your `build.gradle`:
+Add JitPack repository and dependency:
 
 ```gradle
+// settings.gradle.kts or root build.gradle
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+// app/build.gradle
 dependencies {
-    debugImplementation("com.moonrailgun.dreaction:core:1.0.0")
+    debugImplementation 'com.github.moonrailgun.dreaction:core:android-1.0.0'
 }
 ```
 

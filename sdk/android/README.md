@@ -25,13 +25,15 @@ dependencyResolutionManagement {
 }
 ```
 
-Add the dependency:
+Add the dependency (use `android-` prefixed tag):
 
 ```gradle
 dependencies {
-    debugImplementation("com.moonrailgun.dreaction:core:1.0.0")
+    debugImplementation("com.github.moonrailgun.dreaction:core:android-1.0.0")
 }
 ```
+
+> **Note**: Android SDK releases use the `android-` prefix to distinguish from other packages in the monorepo.
 
 ### Using Local Maven
 

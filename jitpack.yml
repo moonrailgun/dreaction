@@ -1,7 +1,17 @@
 jdk:
   - openjdk17
+
+# Only build when tag starts with 'android-'
 before_install:
-  - sdk install java 17.0.1-open
-  - sdk use java 17.0.1-open
+  - |
+    if [[ "$JITPACK_TAG" == android-* ]]; then
+      echo "Building Android SDK..."
+    else
+      echo "Skipping - not an Android release"
+      exit 1
+    fi
+
 install:
-  - cd sdk/android && ./gradlew clean build publishToMavenLocal -x test
+  - cd sdk/android
+  - chmod +x gradlew
+  - ./gradlew clean :dreaction:build :dreaction:publishToMavenLocal -x test
