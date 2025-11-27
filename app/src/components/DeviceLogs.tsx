@@ -445,7 +445,13 @@ const Item: React.FC<{
             </Tabs.Panel>
 
             <Tabs.Panel value="response">
-              <JSONView data={command.payload.response} hideRoot={true} />
+              <JSONView
+                data={{
+                  ...command.payload.response,
+                  body: tryToParseJSON(command.payload.response.body),
+                }}
+                hideRoot={true}
+              />
             </Tabs.Panel>
           </Tabs>
         }

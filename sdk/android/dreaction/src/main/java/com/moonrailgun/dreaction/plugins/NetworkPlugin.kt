@@ -50,22 +50,20 @@ class NetworkPlugin : Plugin() {
             }
 
             val payload = mutableMapOf<String, Any?>(
-                "url" to request.url.toString(),
-                "method" to request.method,
-                "duration" to duration,
                 "request" to mapOf(
+                    "url" to request.url.toString(),
+                    "method" to request.method,
+                    "data" to requestBody,
                     "headers" to requestHeaders,
-                    "body" to requestBody
-                )
-            )
-
-            if (response != null) {
-                payload["status"] = response.code
-                payload["response"] = mapOf(
-                    "headers" to responseHeaders,
+                    "params" to null
+                ),
+                "response" to mapOf(
+                    "status" to (response?.code ?: 0),
+                    "headers" to (responseHeaders ?: emptyMap<String, String>()),
                     "body" to responseBody
-                )
-            }
+                ),
+                "duration" to duration
+            )
 
             if (error != null) {
                 payload["error"] = mapOf(
