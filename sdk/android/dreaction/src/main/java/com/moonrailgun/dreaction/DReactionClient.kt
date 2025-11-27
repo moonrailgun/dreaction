@@ -92,10 +92,9 @@ class DReactionClient(private val config: DReactionConfig) {
     }
 
     private fun onConnected() {
-        plugins.forEach { it.onConnect() }
-
         isReady = true
         sendIntro()
+        plugins.forEach { it.onConnect() }
         flushMessageQueue()
     }
 

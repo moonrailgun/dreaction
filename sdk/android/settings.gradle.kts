@@ -16,4 +16,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "DReaction Android SDK"
 include(":dreaction")
+include(":dreaction-compiler")
 include(":example")

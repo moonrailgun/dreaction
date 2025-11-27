@@ -1,5 +1,6 @@
 package com.moonrailgun.dreaction.plugins
 
+import android.content.Context
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonObject
@@ -12,12 +13,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CustomCommandPlugin : Plugin() {
+class CustomCommandPlugin(private val context: Context? = null) : Plugin() {
 
     private val commands = mutableMapOf<String, CustomCommand>()
     private var currentId = 1
     private val gson = Gson()
     private val scope = CoroutineScope(Dispatchers.Main)
+    private var hasAutoRegistered = false
 
     fun registerCommand(
         command: String,
@@ -62,6 +64,31 @@ class CustomCommandPlugin : Plugin() {
                 "id" to customCommand.id,
                 "command" to command
             ))
+        }
+    }
+
+    override fun onConnect() {
+        super.onConnect()
+
+        // Auto-register annotated commands
+        if (!hasAutoRegistered && context != null) {
+            hasAutoRegistered = true
+            try {
+                val registryClass = Class.forName("com.moonrailgun.dreaction.DReactionCommandRegistry")
+                val instanceField = registryClass.getField("INSTANCE")
+                val instance = instanceField.get(null)
+                val registerMethod = registryClass.getMethod(
+                    "registerAll",
+                    CustomCommandPlugin::class.java,
+                    Context::class.java
+                )
+                registerMethod.invoke(instance, this, context)
+                Log.d(TAG, "Auto-registered annotated custom commands")
+            } catch (e: ClassNotFoundException) {
+                // No generated registry, skip silently
+            } catch (e: Exception) {
+                Log.e(TAG, "Error auto-registering custom commands", e)
+            }
         }
     }
 

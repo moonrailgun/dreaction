@@ -8,6 +8,8 @@ DReaction client for native Android applications with powerful debugging tools.
 - 🌐 **Network Monitoring** - Track all HTTP requests and responses with OkHttp interceptor
 - 📈 **Performance Monitoring** - Monitor FPS and memory usage in real-time
 - 🔧 **Custom Commands** - Register custom commands that can be triggered from desktop client
+  - ⭐ **Annotation Support** - Use `@CustomCommand` for automatic registration (Kotlin & Java)
+  - 🚀 **Zero Runtime Overhead** - Compile-time code generation with KSP
 - 💾 **SharedPreferences Monitoring** - Watch SharedPreferences changes live
 - 🔌 **Plugin System** - Easy to extend with custom plugins
 
@@ -109,6 +111,56 @@ All HTTP requests made with this client will be logged to DReaction.
 
 ### 4. Register Custom Commands
 
+#### Using Annotations (Recommended) ⭐
+
+The easiest way to register custom commands is using annotations with automatic registration:
+
+```kotlin
+// 1. Pass context when enabling custom commands
+DReaction.configure(config)
+    .useCustomCommand(this) // Pass context for auto-registration
+    .connect()
+
+// 2. Create a class with annotated methods
+class MyCommands {
+    @CustomCommand(
+        command = "getInfo",
+        title = "Get App Info",
+        description = "Returns app information"
+    )
+    fun getAppInfo(): Map<String, Any> {
+        return mapOf("version" to "1.0.0")
+    }
+    
+    @CustomCommand(command = "echo")
+    fun echo(message: String): String {
+        return "Echo: $message"
+    }
+    
+    // Supports suspend functions!
+    @CustomCommand(command = "asyncOp")
+    suspend fun asyncOperation(): String {
+        delay(1000)
+        return "Done!"
+    }
+}
+```
+
+**Java Support**: Use `@Param` annotation for parameters in Java:
+
+```java
+public class JavaCommands {
+    @CustomCommand(command = "javaEcho", title = "Java Echo")
+    public String echo(@Param("message") String msg) {
+        return "Java Echo: " + msg;
+    }
+}
+```
+
+Commands are automatically discovered and registered at compile-time with zero runtime overhead! See [ANNOTATION_GUIDE.md](ANNOTATION_GUIDE.md) for details.
+
+#### Manual Registration (Still Supported)
+
 ```kotlin
 DReaction.customCommand?.registerCommand(
     command = "clearCache",
@@ -195,7 +247,7 @@ DReaction.configure(config)  // Configure and get builder
     .useLogger()            // Enable logger plugin
     .useNetwork()           // Enable network monitoring
     .usePerformance(context) // Enable performance monitoring
-    .useCustomCommand()     // Enable custom commands
+    .useCustomCommand(context) // Enable custom commands (pass context for annotations)
     .useSharedPreferences(context, prefsName) // Enable SharedPreferences monitoring
     .use(customPlugin)      // Add custom plugin
     .connect()              // Connect to server

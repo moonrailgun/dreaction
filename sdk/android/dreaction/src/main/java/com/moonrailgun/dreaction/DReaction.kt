@@ -60,8 +60,8 @@ object DReaction {
             return this
         }
 
-        fun useCustomCommand(): Builder {
-            customCommand = CustomCommandPlugin()
+        fun useCustomCommand(context: Context? = null): Builder {
+            customCommand = CustomCommandPlugin(context)
             client.use(customCommand!!)
             return this
         }

@@ -29,7 +29,7 @@ class ExampleApplication : Application() {
         .useLogger()
         .useNetwork()
         .usePerformance(this)
-        .useCustomCommand()
+        .useCustomCommand(this) // Pass context for auto-registration of annotated commands
         .useSharedPreferences(this)
         .connect()
 
@@ -37,7 +37,9 @@ class ExampleApplication : Application() {
         DReaction.logger?.info("Application started")
         DReaction.logger?.debug("Debug mode enabled")
 
-        // Example: Register custom commands
+        // Note: Commands with @CustomCommand annotation will be automatically registered
+
+        // Example: Manual command registration (still supported)
         DReaction.customCommand?.registerCommand(
             command = "getAppInfo",
             title = "Get App Info",
