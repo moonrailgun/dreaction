@@ -2,14 +2,14 @@ jdk:
   - openjdk17
 
 before_install:
-  - echo "Tag/Version: ${JITPACK_TAG:-${JITPACK_GIT_REF:-unknown}}"
-  - |
-    TAG="${JITPACK_TAG:-${JITPACK_GIT_REF:-}}"
+  - echo "Tag/Version:" ${JITPACK_TAG:-${JITPACK_GIT_REF:-unknown}}
+  - >
+    TAG="${JITPACK_TAG:-${JITPACK_GIT_REF:-}}" &&
     if [[ "$TAG" == android-* ]]; then
-      echo "✓ Building Android SDK..."
+      echo "Building Android SDK...";
     else
-      echo "✗ Error: Not an Android release tag (expected 'android-*', got '$TAG')"
-      exit 1
+      echo "Error: Not an Android release tag (expected android-*, got $TAG)" &&
+      exit 1;
     fi
 
 install:
