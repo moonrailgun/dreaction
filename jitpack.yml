@@ -30,4 +30,4 @@ install:
       curl -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.2.0/gradle/wrapper/gradle-wrapper.jar
     fi
   - chmod +x gradlew
-  - ./gradlew clean :dreaction:build :dreaction:publishToMavenLocal -x test
+  - ./gradlew clean :dreaction:assembleRelease :dreaction:publishToMavenLocal -x test -x lint

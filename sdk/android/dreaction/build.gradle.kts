@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    `maven-publish`
+    id("maven-publish")
 }
 
 android {
@@ -58,6 +58,9 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
 
+// Read version from gradle.properties
+val VERSION_NAME: String by project
+
 afterEvaluate {
     publishing {
         publications {
@@ -66,7 +69,7 @@ afterEvaluate {
 
                 groupId = "com.github.moonrailgun"
                 artifactId = "dreaction"
-                version = "1.0.0"
+                version = VERSION_NAME
 
                 pom {
                     name.set("DReaction Android SDK")
@@ -94,6 +97,12 @@ afterEvaluate {
                         url.set("https://github.com/moonrailgun/dreaction")
                     }
                 }
+            }
+        }
+
+        repositories {
+            maven {
+                url = uri(layout.buildDirectory.dir("repo"))
             }
         }
     }
