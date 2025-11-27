@@ -95,7 +95,7 @@ repositories {
 
 // app/build.gradle
 dependencies {
-    debugImplementation 'com.github.moonrailgun.dreaction:core:android-1.0.0'
+    debugImplementation 'com.github.moonrailgun:dreaction:android-1.0.0'
 }
 ```
 

@@ -29,7 +29,7 @@ Add the dependency (use `android-` prefixed tag):
 
 ```gradle
 dependencies {
-    debugImplementation("com.github.moonrailgun.dreaction:core:android-1.0.0")
+    debugImplementation("com.github.moonrailgun:dreaction:android-1.0.0")
 }
 ```
 
@@ -48,7 +48,7 @@ Then in your project:
 
 ```gradle
 dependencies {
-    debugImplementation("com.moonrailgun.dreaction:core:1.0.0")
+    debugImplementation("com.github.moonrailgun:dreaction:1.0.0")
 }
 ```
 

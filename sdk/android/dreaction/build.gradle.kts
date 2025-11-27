@@ -64,8 +64,8 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
 
-                groupId = "com.moonrailgun.dreaction"
-                artifactId = "core"
+                groupId = "com.github.moonrailgun"
+                artifactId = "dreaction"
                 version = "1.0.0"
 
                 pom {
