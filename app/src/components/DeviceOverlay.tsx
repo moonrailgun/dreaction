@@ -84,10 +84,15 @@ export const DeviceOverlay: React.FC = React.memo(() => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Canvas size should match frameSize for 1:1 preview
-    // We'll scale it to device size later
-    canvas.width = frameSize.width;
-    canvas.height = frameSize.height;
+    // Use device pixel ratio to ensure high quality rendering
+    const dpr = window.devicePixelRatio || 1;
+
+    // Canvas size should match frameSize but with DPR for high quality
+    canvas.width = frameSize.width * dpr;
+    canvas.height = frameSize.height * dpr;
+
+    // Scale context to match DPR
+    ctx.scale(dpr, dpr);
 
     // Fill with white background
     ctx.fillStyle = '#ffffff';
@@ -101,7 +106,7 @@ export const DeviceOverlay: React.FC = React.memo(() => {
     ctx.drawImage(imageRef.current, 0, 0);
     ctx.restore();
 
-    // This canvas now exactly matches what's shown in edit area
+    // This canvas now exactly matches what's shown in edit area with high DPI quality
     // Now create the device-sized version
     const deviceCanvas = document.createElement('canvas');
     const deviceCtx = deviceCanvas.getContext('2d');
@@ -117,13 +122,18 @@ export const DeviceOverlay: React.FC = React.memo(() => {
     deviceCtx.fillStyle = '#ffffff';
     deviceCtx.fillRect(0, 0, physicalWidth, physicalHeight);
 
+    // Enable high quality image scaling
+    deviceCtx.imageSmoothingEnabled = true;
+    deviceCtx.imageSmoothingQuality = 'high';
+
     // Draw the frame canvas scaled to device size
+    // Use full canvas dimensions (including DPR scaling)
     deviceCtx.drawImage(
       canvas,
       0,
       0,
-      frameSize.width,
-      frameSize.height,
+      canvas.width,
+      canvas.height,
       0,
       0,
       physicalWidth,
