@@ -20,5 +20,14 @@ before_install:
 
 install:
   - cd sdk/android
+  - echo "Checking Gradle Wrapper..."
+  - ls -la gradle/wrapper/ || echo "wrapper directory not found"
+  - file gradle/wrapper/gradle-wrapper.jar || echo "jar file check failed"
+  - |
+    if [ ! -f gradle/wrapper/gradle-wrapper.jar ] || [ ! -s gradle/wrapper/gradle-wrapper.jar ]; then
+      echo "gradle-wrapper.jar missing or empty, downloading from Gradle 8.2 distribution..."
+      mkdir -p gradle/wrapper
+      curl -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.2.0/gradle/wrapper/gradle-wrapper.jar
+    fi
   - chmod +x gradlew
   - ./gradlew clean :dreaction:build :dreaction:publishToMavenLocal -x test
