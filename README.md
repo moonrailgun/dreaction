@@ -1,6 +1,6 @@
 # DReaction
 
-Your best debug tool in `react-native`
+Your best debug tool for `React Native`, `React/Web`, and `Native Android`
 
 **Highlight**:
 
@@ -82,6 +82,49 @@ function AppContainer() {
   );
 }
 ```
+
+### Install SDK for Native Android
+
+Add to your `build.gradle`:
+
+```gradle
+dependencies {
+    debugImplementation("com.moonrailgun.dreaction:core:1.0.0")
+}
+```
+
+Initialize in your Application class:
+
+```kotlin
+import com.moonrailgun.dreaction.DReaction
+import com.moonrailgun.dreaction.DReactionConfig
+
+class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        
+        if (BuildConfig.DEBUG) {
+            DReaction.configure(
+                DReactionConfig(
+                    host = "192.168.1.100", // Your dev machine IP
+                    port = 9600,
+                    name = "My Android App"
+                )
+            )
+            .useLogger()
+            .useNetwork()
+            .usePerformance(this)
+            .useCustomCommand()
+            .useSharedPreferences(this)
+            .connect()
+            
+            DReaction.performance?.startMonitoring()
+        }
+    }
+}
+```
+
+See [Android SDK Documentation](./sdk/android/README.md) for more details.
 
 ## Example
 
