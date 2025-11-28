@@ -27,7 +27,7 @@ const trackGlobalLogs = () => (dreaction: DReactionCore) => {
       };
       console.info = (...args: Parameters<typeof console.info>) => {
         originalConsoleInfo(...args);
-        client.info(...args);
+        client.log(...args);
       };
       console.warn = (...args: Parameters<typeof console.warn>) => {
         originalConsoleWarn(...args);
@@ -46,7 +46,7 @@ const trackGlobalLogs = () => (dreaction: DReactionCore) => {
       console.warn = originalConsoleWarn;
       console.debug = originalConsoleDebug;
       console.info = originalConsoleInfo;
-    }
+    },
   } satisfies Plugin<DReactionCore>;
 };
 
