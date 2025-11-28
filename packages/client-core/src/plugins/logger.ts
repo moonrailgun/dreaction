@@ -10,6 +10,10 @@ const logger = () => (dreaction: DReactionCore) => {
         const content = args && args.length === 1 ? args[0] : args;
         dreaction.send('log', { level: 'debug', message: content }, false);
       },
+      info: (...args) => {
+        const content = args && args.length === 1 ? args[0] : args;
+        dreaction.send('log', { level: 'debug', message: content }, false);
+      },
       logImportant: (...args) => {
         const content = args && args.length === 1 ? args[0] : args;
         dreaction.send('log', { level: 'debug', message: content }, true);
@@ -36,6 +40,8 @@ export const hasLoggerPlugin = (
     dreaction &&
     'log' in dreaction &&
     typeof dreaction.log === 'function' &&
+    'info' in dreaction &&
+    typeof dreaction.info === 'function' &&
     'logImportant' in dreaction &&
     typeof dreaction.logImportant === 'function' &&
     'debug' in dreaction &&

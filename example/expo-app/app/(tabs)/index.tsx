@@ -58,6 +58,12 @@ export default function TabOneScreen() {
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
+        onPress={() => console.info('Here is a console.info')}
+      >
+        <Text>Click here to call console.info</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => {
           fetch('https://github.com/moonrailgun/dreaction')
             .then((response) => response.text())

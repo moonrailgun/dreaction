@@ -15,9 +15,9 @@ const trackGlobalLogs = () => (dreaction: DReactionCore) => {
     InferFeatures<DReactionCore, LoggerPlugin>;
 
   const originalConsoleLog = console.log;
+  const originalConsoleInfo = console.info;
   const originalConsoleWarn = console.warn;
   const originalConsoleDebug = console.debug;
-  const originalConsoleInfo = console.info;
 
   return {
     onConnect: () => {
@@ -27,13 +27,12 @@ const trackGlobalLogs = () => (dreaction: DReactionCore) => {
       };
       console.info = (...args: Parameters<typeof console.info>) => {
         originalConsoleInfo(...args);
-        client.log(...args);
+        client.info(...args);
       };
       console.warn = (...args: Parameters<typeof console.warn>) => {
         originalConsoleWarn(...args);
         client.warn(args[0]);
       };
-
       console.debug = (...args: Parameters<typeof console.debug>) => {
         originalConsoleDebug(...args);
         client.debug(args[0]);
