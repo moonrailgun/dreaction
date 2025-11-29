@@ -27,15 +27,20 @@ dependencyResolutionManagement {
 }
 ```
 
-Add the dependency (use `android-` prefixed tag):
+Add the dependencies (use `android-` prefixed tag):
 
 ```gradle
 dependencies {
     debugImplementation("com.github.moonrailgun:dreaction:android-1.0.0")
+    
+    // If using @CustomCommand annotation for automatic command registration
+    ksp("com.github.moonrailgun:dreaction-compiler:android-1.0.0")
 }
 ```
 
 > **Note**: Android SDK releases use the `android-` prefix to distinguish from other packages in the monorepo.
+> 
+> **KSP Compiler**: The `dreaction-compiler` is only needed if you use the `@CustomCommand` annotation for automatic command registration. If you register commands manually, you can skip this dependency.
 
 ### Using Local Maven
 
@@ -51,6 +56,9 @@ Then in your project:
 ```gradle
 dependencies {
     debugImplementation("com.github.moonrailgun:dreaction:1.0.0")
+    
+    // If using @CustomCommand annotation
+    ksp("com.github.moonrailgun:dreaction-compiler:1.0.0")
 }
 ```
 
@@ -113,7 +121,21 @@ All HTTP requests made with this client will be logged to DReaction.
 
 #### Using Annotations (Recommended) ⭐
 
-The easiest way to register custom commands is using annotations with automatic registration:
+The easiest way to register custom commands is using annotations with automatic registration.
+
+**Prerequisites**: Add KSP plugin and dreaction-compiler dependency to your app's `build.gradle.kts`:
+
+```kotlin
+plugins {
+    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
+}
+
+dependencies {
+    ksp("com.github.moonrailgun:dreaction-compiler:android-1.0.0")
+}
+```
+
+**Usage**:
 
 ```kotlin
 // 1. Pass context when enabling custom commands
