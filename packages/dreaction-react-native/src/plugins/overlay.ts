@@ -17,6 +17,9 @@ export default function OverlayCreator() {
         // relay this payload on to the emitter
         emitter.emit('overlay', command.payload);
       },
+      onDisconnect() {
+        emitter.emit('overlay', { uri: '' });
+      },
     } satisfies Plugin<DReactionCore>;
   };
 }
