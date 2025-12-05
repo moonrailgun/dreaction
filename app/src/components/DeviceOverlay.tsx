@@ -57,7 +57,7 @@ export const DeviceOverlay: React.FC = React.memo(() => {
     if (!width || !height) return { width: 0, height: 0 };
 
     const containerWidth = window.innerWidth - 150;
-    const containerHeight = window.innerHeight - 250;
+    const containerHeight = window.innerHeight - 280;
     const aspectRatio = width / height;
 
     let frameWidth = containerWidth;
@@ -160,7 +160,7 @@ export const DeviceOverlay: React.FC = React.memo(() => {
   ]);
 
   const { run: cropAndSendImage } = useDebounceFn(_cropAndSendImage, {
-    wait: 1000,
+    wait: 400,
   });
 
   const syncAfterTransform = useCallback(() => {
@@ -280,6 +280,46 @@ export const DeviceOverlay: React.FC = React.memo(() => {
     sendCommand('overlay', { uri: '' });
   }, [sendCommand]);
 
+  // Handle keyboard arrow keys for pixel-level movement
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!image) return;
+
+      const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+      if (!arrowKeys.includes(e.key)) return;
+
+      e.preventDefault();
+
+      // Use Shift key for larger steps (10px), otherwise move by 1px
+      const step = e.shiftKey ? 10 : 1;
+
+      setPosition((prev) => {
+        let newX = prev.x;
+        let newY = prev.y;
+
+        switch (e.key) {
+          case 'ArrowUp':
+            newY -= step;
+            break;
+          case 'ArrowDown':
+            newY += step;
+            break;
+          case 'ArrowLeft':
+            newX -= step;
+            break;
+          case 'ArrowRight':
+            newX += step;
+            break;
+        }
+
+        return { x: newX, y: newY };
+      });
+
+      cropAndSendImage();
+    },
+    [image, cropAndSendImage]
+  );
+
   const handleFitToFrame = useCallback(
     (dimension: 'width' | 'height') => {
       if (!image) return;
@@ -336,13 +376,15 @@ export const DeviceOverlay: React.FC = React.memo(() => {
     document.addEventListener('paste', handlePaste);
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.removeEventListener('paste', handlePaste);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [handlePaste, handleMouseMove, handleMouseUp]);
+  }, [handlePaste, handleMouseMove, handleMouseUp, handleKeyDown]);
 
   if (!width || !height) {
     return (
@@ -534,7 +576,8 @@ export const DeviceOverlay: React.FC = React.memo(() => {
         </span>
         {image && (
           <span className="ml-2 text-sm text-gray-500 dark:text-gray-600">
-            | Drag to move, scroll to zoom
+            | Drag to move, scroll to zoom | Arrow keys for pixel-level movement
+            (hold Shift for 10px)
           </span>
         )}
       </div>
