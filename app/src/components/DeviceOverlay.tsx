@@ -107,12 +107,12 @@ export const DeviceOverlay: React.FC = React.memo(() => {
     ctx.restore();
 
     // This canvas now exactly matches what's shown in edit area with high DPI quality
-    // Now create the device-sized version
+    // Now create the device-sized version with higher quality
     const deviceCanvas = document.createElement('canvas');
     const deviceCtx = deviceCanvas.getContext('2d');
     if (!deviceCtx) return;
 
-    // Set device canvas to physical size
+    // Set device canvas to physical size with output scale for higher quality
     const physicalWidth = width * pixelRatio;
     const physicalHeight = height * pixelRatio;
     deviceCanvas.width = physicalWidth;
@@ -126,21 +126,19 @@ export const DeviceOverlay: React.FC = React.memo(() => {
     deviceCtx.imageSmoothingEnabled = true;
     deviceCtx.imageSmoothingQuality = 'high';
 
-    // Draw the frame canvas scaled to device size
-    // Use full canvas dimensions (including DPR scaling)
-    deviceCtx.drawImage(
-      canvas,
-      0,
-      0,
-      canvas.width,
-      canvas.height,
-      0,
-      0,
-      physicalWidth,
-      physicalHeight
-    );
+    // Calculate the scale factor from frame to device
+    const scaleX = physicalWidth / frameSize.width;
+    const scaleY = physicalHeight / frameSize.height;
 
-    // Convert to base64
+    // Draw the original image directly on device canvas with transformations
+    // This preserves the original image quality better than scaling a smaller canvas
+    deviceCtx.save();
+    deviceCtx.translate(position.x * scaleX, position.y * scaleY);
+    deviceCtx.scale(scale * scaleX, scale * scaleY);
+    deviceCtx.drawImage(imageRef.current, 0, 0);
+    deviceCtx.restore();
+
+    // Convert to base64 with quality settings
     const previewData = canvas.toDataURL('image/png');
     const deviceData = deviceCanvas.toDataURL('image/png');
 
@@ -453,7 +451,7 @@ export const DeviceOverlay: React.FC = React.memo(() => {
         <div className="flex flex-col items-center">
           <div
             ref={frameRef}
-            className="relative border-4 border-gold-500 dark:border-gold-600 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-900 shadow-2xl box-content"
+            className="relative border-4 border-gold-500 dark:border-gold-600 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-900 box-content"
             style={{
               width: `${frameSize.width}px`,
               height: `${frameSize.height}px`,
@@ -502,7 +500,7 @@ export const DeviceOverlay: React.FC = React.memo(() => {
         {previewImage && showPreview && (
           <div className="flex flex-col items-center">
             <div
-              className="relative border-4 border-blue-500 dark:border-blue-600 rounded-lg overflow-hidden bg-white dark:bg-gray-800 shadow-2xl"
+              className="relative border-4 border-blue-500 dark:border-blue-600 rounded-lg overflow-hidden bg-white dark:bg-gray-800"
               style={{
                 width: `${frameSize.width}px`,
                 height: `${frameSize.height}px`,
