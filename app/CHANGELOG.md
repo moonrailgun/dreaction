@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.9.4](https://github.com/moonrailgun/dreaction/compare/v1.9.3...v1.9.4) (2025-12-05)
+
+### Features
+
+* add keyboard navigation for pixel-level movement in DeviceOverlay ([f97935d](https://github.com/moonrailgun/dreaction/commit/f97935d03edffe65f6a271274719e06f9ec7de4d))
+* auto clear overlay on disconnect ([2309856](https://github.com/moonrailgun/dreaction/commit/2309856383f5c12d06207fca098976e0b22f851c))
+* overlay hight dpi support ([be5cafd](https://github.com/moonrailgun/dreaction/commit/be5cafd8b094430d461d15fb5bd06898bcdfcab0))
+* overlay hight ratio support ([9c4d0af](https://github.com/moonrailgun/dreaction/commit/9c4d0afd9af9b7a3e1109707ebfd8ddab6250211))
+
+### Bug Fixes
+
+* info log error in plugin ([caa85ed](https://github.com/moonrailgun/dreaction/commit/caa85ed8e007bc2fc80313e652e2b296a9a63fa5))
+
+### Others
+
+* add dreaction-compiler to JitPack build and bump to 1.0.9 ([bf3f983](https://github.com/moonrailgun/dreaction/commit/bf3f9832ccad547c4c463d53e33095473f2481b4))
+* add KSP compiler release ([0d8a571](https://github.com/moonrailgun/dreaction/commit/0d8a571bd067b657aba4f3b266c04a2e8f8e338d))
+* bump Android SDK version to 1.0.8 ([4d343ac](https://github.com/moonrailgun/dreaction/commit/4d343ac4d464b66d88a2c597c041fac5b82fa40e))
+* dump dreaction react native sdk ([a6b7920](https://github.com/moonrailgun/dreaction/commit/a6b7920906e46942621f1e9328739d58d3623b61))
+* implement client.info feature and dump version ([792528f](https://github.com/moonrailgun/dreaction/commit/792528fb6dceeba1af3ae9049dee16b1a381acc0))
+* revert some not safe problem ([5eac779](https://github.com/moonrailgun/dreaction/commit/5eac779c21ee5bfa172ce181cac11e00a45093cb))
+
 ## [1.9.3](https://github.com/moonrailgun/dreaction/compare/v1.9.2...v1.9.3) (2025-11-27)
 
 ### Features
