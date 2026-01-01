@@ -1,4 +1,4 @@
-import type { DReactionCore, Plugin } from '../';
+import type { DReactionCore, Plugin } from '../types';
 
 /**
  * Runs small high-unscientific benchmarks for you.

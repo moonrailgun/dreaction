@@ -1,4 +1,4 @@
-import type { DReactionCore, Plugin } from '../';
+import type { DReactionCore, Plugin } from '../types';
 
 /**
  * Clears the dreaction server.

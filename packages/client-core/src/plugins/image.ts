@@ -1,4 +1,4 @@
-import type { DReactionCore, Plugin } from '../';
+import type { DReactionCore, Plugin } from '../types';
 
 export interface ImagePayload {
   uri: string;
