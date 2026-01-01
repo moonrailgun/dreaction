@@ -33,7 +33,6 @@ export interface CommandMap {
   dataWatch: DataWatchPayload;
   'profiler.render': ProfilerRenderPayload;
   'profiler.fps': ProfilerFPSPayload;
-  'saga.task.complete': any;
   'state.action.complete': StateActionCompletePayload;
   'state.keys.response': StateKeysResponsePayload;
   'state.values.change': StateValuesChangePayload;
@@ -49,12 +48,9 @@ export interface CommandMap {
   'customCommand.unregister': any;
   'customCommand.response': CustomCommandResponsePayload;
   clear: undefined;
-  'repl.ls.response': any;
-  'repl.execute.response': any;
   'devtools.open': undefined;
   'devtools.reload': undefined;
   'editor.open': EditorOpenPayload;
-  storybook: boolean;
   overlay: boolean;
 }
 
