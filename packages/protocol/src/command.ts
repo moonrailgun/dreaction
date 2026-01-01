@@ -22,88 +22,51 @@ import type {
   StateValuesSubscribePayload,
 } from './state';
 
-export const CommandType = {
-  ApiResponse: 'api.response',
-  AsyncStorageMutation: 'asyncStorage.mutation',
-  Benchmark: 'benchmark.report',
-  ClientIntro: 'client.intro',
-  Display: 'display',
-  Image: 'image',
-  Log: 'log',
-  DataWatch: 'dataWatch',
-  ProfilerRender: 'profiler.render',
-  ProfilerFPS: 'profiler.fps',
-  SagaTaskComplete: 'saga.task.complete',
-  StateActionComplete: 'state.action.complete',
-  StateKeysResponse: 'state.keys.response',
-  StateValuesChange: 'state.values.change',
-  StateValuesResponse: 'state.values.response',
-  StateBackupResponse: 'state.backup.response',
-  StateBackupRequest: 'state.backup.request',
-  StateRestoreRequest: 'state.restore.request',
-  StateActionDispatch: 'state.action.dispatch',
-  StateValuesSubscribe: 'state.values.subscribe',
-  StateKeysRequest: 'state.keys.request',
-  StateValuesRequest: 'state.values.request',
-  CustomCommandRegister: 'customCommand.register',
-  CustomCommandUnregister: 'customCommand.unregister',
-  CustomCommandResponse: 'customCommand.response',
-  Clear: 'clear',
-  ReplLsResponse: 'repl.ls.response',
-  ReplExecuteResponse: 'repl.execute.response',
-  // these technically are commands only in dreaction-react-native, but I felt lazy so they can live here
-  DevtoolsOpen: 'devtools.open',
-  DevtoolsReload: 'devtools.reload',
-  EditorOpen: 'editor.open',
-  Storybook: 'storybook',
-  Overlay: 'overlay',
-} as const;
-
-export type CommandTypeKey = (typeof CommandType)[keyof typeof CommandType];
-
 export interface CommandMap {
-  [CommandType.ApiResponse]: NetworkPayload;
-  [CommandType.AsyncStorageMutation]: AsyncStorageMutationState;
-  [CommandType.Benchmark]: any;
-  [CommandType.ClientIntro]: any;
-  [CommandType.Display]: any;
-  [CommandType.Image]: any;
-  [CommandType.Log]: LogPayload;
-  [CommandType.DataWatch]: DataWatchPayload;
-  [CommandType.ProfilerRender]: ProfilerRenderPayload;
-  [CommandType.ProfilerFPS]: ProfilerFPSPayload;
-  [CommandType.SagaTaskComplete]: any;
-  [CommandType.StateActionComplete]: StateActionCompletePayload;
-  [CommandType.StateKeysResponse]: StateKeysResponsePayload;
-  [CommandType.StateValuesChange]: StateValuesChangePayload;
-  [CommandType.StateValuesResponse]: StateValuesResponsePayload;
-  [CommandType.StateBackupResponse]: StateBackupResponsePayload;
-  [CommandType.StateBackupRequest]: StateBackupRequestPayload;
-  [CommandType.StateRestoreRequest]: StateRestoreRequestPayload;
-  [CommandType.StateActionDispatch]: StateActionDispatchPayload;
-  [CommandType.StateValuesSubscribe]: StateValuesSubscribePayload;
-  [CommandType.StateKeysRequest]: StateKeysRequestPayload;
-  [CommandType.StateValuesRequest]: StateValuesRequestPayload;
-  [CommandType.CustomCommandRegister]: CustomCommandRegisterPayload;
-  [CommandType.CustomCommandUnregister]: any;
-  [CommandType.CustomCommandResponse]: CustomCommandResponsePayload;
-  [CommandType.Clear]: undefined;
-  [CommandType.ReplLsResponse]: any;
-  [CommandType.ReplExecuteResponse]: any;
-  [CommandType.DevtoolsOpen]: undefined;
-  [CommandType.DevtoolsReload]: undefined;
-  [CommandType.EditorOpen]: EditorOpenPayload;
-  [CommandType.Storybook]: boolean;
-  [CommandType.Overlay]: boolean;
+  'api.response': NetworkPayload;
+  'asyncStorage.mutation': AsyncStorageMutationState;
+  'benchmark.report': any;
+  'client.intro': any;
+  display: any;
+  image: any;
+  log: LogPayload;
+  dataWatch: DataWatchPayload;
+  'profiler.render': ProfilerRenderPayload;
+  'profiler.fps': ProfilerFPSPayload;
+  'saga.task.complete': any;
+  'state.action.complete': StateActionCompletePayload;
+  'state.keys.response': StateKeysResponsePayload;
+  'state.values.change': StateValuesChangePayload;
+  'state.values.response': StateValuesResponsePayload;
+  'state.backup.response': StateBackupResponsePayload;
+  'state.backup.request': StateBackupRequestPayload;
+  'state.restore.request': StateRestoreRequestPayload;
+  'state.action.dispatch': StateActionDispatchPayload;
+  'state.values.subscribe': StateValuesSubscribePayload;
+  'state.keys.request': StateKeysRequestPayload;
+  'state.values.request': StateValuesRequestPayload;
+  'customCommand.register': CustomCommandRegisterPayload;
+  'customCommand.unregister': any;
+  'customCommand.response': CustomCommandResponsePayload;
+  clear: undefined;
+  'repl.ls.response': any;
+  'repl.execute.response': any;
+  'devtools.open': undefined;
+  'devtools.reload': undefined;
+  'editor.open': EditorOpenPayload;
+  storybook: boolean;
+  overlay: boolean;
 }
 
+export type CommandTypeKey = keyof CommandMap;
+
 export type Command = {
-  [Type in keyof CommandMap]: CommandInferType<Type>;
-}[keyof CommandMap];
+  [Type in CommandTypeKey]: CommandInferType<Type>;
+}[CommandTypeKey];
 
 export type CommandEvent = (command: Command) => void;
 
-export type CommandInferType<T extends keyof CommandMap> = {
+export type CommandInferType<T extends CommandTypeKey> = {
   type: T;
   connectionId: number;
   clientId?: string;
