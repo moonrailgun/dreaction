@@ -1,7 +1,6 @@
 {
   "name": "dreaction",
-  "version": "1.0.0",
-  "description": "",
+  "description": "The best debugging tool for React Native",
   "scripts": {
     "dev": "cd app && pnpm dev",
     "release": "cd app && pnpm release",

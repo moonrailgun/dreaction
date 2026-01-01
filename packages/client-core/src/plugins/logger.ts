@@ -31,11 +31,11 @@ const logger = () => (dreaction: DReactionCore) => {
 export default logger;
 
 export type LoggerPlugin = ReturnType<typeof logger>;
+export type LoggerFeatures = InferFeatures<ReturnType<typeof logger>>;
 
 export const hasLoggerPlugin = (
   dreaction: DReactionCore
-): dreaction is DReactionCore &
-  InferFeatures<DReactionCore, ReturnType<typeof logger>> => {
+): dreaction is DReactionCore & LoggerFeatures => {
   return (
     dreaction &&
     'log' in dreaction &&
@@ -55,8 +55,7 @@ export const hasLoggerPlugin = (
 
 export const assertHasLoggerPlugin = (
   dreaction: DReactionCore
-): asserts dreaction is DReactionCore &
-  InferFeatures<DReactionCore, ReturnType<typeof logger>> => {
+): asserts dreaction is DReactionCore & LoggerFeatures => {
   if (!hasLoggerPlugin(dreaction)) {
     throw new Error(
       'This DReaction client has not had the logger plugin applied to it. Make sure that you add `use(logger())` before adding this plugin.'

@@ -44,13 +44,15 @@ const stateResponse = () => (dreaction: DReactionCore) => {
 };
 
 export type StateResponsePlugin = ReturnType<typeof stateResponse>;
+export type StateResponseFeatures = InferFeatures<
+  ReturnType<typeof stateResponse>
+>;
 
 export default stateResponse;
 
 export const hasStateResponsePlugin = (
   dreaction: DReactionCore
-): dreaction is DReactionCore &
-  InferFeatures<DReactionCore, ReturnType<typeof stateResponse>> =>
+): dreaction is DReactionCore & StateResponseFeatures =>
   dreaction &&
   'stateActionComplete' in dreaction &&
   typeof dreaction.stateActionComplete === 'function' &&
@@ -65,8 +67,7 @@ export const hasStateResponsePlugin = (
 
 export const assertHasStateResponsePlugin = (
   dreaction: DReactionCore
-): asserts dreaction is DReactionCore &
-  InferFeatures<DReactionCore, ReturnType<typeof stateResponse>> => {
+): asserts dreaction is DReactionCore & StateResponseFeatures => {
   if (!hasStateResponsePlugin(dreaction)) {
     throw new Error(
       'This DReaction client has not had the state responses plugin applied to it. Make sure that you add `use(stateResponse())` before adding this plugin.'

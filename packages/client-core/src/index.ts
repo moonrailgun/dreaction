@@ -80,20 +80,37 @@ export interface CustomCommand<
   args?: Args;
 }
 
-type ExtractFeatures<T> = T extends { features: infer U } ? U : never;
-type PluginFeatures<Client, P extends PluginCreator<Client>> = ExtractFeatures<
-  ReturnType<P>
->;
+/**
+ * Extract features from a single PluginCreator
+ */
+type ExtractPluginFeatures<P> = P extends PluginCreator<any>
+  ? ReturnType<P> extends { features: infer F }
+    ? F
+    : {}
+  : {};
 
+/**
+ * Extract features type from a plugin or array of plugins.
+ * Supports:
+ * - Single PluginCreator: InferFeatures<typeof myPlugin>
+ * - Array of PluginCreators: InferFeatures<typeof plugins>
+ * - Legacy format: InferFeatures<Client, PluginCreator> (second param is the plugin)
+ */
+export type InferFeatures<ClientOrPlugin, LegacyPluginCreator = never> = [
+  LegacyPluginCreator
+] extends [never]
+  ? ClientOrPlugin extends PluginCreator<any>[]
+    ? UnionToIntersection<ExtractPluginFeatures<ClientOrPlugin[number]>>
+    : ExtractPluginFeatures<ClientOrPlugin>
+  : ExtractPluginFeatures<LegacyPluginCreator>;
+
+/**
+ * @deprecated Use InferFeatures instead
+ */
 export type InferFeaturesFromPlugins<
-  Client,
-  Plugins extends PluginCreator<Client>[]
-> = UnionToIntersection<PluginFeatures<Client, Plugins[number]>>;
-
-type InferFeaturesFromPlugin<
-  Client,
-  P extends PluginCreator<Client>
-> = UnionToIntersection<PluginFeatures<Client, P>>;
+  _Client,
+  Plugins extends PluginCreator<any>[]
+> = UnionToIntersection<ExtractPluginFeatures<Plugins[number]>>;
 
 export interface DReactionCore {
   connected: boolean;
@@ -119,12 +136,12 @@ export interface DReactionCore {
   configure: (
     options?: ClientOptions<this>
   ) => ClientOptions<this>['plugins'] extends PluginCreator<this>[]
-    ? this & InferFeaturesFromPlugins<this, ClientOptions<this>['plugins']>
+    ? this & InferFeatures<ClientOptions<this>['plugins']>
     : this;
 
   use: <P extends PluginCreator<this>>(
     pluginCreator: P
-  ) => this & InferFeaturesFromPlugin<this, P>;
+  ) => this & InferFeatures<P>;
 
   connect: () => this;
 
@@ -133,11 +150,6 @@ export interface DReactionCore {
    */
   waitForConnect: () => Promise<void>;
 }
-
-export type InferFeatures<
-  Client = DReactionCore,
-  PC extends PluginCreator<Client> = PluginCreator<Client>
-> = PC extends (client: Client) => { features: infer U } ? U : never;
 
 export const corePlugins = [
   image(),
@@ -148,19 +160,9 @@ export const corePlugins = [
   clear(),
   repl(),
 ] satisfies PluginCreator<DReactionCore>[];
-
-export type InferPluginsFromCreators<
-  Client,
-  PC extends PluginCreator<Client>[]
-> = PC extends Array<infer P extends PluginCreator<Client>>
-  ? ReturnType<P>[]
-  : never;
 // #endregion
 
-export type CorePluginFeatures = InferFeaturesFromPlugins<
-  DReactionCore,
-  typeof corePlugins
->;
+export type CorePluginFeatures = InferFeatures<typeof corePlugins>;
 
 export interface DReaction extends DReactionCore, CorePluginFeatures {}
 
@@ -252,7 +254,7 @@ export class DReactionImpl
   configure(
     options: ClientOptions<this> = {}
   ): ClientOptions<this>['plugins'] extends PluginCreator<this>[]
-    ? this & InferFeaturesFromPlugins<this, ClientOptions<this>['plugins']>
+    ? this & InferFeatures<ClientOptions<this>['plugins']>
     : this {
     // options get merged & validated before getting set
     const newOptions = {
@@ -280,10 +282,7 @@ export class DReactionImpl
     }
 
     return this as this &
-      InferFeaturesFromPlugins<
-        this,
-        Exclude<ClientOptions<this>['plugins'], undefined>
-      >;
+      InferFeatures<Exclude<ClientOptions<this>['plugins'], undefined>>;
   }
 
   close() {
@@ -531,18 +530,16 @@ export class DReactionImpl
   /**
    * Adds a plugin to the system
    */
-  use(
-    pluginCreator: PluginCreator<this>
-  ): this & PluginFeatures<this, typeof pluginCreator> {
+  use<P extends PluginCreator<this>>(
+    pluginCreator: P
+  ): this & InferFeatures<P> {
     // we're supposed to be given a function
     if (typeof pluginCreator !== 'function') {
       throw new Error('plugins must be a function');
     }
 
     // execute it immediately passing the send function
-    const plugin = pluginCreator.bind(this)(this) as ReturnType<
-      typeof pluginCreator
-    >;
+    const plugin = pluginCreator.bind(this)(this) as ReturnType<P>;
 
     // ensure we get an Object-like creature back
     if (typeof plugin !== 'object') {
@@ -588,7 +585,7 @@ export class DReactionImpl
       plugin.onPlugin.bind(this)(this);
 
     // chain-friendly
-    return this as this & PluginFeatures<this, typeof pluginCreator>;
+    return this as this & InferFeatures<P>;
   }
 
   registerCustomCommand(
