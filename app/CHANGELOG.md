@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.10.0](https://github.com/moonrailgun/dreaction/compare/v1.9.3...v1.10.0) (2026-01-19)
+
+### Features
+
+* add device network feature and api.request command ([e3230cd](https://github.com/moonrailgun/dreaction/commit/e3230cdc555f9484862859f4e7b3d4d99a3d3b6d))
+* add issue feature which can improve display and report issue if necessary ([7da9be5](https://github.com/moonrailgun/dreaction/commit/7da9be560887eb0ea2d3675ed1ff875357de795d))
+* add keyboard navigation for pixel-level movement in DeviceOverlay ([4fd8418](https://github.com/moonrailgun/dreaction/commit/4fd8418cf0b56fc673ede67797577a8b98184351))
+* add payload size of network and add warning ([85a980d](https://github.com/moonrailgun/dreaction/commit/85a980d442ea8498aa145188310fca681efdfa7a))
+* auto clear overlay on disconnect ([963b056](https://github.com/moonrailgun/dreaction/commit/963b0569c0010f5536f14ff61b8140f660cf3785))
+* overlay hight dpi support ([259833d](https://github.com/moonrailgun/dreaction/commit/259833d401fc8857a4eb0a1f2fbf0f27c2138e3e))
+* overlay hight ratio support ([70b7ed2](https://github.com/moonrailgun/dreaction/commit/70b7ed2749248916127b6f7e7726643a740bf672))
+
+### Bug Fixes
+
+* info log error in plugin ([caa85ed](https://github.com/moonrailgun/dreaction/commit/caa85ed8e007bc2fc80313e652e2b296a9a63fa5))
+
+### Others
+
+* add dreaction-compiler to JitPack build and bump to 1.0.9 ([bf3f983](https://github.com/moonrailgun/dreaction/commit/bf3f9832ccad547c4c463d53e33095473f2481b4))
+* add KSP compiler release ([0d8a571](https://github.com/moonrailgun/dreaction/commit/0d8a571bd067b657aba4f3b266c04a2e8f8e338d))
+* bump Android SDK version to 1.0.8 ([4d343ac](https://github.com/moonrailgun/dreaction/commit/4d343ac4d464b66d88a2c597c041fac5b82fa40e))
+* dump dreaction react native sdk ([a6b7920](https://github.com/moonrailgun/dreaction/commit/a6b7920906e46942621f1e9328739d58d3623b61))
+* implement client.info feature and dump version ([792528f](https://github.com/moonrailgun/dreaction/commit/792528fb6dceeba1af3ae9049dee16b1a381acc0))
+* improve code design for client-core ([8eef47a](https://github.com/moonrailgun/dreaction/commit/8eef47a245e882280236ba7a6a406561402cb797))
+* release v1.9.4 ([5f69f4c](https://github.com/moonrailgun/dreaction/commit/5f69f4c28208a46a4a11d36d781e62f4f2674018))
+* remove unused command ([e60b7c2](https://github.com/moonrailgun/dreaction/commit/e60b7c268b5b159bcaff1e906d9757ed21e0e354))
+* revert some not safe problem ([5eac779](https://github.com/moonrailgun/dreaction/commit/5eac779c21ee5bfa172ce181cac11e00a45093cb))
+* simplify protocol command ([2c5e3b3](https://github.com/moonrailgun/dreaction/commit/2c5e3b360da15c9e742a6af1459cc48bb552ca35))
+* update type for client core ([94a4b5e](https://github.com/moonrailgun/dreaction/commit/94a4b5ee17f92bc15a18589a1643d96c117bcaed))
+* upgrade react version to 19 ([81ddd4d](https://github.com/moonrailgun/dreaction/commit/81ddd4dae4b8dcef11dc29faa867510df919bd9e))
+
 ## [1.9.4](https://github.com/moonrailgun/dreaction/compare/v1.9.3...v1.9.4) (2025-12-05)
 
 ### Features
