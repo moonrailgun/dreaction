@@ -19,7 +19,11 @@ import { JSONView } from './JSONView';
 import { renderDeviceLogsDate } from '../utils/date';
 import { CopyText } from './CopyText';
 import { apiRequestToCurl } from '../utils/api';
-import { IconTrash, IconDownload, IconAlertTriangle } from '@tabler/icons-react';
+import {
+  IconTrash,
+  IconDownload,
+  IconAlertTriangle,
+} from '@tabler/icons-react';
 import { useDReactionServer } from '../context/DReaction/useDReactionServer';
 import { repairSerialization } from '../utils/repairSerialization';
 import { useDebounce } from 'ahooks';

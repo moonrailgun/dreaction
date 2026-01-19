@@ -5,6 +5,7 @@ import {
   IconCommand,
   IconList,
   IconPhoto,
+  IconAlertTriangle,
 } from '@tabler/icons-react';
 import { Home } from '../components/Home';
 import { DeviceLogs } from '../components/DeviceLogs';
@@ -12,6 +13,7 @@ import { DeviceData } from '../components/DeviceData';
 import { DeviceCommand } from '../components/DeviceCommand';
 import { DevicePerformance } from '../components/DevicePerformance';
 import { DeviceOverlay } from '../components/DeviceOverlay';
+import { DeviceIssues } from '../components/DeviceIssues';
 
 export const menu = [
   { key: 'home', icon: IconHome2, label: 'Home', component: <Home /> },
@@ -20,6 +22,12 @@ export const menu = [
     icon: IconList,
     label: 'Dashboard',
     component: <DeviceLogs />,
+  },
+  {
+    key: 'issues',
+    icon: IconAlertTriangle,
+    label: 'Issues',
+    component: <DeviceIssues />,
   },
   {
     key: 'dataWatch',

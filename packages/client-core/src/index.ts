@@ -27,6 +27,8 @@ export type {
   StateResponsePlugin,
   StateResponseFeatures,
 } from './plugins/state-responses';
+export { assertHasIssuePlugin, hasIssuePlugin } from './plugins/issue';
+export type { IssuePlugin, IssueFeatures } from './plugins/issue';
 
 // Utils
 export { runFPSMeter } from './utils/fps';
@@ -39,4 +41,4 @@ import type { corePlugins } from './plugins';
 export type CorePluginFeatures = InferFeatures<typeof corePlugins>;
 
 import type { DReactionCore } from './types';
-export interface DReaction extends DReactionCore, CorePluginFeatures {}
+export interface DReaction extends DReactionCore, CorePluginFeatures { }

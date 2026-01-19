@@ -1,11 +1,18 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useMemo } from 'react';
 import {
   IconArrowsRightLeft,
   IconHome2,
   IconSun,
   IconMoon,
 } from '@tabler/icons-react';
-import { Avatar, Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
+import {
+  Avatar,
+  Center,
+  Indicator,
+  Stack,
+  Tooltip,
+  UnstyledButton,
+} from '@mantine/core';
 import clsx from 'clsx';
 import { DeviceSwitcher } from './DeviceSwitcher';
 import { ActivePage, useLayoutStore } from '../store/layout';
@@ -13,11 +20,14 @@ import { useThemeStore } from '../store/theme';
 import { menu } from '../utils/menu';
 import { GOLD_GRADIENT } from '../constants/theme';
 import logoUrl from '../assets/icon.svg';
+import { useDReactionServerContext } from '../context/DReaction';
+import type { ReportIssuePayload } from 'dreaction-protocol';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
   label: string;
   active?: boolean;
+  badge?: number;
   onClick?: () => void;
 }
 
@@ -25,30 +35,47 @@ function NavbarLink({
   icon: Icon,
   label,
   active,
+  badge,
   onClick,
   isDark,
 }: NavbarLinkProps & { isDark?: boolean }) {
+  const button = (
+    <UnstyledButton
+      onClick={onClick}
+      className={clsx(
+        'w-12 h-12 rounded-md flex items-center justify-center transition-all',
+        'text-gray-700 hover:bg-gray-100',
+        'dark:text-gray-400 dark:hover:bg-gray-800',
+        active && !isDark && 'bg-blue-100 text-blue-700',
+        active && isDark && '!text-gray-900 shadow-lg shadow-gold/50'
+      )}
+      style={
+        active && isDark
+          ? {
+              background: GOLD_GRADIENT,
+            }
+          : undefined
+      }
+    >
+      <Icon size={20} stroke={1.5} />
+    </UnstyledButton>
+  );
+
   return (
     <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
-      <UnstyledButton
-        onClick={onClick}
-        className={clsx(
-          'w-12 h-12 rounded-md flex items-center justify-center transition-all',
-          'text-gray-700 hover:bg-gray-100',
-          'dark:text-gray-400 dark:hover:bg-gray-800',
-          active && !isDark && 'bg-blue-100 text-blue-700',
-          active && isDark && '!text-gray-900 shadow-lg shadow-gold/50'
-        )}
-        style={
-          active && isDark
-            ? {
-                background: GOLD_GRADIENT,
-              }
-            : undefined
-        }
-      >
-        <Icon size={20} stroke={1.5} />
-      </UnstyledButton>
+      {badge && badge > 0 ? (
+        <Indicator
+          label={badge > 99 ? '99+' : badge}
+          size={12}
+          offset={6}
+          color="yellow"
+          className="text-[9px]"
+        >
+          {button}
+        </Indicator>
+      ) : (
+        button
+      )}
     </Tooltip>
   );
 }
@@ -56,7 +83,19 @@ function NavbarLink({
 export function Layout(props: PropsWithChildren) {
   const { activePage } = useLayoutStore();
   const { colorScheme, toggleColorScheme } = useThemeStore();
+  const { selectedConnection } = useDReactionServerContext();
   const isDark = colorScheme === 'dark';
+
+  const issueCount = useMemo(() => {
+    const commands = selectedConnection?.commands ?? [];
+    const issueCommands = commands.filter(
+      (command) => command.type === 'report.issue'
+    );
+    const uniqueIds = new Set(
+      issueCommands.map((cmd) => (cmd.payload as ReportIssuePayload).id)
+    );
+    return uniqueIds.size;
+  }, [selectedConnection?.commands]);
 
   const handleChangeTab = (key: ActivePage) => {
     useLayoutStore.setState({ activePage: key });
@@ -67,6 +106,7 @@ export function Layout(props: PropsWithChildren) {
       {...link}
       key={link.label}
       active={link.key === activePage}
+      badge={link.key === 'issues' ? issueCount : undefined}
       onClick={() => handleChangeTab(link.key)}
       isDark={isDark}
     />

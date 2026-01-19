@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { dreaction } from 'dreaction-react';
 import {
   useDebugCounter,
   useDebugList,
@@ -135,6 +136,39 @@ export default function Home() {
               onClick={handleRandomArray}
             >
               Generate Random Array
+            </button>
+          </div>
+        </div>
+
+        {/* Issue Report Section */}
+        <div className="w-full max-w-2xl">
+          <h2 className="text-2xl font-semibold text-black dark:text-zinc-50 mb-4">
+            Issue Report Test
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button
+              className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors font-medium cursor-pointer"
+              onClick={() =>
+                dreaction.reportIssue(
+                  'test-issue-1',
+                  'Test Issue',
+                  'This is a test issue reported from Next.js demo'
+                )
+              }
+            >
+              Report Issue (Same ID)
+            </button>
+            <button
+              className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors font-medium cursor-pointer"
+              onClick={() =>
+                dreaction.reportIssue(
+                  `issue-${Date.now()}`,
+                  'Random Issue',
+                  'This issue has a unique ID'
+                )
+              }
+            >
+              Report Issue (Unique ID)
             </button>
           </div>
         </div>

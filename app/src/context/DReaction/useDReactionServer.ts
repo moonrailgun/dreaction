@@ -43,6 +43,7 @@ interface State {
   connectionDisconnected: (connection: DReactionConnection) => void;
   commandReceived: (command: any) => void;
   clearSelectedConnectionCommands: () => void;
+  clearSelectedConnectionIssues: () => void;
   selectConnection: (clientId: string) => void;
   addCommandListener: (callback: (command: any) => void) => void;
   portUnavailable: () => void;
@@ -143,6 +144,24 @@ export const useDReactionServer = create<State>((set) => ({
 
       const updatedConnections = state.connections.map((c) =>
         c.clientId === state.selectedClientId ? { ...c, commands: [] } : c
+      );
+
+      return {
+        ...state,
+        connections: updatedConnections,
+      };
+    }),
+  clearSelectedConnectionIssues: () =>
+    set((state) => {
+      if (!state.selectedClientId) return state;
+
+      const updatedConnections = state.connections.map((c) =>
+        c.clientId === state.selectedClientId
+          ? {
+              ...c,
+              commands: c.commands.filter((cmd) => cmd.type !== 'report.issue'),
+            }
+          : c
       );
 
       return {

@@ -4,6 +4,7 @@ import {
   CustomCommandResponsePayload,
 } from './customCommand';
 import { DataWatchPayload } from './data';
+import { ReportIssuePayload } from './issue';
 import type { LogPayload } from './log';
 import { NetworkPayload } from './network';
 import { EditorOpenPayload } from './openInEditor';
@@ -52,6 +53,7 @@ export interface CommandMap {
   'devtools.reload': undefined;
   'editor.open': EditorOpenPayload;
   overlay: boolean;
+  'report.issue': ReportIssuePayload;
 }
 
 export type CommandTypeKey = keyof CommandMap;
