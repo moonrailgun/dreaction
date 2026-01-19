@@ -1,6 +1,10 @@
 // @ts-ignore
 import { XHRInterceptor } from './xhrInterceptor';
-import type { DReactionCore, Plugin } from 'dreaction-client-core';
+import {
+  type DReactionCore,
+  type Plugin,
+  generateRequestId,
+} from 'dreaction-client-core';
 
 /**
  * Don't include the response bodies for images by default.
@@ -25,11 +29,8 @@ const networking =
     const ignoreContentTypes =
       options.ignoreContentTypes || DEFAULT_CONTENT_TYPES_RX;
 
-    // a XHR call tracker
-    let dreactionCounter = 1000;
-
     // a temporary cache to hold requests so we can match up the data
-    const requestCache = {};
+    const requestCache: Record<string, any> = {};
 
     /**
      * Fires when we talk to the server.
@@ -43,18 +44,47 @@ const networking =
         return;
       }
 
-      // bump the counter
-      dreactionCounter++;
+      // Generate unique request ID
+      const requestId = generateRequestId();
 
       // tag
-      xhr._trackingName = dreactionCounter;
+      xhr._trackingName = requestId;
+
+      // Parse URL and params
+      const url = xhr._url;
+      let params: Record<string, string> | null = null;
+      const queryParamIdx = url ? url.indexOf('?') : -1;
+      if (queryParamIdx > -1) {
+        params = {};
+        url
+          .substr(queryParamIdx + 1)
+          .split('&')
+          .forEach((pair: string) => {
+            const [key, value] = pair.split('=');
+            if (key && value !== undefined) {
+              params![key] = decodeURIComponent(value.replace(/\+/g, ' '));
+            }
+          });
+      }
+
+      const tronRequest = {
+        url: url || '',
+        method: xhr._method || 'GET',
+        data,
+        headers: xhr._headers || {},
+        params,
+      };
 
       // cache
-      (requestCache as any)[dreactionCounter] = {
+      requestCache[requestId] = {
         data,
         xhr,
+        request: tronRequest,
         stopTimer: dreaction.startTimer(),
       };
+
+      // Send api.request event
+      (dreaction as any).apiRequest(requestId, tronRequest);
     }
 
     /**
@@ -79,35 +109,15 @@ const networking =
         return;
       }
 
-      let params = null;
-      const queryParamIdx = url ? url.indexOf('?') : -1;
-      if (queryParamIdx > -1) {
-        params = {};
-        url
-          .substr(queryParamIdx + 1)
-          .split('&')
-          .forEach((pair: any) => {
-            const [key, value] = pair.split('=');
-            if (key && value !== undefined) {
-              params[key] = decodeURIComponent(value.replace(/\+/g, ' '));
-            }
-          });
-      }
-
       // fetch and clear the request data from the cache
-      const rid = xhr._trackingName;
-      const cachedRequest = (requestCache as any)[rid] || { xhr };
-      (requestCache as any)[rid] = null;
+      const requestId = xhr._trackingName;
+      const cachedRequest = requestCache[requestId];
+      if (!cachedRequest) {
+        return;
+      }
+      delete requestCache[requestId];
 
-      // assemble the request object
-      const { data, stopTimer } = cachedRequest;
-      const tronRequest = {
-        url: url || cachedRequest.xhr._url,
-        method: xhr._method || null,
-        data,
-        headers: xhr._headers || {},
-        params,
-      };
+      const { request: tronRequest, stopTimer } = cachedRequest;
 
       // what type of content is this?
       const contentType =
@@ -116,7 +126,7 @@ const networking =
         '';
 
       const sendResponse = (responseBodyText: string) => {
-        let body = `~~~ skipped ~~~`;
+        let body: any = `~~~ skipped ~~~`;
         if (responseBodyText) {
           try {
             // all i am saying, is give JSON a chance...
@@ -128,13 +138,14 @@ const networking =
         const tronResponse = {
           body,
           status,
-          headers: xhr.responseHeaders || null,
+          headers: xhr.responseHeaders || {},
         };
         (dreaction as any).apiResponse(
+          requestId,
           tronRequest,
           tronResponse,
-          stopTimer ? stopTimer() : null
-        ); // TODO: Fix
+          stopTimer ? stopTimer() : 0
+        );
       };
 
       // can we use the real response?

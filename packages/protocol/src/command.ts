@@ -6,7 +6,11 @@ import {
 import { DataWatchPayload } from './data';
 import { ReportIssuePayload } from './issue';
 import type { LogPayload } from './log';
-import { NetworkPayload } from './network';
+import {
+  NetworkPayload,
+  NetworkRequestPayload,
+  NetworkResponsePayload,
+} from './network';
 import { EditorOpenPayload } from './openInEditor';
 import { ProfilerFPSPayload, ProfilerRenderPayload } from './profiler';
 import type {
@@ -24,7 +28,8 @@ import type {
 } from './state';
 
 export interface CommandMap {
-  'api.response': NetworkPayload;
+  'api.request': NetworkRequestPayload;
+  'api.response': NetworkResponsePayload;
   'asyncStorage.mutation': AsyncStorageMutationState;
   'benchmark.report': any;
   'client.intro': any;

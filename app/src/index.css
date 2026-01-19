@@ -20,3 +20,67 @@ body {
   width: 100%;
   height: 100%;
 }
+
+/* react-waterfall-timeline style overrides */
+.waterfall-item-tooltip {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Dark mode support for waterfall timeline */
+.dark .waterfall-container {
+  background-color: #0a0a0a;
+  border-color: #374151;
+}
+
+.dark .waterfall-header {
+  background-color: #111;
+  border-color: #374151;
+}
+
+.dark .waterfall-header-label {
+  background-color: #111;
+  border-color: #374151;
+}
+
+.dark .waterfall-header-label-text {
+  color: #d1d5db;
+}
+
+.dark .waterfall-ruler {
+  background-color: #111;
+}
+
+.dark .waterfall-ruler-tick-label {
+  color: #9ca3af;
+}
+
+.dark .waterfall-row {
+  border-color: #1f2937;
+}
+
+.dark .waterfall-row:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark .waterfall-item-label {
+  color: #d1d5db;
+  border-color: #374151;
+}
+
+/* Make waterfall fill available height */
+.waterfall-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.waterfall-body {
+  flex: 1;
+  max-height: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

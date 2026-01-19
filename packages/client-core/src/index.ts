@@ -29,6 +29,8 @@ export type {
 } from './plugins/state-responses';
 export { assertHasIssuePlugin, hasIssuePlugin } from './plugins/issue';
 export type { IssuePlugin, IssueFeatures } from './plugins/issue';
+export { generateRequestId } from './plugins/api-response';
+export type { ApiResponsePlugin, ApiResponseFeatures } from './plugins/api-response';
 
 // Utils
 export { runFPSMeter } from './utils/fps';

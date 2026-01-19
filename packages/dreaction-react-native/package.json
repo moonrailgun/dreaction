@@ -1,6 +1,6 @@
 {
   "name": "dreaction-react-native",
-  "version": "1.8.4",
+  "version": "1.9.0",
   "private": false,
   "description": "DReaction client for React Native applications with draggable debug ball and powerful debugging tools",
   "main": "lib/index.js",

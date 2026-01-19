@@ -3,6 +3,7 @@ export * from './customCommand';
 export * from './issue';
 export * from './log';
 export * from './data';
+export * from './network';
 export * from './openInEditor';
 export * from './profiler';
 export * from './server-events';

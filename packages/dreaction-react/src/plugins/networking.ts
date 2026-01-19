@@ -1,4 +1,8 @@
-import type { DReactionCore, Plugin } from 'dreaction-client-core';
+import {
+  type DReactionCore,
+  type Plugin,
+  generateRequestId,
+} from 'dreaction-client-core';
 
 /**
  * Don't include the response bodies for images by default.
@@ -23,11 +27,8 @@ const networking =
     const ignoreContentTypes =
       options.ignoreContentTypes || DEFAULT_CONTENT_TYPES_RX;
 
-    // a XHR call tracker
-    let dreactionCounter = 1000;
-
     // a temporary cache to hold requests so we can match up the data
-    const requestCache: Record<number, any> = {};
+    const requestCache: Record<string, any> = {};
 
     // Store original functions
     let originalXHROpen: typeof XMLHttpRequest.prototype.open;
@@ -59,18 +60,57 @@ const networking =
           return originalXHRSend.apply(this, [data]);
         }
 
-        // bump the counter
-        dreactionCounter++;
+        // Generate unique request ID
+        const requestId = generateRequestId();
 
         // tag
-        xhr._trackingName = dreactionCounter;
+        xhr._trackingName = requestId;
+
+        // Parse request headers
+        let requestHeaders: Record<string, string> = {};
+        try {
+          if (xhr._requestHeaders) {
+            requestHeaders = xhr._requestHeaders;
+          }
+        } catch (e) {
+          // ignore
+        }
+
+        // Parse URL and params
+        const url = xhr._url;
+        let params = null;
+        const queryParamIdx = url ? url.indexOf('?') : -1;
+        if (queryParamIdx > -1) {
+          params = {} as Record<string, string>;
+          url
+            .substr(queryParamIdx + 1)
+            .split('&')
+            .forEach((pair: string) => {
+              const [key, value] = pair.split('=');
+              if (key && value !== undefined) {
+                params![key] = decodeURIComponent(value.replace(/\+/g, ' '));
+              }
+            });
+        }
+
+        const tronRequest = {
+          url: url || '',
+          method: xhr._method || 'GET',
+          data,
+          headers: requestHeaders,
+          params,
+        };
 
         // cache
-        requestCache[dreactionCounter] = {
+        requestCache[requestId] = {
           data,
           xhr,
+          request: tronRequest,
           stopTimer: dreaction.startTimer(),
         };
+
+        // Send api.request event
+        (dreaction as any).apiRequest(requestId, tronRequest);
 
         // Setup listener for response
         const originalOnReadyStateChange = xhr.onreadystatechange;
@@ -96,48 +136,15 @@ const networking =
         return;
       }
 
-      const url = xhr._url;
-      let params = null;
-      const queryParamIdx = url ? url.indexOf('?') : -1;
-      if (queryParamIdx > -1) {
-        params = {} as Record<string, string>;
-        url
-          .substr(queryParamIdx + 1)
-          .split('&')
-          .forEach((pair: string) => {
-            const [key, value] = pair.split('=');
-            if (key && value !== undefined) {
-              params![key] = decodeURIComponent(value.replace(/\+/g, ' '));
-            }
-          });
-      }
-
       // fetch and clear the request data from the cache
-      const rid = xhr._trackingName;
-      const cachedRequest = requestCache[rid] || { xhr };
-      requestCache[rid] = null;
-
-      // assemble the request object
-      const { data, stopTimer } = cachedRequest;
-
-      // Parse request headers
-      let requestHeaders: Record<string, string> = {};
-      try {
-        const requestHeaderString = xhr._requestHeaders;
-        if (requestHeaderString) {
-          requestHeaders = requestHeaderString;
-        }
-      } catch (e) {
-        // ignore
+      const requestId = xhr._trackingName;
+      const cachedRequest = requestCache[requestId];
+      if (!cachedRequest) {
+        return;
       }
+      delete requestCache[requestId];
 
-      const tronRequest = {
-        url: url || cachedRequest.xhr._url,
-        method: xhr._method || null,
-        data,
-        headers: requestHeaders || null,
-        params,
-      };
+      const { request: tronRequest, stopTimer } = cachedRequest;
 
       // Parse response headers
       let responseHeaders: Record<string, string> = {};
@@ -185,13 +192,14 @@ const networking =
       const tronResponse = {
         body,
         status: xhr.status,
-        headers: responseHeaders || null,
+        headers: responseHeaders || {},
       };
 
       (dreaction as any).apiResponse(
+        requestId,
         tronRequest,
         tronResponse,
-        stopTimer ? stopTimer() : null
+        stopTimer ? stopTimer() : 0
       );
     };
 
@@ -216,9 +224,8 @@ const networking =
           return originalFetch.call(this, input as RequestInfo, init);
         }
 
-        // bump the counter
-        dreactionCounter++;
-        const requestId = dreactionCounter;
+        // Generate unique request ID
+        const requestId = generateRequestId();
 
         const stopTimer = dreaction.startTimer();
 
@@ -238,13 +245,32 @@ const networking =
             });
         }
 
+        // Parse request headers
+        let requestHeaders: Record<string, string> = {};
+        if (init?.headers) {
+          if (init.headers instanceof Headers) {
+            init.headers.forEach((value: string, key: string) => {
+              requestHeaders[key] = value;
+            });
+          } else if (Array.isArray(init.headers)) {
+            init.headers.forEach(([key, value]: [string, string]) => {
+              requestHeaders[key] = value;
+            });
+          } else {
+            requestHeaders = init.headers as Record<string, string>;
+          }
+        }
+
         const tronRequest = {
           url,
-          method: init?.method || 'GET',
+          method: (init?.method || 'GET') as any,
           data: init?.body || null,
-          headers: init?.headers || {},
+          headers: requestHeaders,
           params,
         };
+
+        // Send api.request event
+        (dreaction as any).apiRequest(requestId, tronRequest);
 
         return originalFetch
           .call(this, input as RequestInfo, init)
@@ -282,6 +308,7 @@ const networking =
             };
 
             (dreaction as any).apiResponse(
+              requestId,
               tronRequest,
               tronResponse,
               stopTimer()

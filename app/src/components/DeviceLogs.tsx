@@ -12,13 +12,11 @@ import {
   Badge,
   Input,
   SegmentedControl,
-  Tabs,
   Tooltip,
 } from '@mantine/core';
 import { JSONView } from './JSONView';
 import { renderDeviceLogsDate } from '../utils/date';
-import { CopyText } from './CopyText';
-import { apiRequestToCurl } from '../utils/api';
+import { NetworkRequestDetail } from './NetworkRequestDetail';
 import {
   IconTrash,
   IconDownload,
@@ -29,7 +27,7 @@ import { repairSerialization } from '../utils/repairSerialization';
 import { useDebounce } from 'ahooks';
 import { CommandTypeKey } from 'dreaction-protocol';
 import { get } from 'lodash-es';
-import { tryToParseJSON, getPayloadSize, formatBytes } from '../utils/utils';
+import { getPayloadSize } from '../utils/utils';
 import {
   useVirtualizer,
   type Virtualizer as TanstackVirtualizer,
@@ -384,108 +382,11 @@ const Item: React.FC<{
         }
         title={String(command.payload.request.url)}
         body={
-          <Tabs defaultValue="summary">
-            <Tabs.List className="items-center">
-              <Tabs.Tab value="summary">Summary</Tabs.Tab>
-              <Tabs.Tab value="request">Request</Tabs.Tab>
-              <Tabs.Tab value="response">Response</Tabs.Tab>
-
-              <div className="w-4" />
-              <CopyText
-                label="Copy as curl"
-                value={apiRequestToCurl(command.payload)}
-              />
-            </Tabs.List>
-
-            <Tabs.Panel value="summary">
-              <div>
-                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
-                  Url:
-                </span>
-                <span className="text-sm dark:text-gray-300">
-                  {command.payload.request.url}
-                </span>
-              </div>
-              <div>
-                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
-                  Status Code:
-                </span>
-                <Badge>{command.payload.response.status}</Badge>
-              </div>
-              <div>
-                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
-                  Method:
-                </span>
-                <Badge>{command.payload.request.method}</Badge>
-              </div>
-              <div>
-                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
-                  Duration:
-                </span>
-                <span className="dark:text-gray-300">
-                  {Math.round(command.payload.duration)}
-                </span>
-                <span className="text-gray-500 dark:text-gray-600 ml-1">
-                  ms
-                </span>
-              </div>
-              <div>
-                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
-                  Response Size:
-                </span>
-                <span className="dark:text-gray-300">
-                  {formatBytes(getPayloadSize(command.payload.response.body))}
-                </span>
-              </div>
-              <div className="flex gap-1 items-center">
-                <span className="opacity-60 text-xs dark:text-gray-500">
-                  Request Header
-                </span>
-
-                <CopyText
-                  value={JSON.stringify(
-                    command.payload.request.headers || {},
-                    null,
-                    2
-                  )}
-                />
-              </div>
-              <JSONView
-                data={command.payload.request.headers}
-                hideRoot={true}
-              />
-              <div className="flex gap-1 items-center">
-                <span className="opacity-60 text-xs dark:text-gray-500">
-                  Response Header
-                </span>
-                <CopyText
-                  value={JSON.stringify(
-                    command.payload.response.headers || {},
-                    null,
-                    2
-                  )}
-                />
-              </div>
-              <JSONView
-                data={command.payload.response.headers}
-                hideRoot={true}
-              />
-            </Tabs.Panel>
-
-            <Tabs.Panel value="request">
-              <JSONView data={tryToParseJSON(command.payload.request.data)} />
-            </Tabs.Panel>
-
-            <Tabs.Panel value="response">
-              <JSONView
-                data={{
-                  ...command.payload.response,
-                  body: tryToParseJSON(command.payload.response.body),
-                }}
-                hideRoot={true}
-              />
-            </Tabs.Panel>
-          </Tabs>
+          <NetworkRequestDetail
+            request={command.payload.request}
+            response={command.payload.response}
+            duration={command.payload.duration}
+          />
         }
       />
     );
