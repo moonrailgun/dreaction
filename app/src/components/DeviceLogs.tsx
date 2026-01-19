@@ -13,27 +13,32 @@ import {
   Input,
   SegmentedControl,
   Tabs,
+  Tooltip,
 } from '@mantine/core';
 import { JSONView } from './JSONView';
 import { renderDeviceLogsDate } from '../utils/date';
 import { CopyText } from './CopyText';
 import { apiRequestToCurl } from '../utils/api';
-import { IconTrash, IconDownload } from '@tabler/icons-react';
+import { IconTrash, IconDownload, IconAlertTriangle } from '@tabler/icons-react';
 import { useDReactionServer } from '../context/DReaction/useDReactionServer';
 import { repairSerialization } from '../utils/repairSerialization';
 import { useDebounce } from 'ahooks';
 import { CommandTypeKey } from 'dreaction-protocol';
 import { get } from 'lodash-es';
-import { tryToParseJSON } from '../utils/utils';
+import { tryToParseJSON, getPayloadSize, formatBytes } from '../utils/utils';
 import {
   useVirtualizer,
   type Virtualizer as TanstackVirtualizer,
 } from '@tanstack/react-virtual';
 
+const LARGE_PAYLOAD_THRESHOLD = 500 * 1024; // 500 KiB
+const SLOW_REQUEST_THRESHOLD = 5000; // 5000ms
+
 const blacklistType: CommandTypeKey[] = [
   'dataWatch',
   'profiler.render',
   'profiler.fps',
+  'report.issue',
   'customCommand.register',
   'customCommand.unregister',
   'customCommand.response',
@@ -345,16 +350,31 @@ const Item: React.FC<{
         : statusCode < 500
         ? 'yellow'
         : 'red';
+    const responseSize = getPayloadSize(command.payload.response.body);
+    const isLargePayload = responseSize > LARGE_PAYLOAD_THRESHOLD;
+    const isSlowRequest = command.payload.duration > SLOW_REQUEST_THRESHOLD;
 
     return (
       <ItemContainer
         command={command}
         tag={
-          <div className="space-x-2 flex">
+          <div className="space-x-2 flex items-center">
             <Badge color="violet">{command.payload.request.method}</Badge>
 
             {statusColor !== 'green' && (
               <Badge color={statusColor}>{statusCode}</Badge>
+            )}
+
+            {isSlowRequest && (
+              <Tooltip label="Slow request, may indicate API performance issues">
+                <IconAlertTriangle size={16} className="text-orange-500" />
+              </Tooltip>
+            )}
+
+            {isLargePayload && (
+              <Tooltip label="Payload too large, may cause performance issues">
+                <IconAlertTriangle size={16} className="text-yellow-500" />
+              </Tooltip>
             )}
           </div>
         }
@@ -403,6 +423,14 @@ const Item: React.FC<{
                 </span>
                 <span className="text-gray-500 dark:text-gray-600 ml-1">
                   ms
+                </span>
+              </div>
+              <div>
+                <span className="opacity-60 text-xs mr-2 dark:text-gray-500">
+                  Response Size:
+                </span>
+                <span className="dark:text-gray-300">
+                  {formatBytes(getPayloadSize(command.payload.response.body))}
                 </span>
               </div>
               <div className="flex gap-1 items-center">
