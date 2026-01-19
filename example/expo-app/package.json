@@ -13,11 +13,13 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "@babel/runtime": "^7.25.0",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "^2.1.0",
     "@react-navigation/native": "^7.0.0",
     "dreaction-react-native": "workspace:*",
     "expo": "~52.0.17",
+    "expo-asset": "^12.0.12",
     "expo-font": "~13.0.1",
     "expo-linking": "~7.0.3",
     "expo-router": "~4.0.11",

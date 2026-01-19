@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@testing-library/dom": "^10.0.0",
+    "@types/node": "^22.0.0",
     "@types/ws": "^8.5.13",
     "happy-dom": "15.11.6",
     "msw": "^2.2.13",

@@ -1,11 +1,16 @@
 {
   "name": "dreaction",
   "description": "The best debugging tool for React Native",
+  "workspaces": [
+    "app",
+    "packages/*",
+    "example/*"
+  ],
   "scripts": {
-    "dev": "cd app && pnpm dev",
-    "release": "cd app && pnpm release",
-    "release:patch": "cd app && pnpm release:patch",
-    "release:packages": "pnpm -r --filter \"./packages/*\" publish --registry=https://registry.npmjs.com/ --no-git-checks",
+    "dev": "bun run --cwd app dev",
+    "release": "bun run --cwd app release",
+    "release:patch": "bun run --cwd app release:patch",
+    "release:packages": "bun publish --filter './packages/*' --registry=https://registry.npmjs.com/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

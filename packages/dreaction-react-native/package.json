@@ -42,11 +42,14 @@
     "mitt": "^3.0.1"
   },
   "devDependencies": {
-    "@react-native-async-storage/async-storage": "^2.1.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.0.0",
     "@types/react-native": "^0.73.0",
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "@react-native-async-storage/async-storage": "*"
+    "@react-native-async-storage/async-storage": "*",
+    "react": ">=18",
+    "react-native": ">=0.70"
   }
 }
