@@ -22,6 +22,8 @@ import { NetworkRequestDetail } from './NetworkRequestDetail';
 const SLOW_REQUEST_THRESHOLD = 5000; // 5000ms
 const LARGE_PAYLOAD_THRESHOLD = 500 * 1024; // 500 KiB
 
+const URL_BLACKLIST = ['https://clients3.google.com/generate_204'];
+
 interface NetworkItem extends WaterfallItem {
   requestId: string;
   url: string;
@@ -120,7 +122,7 @@ export const DeviceNetwork: React.FC = React.memo(() => {
         let color = '#22c55e'; // green
         if (statusCode >= 400 && statusCode < 500) {
           color = '#eab308'; // yellow
-        } else if (statusCode >= 500) {
+        } else if (statusCode >= 500 || statusCode === 0) {
           color = '#ef4444'; // red
         } else if (statusCode >= 300 && statusCode < 400) {
           color = '#3b82f6'; // blue
@@ -162,11 +164,13 @@ export const DeviceNetwork: React.FC = React.memo(() => {
       }
     }
 
-    const items = Array.from(networkMap.values()).sort((a, b) => {
-      const aTime = a.startTime ?? a.endTime ?? 0;
-      const bTime = b.startTime ?? b.endTime ?? 0;
-      return aTime - bTime;
-    });
+    const items = Array.from(networkMap.values())
+      .filter((item) => !URL_BLACKLIST.some((url) => item.url.startsWith(url)))
+      .sort((a, b) => {
+        const aTime = a.startTime ?? a.endTime ?? 0;
+        const bTime = b.startTime ?? b.endTime ?? 0;
+        return aTime - bTime;
+      });
 
     return { items, baseTime };
   }, [selectedConnection?.commands]);

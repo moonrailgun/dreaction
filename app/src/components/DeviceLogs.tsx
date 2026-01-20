@@ -37,6 +37,7 @@ const LARGE_PAYLOAD_THRESHOLD = 500 * 1024; // 500 KiB
 const SLOW_REQUEST_THRESHOLD = 5000; // 5000ms
 
 const blacklistType: CommandTypeKey[] = [
+  'api.request',
   'dataWatch',
   'profiler.render',
   'profiler.fps',
