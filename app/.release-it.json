@@ -7,9 +7,7 @@
     "tag": true,
     "tagName": "v${version}"
   },
-  "npm": {
-    "publish": false
-  },
+  "npm": false,
   "hooks": {
     "after:bump": "echo Version Upgrade Success. checkout more in CHANGELOG"
   },
