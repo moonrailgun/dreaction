@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.1](https://github.com/moonrailgun/dreaction/compare/v1.10.0...v1.10.1) (2026-01-20)
+
+### Others
+
+* migrate to bun workspace ([60664da](https://github.com/moonrailgun/dreaction/commit/60664dafbc538f581468778482f1c273b6876edc))
+* update react-waterfall-timeline to v1.1.2 and add URL blacklist in DeviceNetwork component ([150f0d2](https://github.com/moonrailgun/dreaction/commit/150f0d2cfdbebc8ce9bbb84d87e816e7e8ccd930))
+* update release-it configuration to disable npm publishing ([e64e4d9](https://github.com/moonrailgun/dreaction/commit/e64e4d9f2da3a3019b9fef28c73370854f5ab491))
+
 ## [1.10.0](https://github.com/moonrailgun/dreaction/compare/v1.9.3...v1.10.0) (2026-01-19)
 
 ### Features
