@@ -7,6 +7,7 @@
   "scripts": {
     "build": "tsc",
     "prepare": "tsc",
+    "release": "bun publish --ignore-scripts --registry=https://registry.npmjs.com/",
     "test": "vitest"
   },
   "files": [

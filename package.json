@@ -10,7 +10,7 @@
     "dev": "bun run --cwd app dev",
     "release": "bun run --cwd app release",
     "release:patch": "bun run --cwd app release:patch",
-    "release:packages": "bun publish --filter './packages/*' --registry=https://registry.npmjs.com/",
+    "release:packages": "bun run --filter './packages/*' release",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

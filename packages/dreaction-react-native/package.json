@@ -1,13 +1,14 @@
 {
   "name": "dreaction-react-native",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "private": false,
   "description": "DReaction client for React Native applications with draggable debug ball and powerful debugging tools",
   "main": "lib/index.js",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "prepare": "tsc",
+    "prepare": "bun run tsc",
+    "release": "bun publish --ignore-scripts --registry=https://registry.npmjs.com/",
     "test": "vitest"
   },
   "files": [
@@ -45,7 +46,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^18.0.0",
     "@types/react-native": "^0.73.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.9.3"
   },
   "peerDependencies": {
     "@react-native-async-storage/async-storage": "*",

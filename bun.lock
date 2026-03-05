@@ -150,7 +150,7 @@
     },
     "packages/dreaction-react-native": {
       "name": "dreaction-react-native",
-      "version": "1.9.0",
+      "version": "1.9.2",
       "dependencies": {
         "dreaction-client-core": "workspace:*",
         "dreaction-protocol": "workspace:*",
@@ -160,7 +160,7 @@
         "@types/node": "^22.0.0",
         "@types/react": "^18.0.0",
         "@types/react-native": "^0.73.0",
-        "typescript": "^5.4.5",
+        "typescript": "^5.9.3",
       },
       "peerDependencies": {
         "@react-native-async-storage/async-storage": "*",
