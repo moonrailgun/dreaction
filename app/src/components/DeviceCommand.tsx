@@ -172,15 +172,19 @@ export const DeviceCommandDetail: React.FC<{
     'customCommand.response',
     (p) => p.command === payload.command
   );
+  const [clearedMessageId, setClearedMessageId] = useState<string | null>(null);
+  const visibleResponse =
+    response && response.messageId !== clearedMessageId ? response : null;
 
   const handleSubmit = useCallback(() => {
+    setClearedMessageId(response?.messageId ?? null);
     sendCommand('custom', {
       command: payload.command,
       args: {
         ...form.getValues(),
       },
     });
-  }, [sendCommand, payload.command, form]);
+  }, [sendCommand, payload.command, form, response?.messageId]);
 
   useHotkeys([['mod+Enter', () => handleSubmit()]]);
 
@@ -259,11 +263,13 @@ export const DeviceCommandDetail: React.FC<{
         </div>
 
         <div className="flex-1 overflow-hidden">
-          {response ? (
+          {visibleResponse ? (
             <ScrollArea className="h-full">
               <div className="p-4">
                 <DataRender
-                  data={get(response.payload, 'payload')}
+                  data={repairSerialization(
+                    get(visibleResponse.payload, 'payload')
+                  )}
                   useTableMode={payload.responseViewType === 'table'}
                 />
               </div>
@@ -298,8 +304,12 @@ export const DeviceCommandCard: React.FC<{
     'customCommand.response',
     (p) => p.command === payload.command
   );
+  const [clearedMessageId, setClearedMessageId] = useState<string | null>(null);
+  const visibleResponse =
+    response && response.messageId !== clearedMessageId ? response : null;
 
   const handleSubmit = () => {
+    setClearedMessageId(response?.messageId ?? null);
     sendCommand('custom', {
       command: payload.command,
       args: {
@@ -343,9 +353,9 @@ export const DeviceCommandCard: React.FC<{
           })}
       </div>
 
-      {response && (
+      {visibleResponse && (
         <DataRender
-          data={get(response.payload, 'payload')}
+          data={repairSerialization(get(visibleResponse.payload, 'payload'))}
           useTableMode={payload.responseViewType === 'table'}
         />
       )}
