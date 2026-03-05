@@ -7,7 +7,7 @@ import {
   Image,
   Alert,
 } from 'react-native';
-import { ConfigDialog } from './ConfigDialog';
+import { ConfigDialog, LOCAL_CACHE_HOST_NAME } from './ConfigDialog';
 import { dreaction } from '../dreaction';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -34,6 +34,21 @@ export const DraggableBall: React.FC = React.memo(() => {
     return () => {
       clearInterval(timer);
     };
+  }, []);
+
+  useEffect(() => {
+    if (dreaction.isReady || dreaction.connected) {
+      return;
+    }
+
+    dreaction.asyncStorageHandler
+      ?.getItem(LOCAL_CACHE_HOST_NAME)
+      .then((cachedHost) => {
+        if (cachedHost && !dreaction.isReady && !dreaction.connected) {
+          dreaction.configure({ host: cachedHost }).connect();
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const handleClick = (host: string) => {

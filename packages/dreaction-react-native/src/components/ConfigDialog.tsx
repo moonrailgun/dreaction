@@ -11,7 +11,7 @@ import { getHost } from '../helpers/getHost';
 import { dreaction } from '../dreaction';
 import { getHostWithPortFromUrl } from '../helpers/parseURL';
 
-const LOCAL_CACHE_HOST_NAME = '__dreaction-react-native-host';
+export const LOCAL_CACHE_HOST_NAME = '__dreaction-react-native-host';
 
 interface ConfigDialogProps {
   visible: boolean;
