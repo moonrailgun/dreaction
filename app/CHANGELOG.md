@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.3](https://github.com/moonrailgun/dreaction/compare/v1.10.2...v1.10.3) (2026-03-06)
+
+### Others
+
+* add TypeScript definitions to package.json for client and server packages ([e67cd18](https://github.com/moonrailgun/dreaction/commit/e67cd180a71cd43d6da1251aadb991b531d2a642))
+* migrate release workflow to use Bun instead of Node.js ([a560607](https://github.com/moonrailgun/dreaction/commit/a560607d1d19f6e8c2a94e747d7c90c9fac7fec5))
+
 ## [1.10.2](https://github.com/moonrailgun/dreaction/compare/v1.10.1...v1.10.2) (2026-03-06)
 
 ### Features
