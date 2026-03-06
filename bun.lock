@@ -118,7 +118,7 @@
     },
     "packages/client-core": {
       "name": "dreaction-client-core",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "dependencies": {
         "@types/ws": "^8.5.13",
         "dreaction-protocol": "workspace:*",
@@ -132,7 +132,7 @@
     },
     "packages/dreaction-react": {
       "name": "dreaction-react",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "dependencies": {
         "dreaction-client-core": "workspace:*",
         "dreaction-protocol": "workspace:*",
@@ -150,7 +150,7 @@
     },
     "packages/dreaction-react-native": {
       "name": "dreaction-react-native",
-      "version": "1.9.2",
+      "version": "1.9.3",
       "dependencies": {
         "dreaction-client-core": "workspace:*",
         "dreaction-protocol": "workspace:*",

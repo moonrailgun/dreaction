@@ -1,14 +1,14 @@
 {
   "name": "dreaction-client-core",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": false,
   "description": "",
   "main": "lib/index.js",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "prepare": "tsc",
-    "release": "bun publish --ignore-scripts --registry=https://registry.npmjs.com/",
+    "prepare": "bun run tsc",
+    "release": "bun publish --registry=https://registry.npmjs.com/",
     "test": "vitest"
   },
   "files": [

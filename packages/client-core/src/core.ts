@@ -203,14 +203,19 @@ export class DReactionImpl
               : cc.command === command.payload.command
           )
           .forEach(async (cc) => {
-            const res = await cc.handler(
-              typeof command.payload === 'object' ? command.payload.args : {}
-            );
-            if (res) {
+            const sendResponse = (payload: any) => {
               this.send('customCommand.response', {
                 command: cc.command,
-                payload: res,
+                payload,
               });
+            };
+
+            const res = await cc.handler(
+              typeof command.payload === 'object' ? command.payload.args : {},
+              { sendResponse }
+            );
+            if (res) {
+              sendResponse(res);
             }
           });
       } else if (command.type === 'setClientId') {
@@ -331,7 +336,10 @@ export class DReactionImpl
     optHandler?: () => void
   ): () => void {
     let command: string;
-    let handler: (args: Record<string, any>) => void;
+    let handler: (
+      args: Record<string, any>,
+      ctx: { sendResponse: (payload: any) => void }
+    ) => void;
     let title!: string;
     let description!: string;
     let args!: CustomCommandArg[];

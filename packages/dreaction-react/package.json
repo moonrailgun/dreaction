@@ -1,14 +1,14 @@
 {
   "name": "dreaction-react",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "private": false,
   "description": "DReaction client for React web applications",
   "main": "lib/index.js",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",
-    "prepare": "tsc",
-    "release": "bun publish --ignore-scripts --registry=https://registry.npmjs.com/"
+    "prepare": "bun run tsc",
+    "release": "bun publish --registry=https://registry.npmjs.com/"
   },
   "files": [
     "lib",

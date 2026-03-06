@@ -6,7 +6,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "prepare": "tsc",
+    "prepare": "bun run tsc",
     "test": "vitest"
   },
   "files": [

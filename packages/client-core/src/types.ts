@@ -40,7 +40,10 @@ export interface CustomCommand<
   Args extends CustomCommandArg[] = CustomCommandArg[]
 > extends Omit<CustomCommandRegisterPayload, 'id' | 'args'> {
   id?: number;
-  handler: (args: CustomCommandArgs<Args>) => any | Promise<any>;
+  handler: (
+    args: CustomCommandArgs<Args>,
+    ctx: { sendResponse: (payload: any) => void }
+  ) => any | Promise<any>;
   args?: Args;
 }
 // #endregion
