@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.10.2](https://github.com/moonrailgun/dreaction/compare/v1.10.1...v1.10.2) (2026-03-06)
+
+### Features
+
+* add auto connection feature ([161d20e](https://github.com/moonrailgun/dreaction/commit/161d20e67471038368b9af47cd763996b7b12f58))
+* improve response handling in DeviceCommand ([7e4d0dd](https://github.com/moonrailgun/dreaction/commit/7e4d0dd0dbb9f862f538d8ecb59f4ac7a347f505))
+
+### Others
+
+* add send response on custom command handler ([e5bd890](https://github.com/moonrailgun/dreaction/commit/e5bd8908d9f9803af25d8ff0243208ba55fb41a8))
+* update publish script ([c1f738c](https://github.com/moonrailgun/dreaction/commit/c1f738c1912ccdb40b234656012d6ad9d3c9771b))
+
 ## [1.10.1](https://github.com/moonrailgun/dreaction/compare/v1.10.0...v1.10.1) (2026-01-20)
 
 ### Others
