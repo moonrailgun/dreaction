@@ -7,7 +7,6 @@ import { DataWatchPayload } from './data';
 import { ReportIssuePayload } from './issue';
 import type { LogPayload } from './log';
 import {
-  NetworkPayload,
   NetworkRequestPayload,
   NetworkResponsePayload,
 } from './network';

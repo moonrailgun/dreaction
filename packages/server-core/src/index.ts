@@ -1,4 +1,4 @@
-import { Server as WebSocketServer, OPEN, type RawData, WebSocket } from 'ws';
+import WebSocket, { type RawData, WebSocketServer } from 'ws';
 import { EventEmitter } from 'eventemitter-strict';
 
 import type { Command } from 'dreaction-protocol';
@@ -342,7 +342,7 @@ export class Server extends EventEmitter<ServerEventMap> {
 
     this.wss.clients.forEach((client) => {
       if (
-        client.readyState === OPEN &&
+        client.readyState === WebSocket.OPEN &&
         (!clientId || (client as any).clientId === clientId)
       ) {
         client.send(JSON.stringify({ type, payload }));
