@@ -331,28 +331,34 @@ export class DReactionImpl
     return this as this & InferFeatures<P>;
   }
 
-  registerCustomCommand(
-    config: CustomCommand,
+  registerCustomCommand<Args extends CustomCommandArg[]>(
+    config: CustomCommand<Args>
+  ): () => void;
+  registerCustomCommand(config: string, optHandler: () => void): () => void;
+  registerCustomCommand<Args extends CustomCommandArg[]>(
+    config: string | CustomCommand<Args>,
     optHandler?: () => void
   ): () => void {
     let command: string;
     let handler: (
-      args: Record<string, any>,
+      args: any,
       ctx: { sendResponse: (payload: any) => void }
-    ) => void;
+    ) => any;
     let title!: string;
     let description!: string;
     let args!: CustomCommandArg[];
+    let responseViewType: CustomCommand['responseViewType'];
 
     if (typeof config === 'string') {
       command = config;
-      handler = optHandler!;
+      handler = optHandler as typeof handler;
     } else {
       command = config.command;
       handler = config.handler;
       title = config.title!;
       description = config.description!;
       args = config.args!;
+      responseViewType = config.responseViewType;
     }
 
     if (!command) throw new Error('A command is required');
@@ -396,7 +402,7 @@ export class DReactionImpl
       title,
       description,
       args,
-      responseViewType: config.responseViewType,
+      responseViewType,
     };
 
     this.customCommands.push(customHandler);

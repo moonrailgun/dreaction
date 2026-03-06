@@ -61,5 +61,10 @@ const stateResponseGuard = createPluginGuard<StateResponseFeatures>(
   'state responses'
 );
 
-export const hasStateResponsePlugin = stateResponseGuard.has;
-export const assertHasStateResponsePlugin = stateResponseGuard.assert;
+export const hasStateResponsePlugin: (
+  client: DReactionCore
+) => client is DReactionCore & StateResponseFeatures = stateResponseGuard.has;
+export const assertHasStateResponsePlugin: (
+  client: DReactionCore
+) => asserts client is DReactionCore & StateResponseFeatures =
+  stateResponseGuard.assert;

@@ -21,5 +21,9 @@ export type IssueFeatures = InferFeatures<ReturnType<typeof issue>>;
 
 const issueGuard = createPluginGuard<IssueFeatures>(['reportIssue'], 'issue');
 
-export const hasIssuePlugin = issueGuard.has;
-export const assertHasIssuePlugin = issueGuard.assert;
+export const hasIssuePlugin: (
+  client: DReactionCore
+) => client is DReactionCore & IssueFeatures = issueGuard.has;
+export const assertHasIssuePlugin: (
+  client: DReactionCore
+) => asserts client is DReactionCore & IssueFeatures = issueGuard.assert;

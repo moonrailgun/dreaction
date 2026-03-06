@@ -4,6 +4,7 @@
   "private": false,
   "description": "",
   "main": "lib/index.js",
+  "types": "src/index.ts",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",

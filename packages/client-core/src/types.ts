@@ -27,14 +27,12 @@ interface ArgTypeMap {
   string: string;
 }
 
+type CustomCommandArgRecord<Arg extends CustomCommandArg> = {
+  [K in Arg['name']]: ArgTypeMap[Arg['type']];
+};
+
 export type CustomCommandArgs<Args extends CustomCommandArg[]> =
-  UnionToIntersection<
-    Args extends Array<infer U>
-      ? U extends CustomCommandArg
-        ? { [K in U as U['name']]: ArgTypeMap[U['type']] }
-        : never
-      : never
-  >;
+  UnionToIntersection<CustomCommandArgRecord<Args[number]>>;
 
 export interface CustomCommand<
   Args extends CustomCommandArg[] = CustomCommandArg[]
@@ -111,11 +109,12 @@ export interface DReactionCore {
     important?: boolean
   ) => void;
   display: (config: DisplayConfig) => void;
-  registerCustomCommand: <
+  registerCustomCommand<
     Args extends CustomCommandArg[] = Exclude<CustomCommand['args'], undefined>
   >(
     config: CustomCommand<Args>
-  ) => () => void | ((config: string, optHandler?: () => void) => () => void);
+  ): () => void;
+  registerCustomCommand(config: string, optHandler: () => void): () => void;
   configure: (
     options?: ClientOptions<this>
   ) => ClientOptions<this>['plugins'] extends PluginCreator<this>[]

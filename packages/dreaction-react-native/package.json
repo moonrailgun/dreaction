@@ -4,6 +4,7 @@
   "private": false,
   "description": "DReaction client for React Native applications with draggable debug ball and powerful debugging tools",
   "main": "lib/index.js",
+  "types": "src/index.ts",
   "scripts": {
     "dev": "tsc --watch",
     "build": "tsc",

@@ -39,5 +39,9 @@ const loggerGuard = createPluginGuard<LoggerFeatures>(
   'logger'
 );
 
-export const hasLoggerPlugin = loggerGuard.has;
-export const assertHasLoggerPlugin = loggerGuard.assert;
+export const hasLoggerPlugin: (
+  client: DReactionCore
+) => client is DReactionCore & LoggerFeatures = loggerGuard.has;
+export const assertHasLoggerPlugin: (
+  client: DReactionCore
+) => asserts client is DReactionCore & LoggerFeatures = loggerGuard.assert;

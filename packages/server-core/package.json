@@ -4,6 +4,7 @@
   "private": true,
   "description": "",
   "main": "lib/index.js",
+  "types": "src/index.ts",
   "scripts": {
     "build": "tsc",
     "prepare": "bun run tsc",
