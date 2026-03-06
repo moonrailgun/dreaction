@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.4](https://github.com/moonrailgun/dreaction/compare/v1.10.3...v1.10.4) (2026-03-06)
+
+### Others
+
+* clean up imports and improve WebSocket client state check ([5a3216e](https://github.com/moonrailgun/dreaction/commit/5a3216eedeb49b4556f5056c238466d2c1399026))
+* update Next.js and ESLint dependencies to version 16.1.6 ([8c41046](https://github.com/moonrailgun/dreaction/commit/8c41046444b2a2c3e70de385a2c6c79464252e87))
+
 ## [1.10.3](https://github.com/moonrailgun/dreaction/compare/v1.10.2...v1.10.3) (2026-03-06)
 
 ### Others
