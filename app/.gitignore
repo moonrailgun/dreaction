@@ -1,6 +1,11 @@
 dist-electron
 release
 
+# Electrobun
+build
+artifacts
+dist-css
+
 # Logs
 logs
 *.log

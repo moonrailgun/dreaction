@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  release:
+  release-macos:
     runs-on: macos-latest
     permissions: write-all
 
@@ -22,18 +22,82 @@ jobs:
     - name: Install dependencies
       run: bun install --frozen-lockfile
 
-    - name: Build and Release
+    - name: Build CSS
+      run: bun run --cwd app build:css
+
+    - name: Build and Package
       env:
         NODE_ENV: production
-      run: bun run --cwd app build -- -mwl
+      run: cd app && electrobun build --env=stable
 
     - name: Upload Release Assets
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          app/release/**/*.dmg
-          app/release/**/*.zip
-          app/release/**/*.exe
-          app/release/**/*.AppImage
+          app/artifacts/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  release-linux:
+    runs-on: ubuntu-latest
+    permissions: write-all
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+
+    - name: Build CSS
+      run: bun run --cwd app build:css
+
+    - name: Build and Package
+      env:
+        NODE_ENV: production
+      run: cd app && electrobun build --env=stable
+
+    - name: Upload Release Assets
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          app/artifacts/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  release-windows:
+    runs-on: windows-latest
+    permissions: write-all
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
+
+    - name: Install dependencies
+      run: bun install --frozen-lockfile
+
+    - name: Build CSS
+      run: bun run --cwd app build:css
+
+    - name: Build and Package
+      env:
+        NODE_ENV: production
+      run: cd app && electrobun build --env=stable
+
+    - name: Upload Release Assets
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          app/artifacts/*
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

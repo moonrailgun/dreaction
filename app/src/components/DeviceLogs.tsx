@@ -1,10 +1,7 @@
-import os from 'os';
-import path from 'path';
-import fs from 'fs';
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { useDReactionServerContext } from '../context/DReaction';
 import { useThemeStore } from '../store/theme';
-import { Command } from 'dreaction-server-core';
+import type { Command } from 'dreaction-protocol';
 import { GOLD_GRADIENT, GOLD_SHADOW } from '../constants/theme';
 import {
   Accordion,
@@ -126,14 +123,15 @@ export const DeviceLogs: React.FC = React.memo(() => {
   });
 
   const handleDowload = () => {
-    const homeDir = os.homedir();
-    const downloadDir = path.join(homeDir, 'Downloads');
-    fs.writeFileSync(
-      path.resolve(downloadDir, `dreaction-timeline-log-${Date.now()}.json`),
-      JSON.stringify(commands || []),
-      'utf8'
-    );
-    console.log(`Exported timeline log to ${downloadDir}`);
+    const blob = new Blob([JSON.stringify(commands || [], null, 2)], {
+      type: 'application/json',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dreaction-timeline-log-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleClear = () => {

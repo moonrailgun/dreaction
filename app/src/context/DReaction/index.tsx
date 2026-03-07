@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useRef, useEffect, useCallback, useMemo } from 'react';
-import { Command, Server, createServer } from 'dreaction-server-core';
-import { config } from '../../utils/config';
+import React, { useEffect, useCallback, useMemo } from 'react';
+import { rpc } from '../../utils/rpc';
+import type { Command } from 'dreaction-protocol';
 
 import {
   useDReactionServer,
@@ -10,10 +10,14 @@ import {
 } from './useDReactionServer';
 import { first } from 'lodash-es';
 import { CommandMap } from 'dreaction-protocol';
+import type {
+  DReactionConnectionInfo,
+  SerializedCommand,
+  ServerStatus as RpcServerStatus,
+} from '../../shared/rpc-types';
 
 export { type Connection };
 
-// TODO: Move up to better places like core somewhere!
 interface Context {
   serverStatus: ServerStatus;
   connections: Connection[];
@@ -30,7 +34,6 @@ const DReactionServerContext = React.createContext<Context>({
   serverStatus: 'stopped',
   connections: [],
   selectedConnection: null,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   selectConnection: () => {},
   sendCommand: () => {},
 });
@@ -38,8 +41,6 @@ const DReactionServerContext = React.createContext<Context>({
 export const DReactionServerProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const dreactionServer = useRef<Server>(null);
-
   const {
     serverStatus,
     connections,
@@ -50,7 +51,6 @@ export const DReactionServerProvider: React.FC<{
     connectionEstablished,
     commandReceived,
     connectionDisconnected,
-    // addCommandListener,
     portUnavailable,
   } = useDReactionServer();
 
@@ -58,34 +58,48 @@ export const DReactionServerProvider: React.FC<{
     connections.find((c) => c.clientId === selectedClientId) ?? null;
 
   useEffect(() => {
-    if (dreactionServer.current) {
-      dreactionServer.current.stop();
-    }
+    const handleServerStatus = (data: { status: RpcServerStatus }) => {
+      if (data.status === 'started') serverStarted();
+      else if (data.status === 'stopped') serverStopped();
+      else if (data.status === 'portUnavailable') portUnavailable();
+    };
 
-    // @ts-ignore
-    dreactionServer.current = createServer({
-      port: config.serverPort,
-    });
+    const handleConnection = (data: {
+      connection: DReactionConnectionInfo;
+    }) => {
+      connectionEstablished(data.connection);
+    };
 
-    // @ts-ignore
-    window.__server = dreactionServer.current;
+    const handleDisconnect = (data: {
+      connection: DReactionConnectionInfo;
+    }) => {
+      connectionDisconnected(data.connection);
+    };
 
-    dreactionServer.current.on('start', serverStarted);
-    dreactionServer.current.on('stop', serverStopped);
-    // need to sync these types between dreaction-core-server and dreaction-app
-    // @ts-ignore
-    dreactionServer.current.on('connectionEstablished', connectionEstablished);
-    dreactionServer.current.on('command', commandReceived);
-    // need to sync these types between dreaction-core-server and dreaction-app
+    const handleCommand = (data: { command: SerializedCommand }) => {
+      const deserialized = {
+        ...data.command,
+        date: new Date(data.command.date),
+      };
+      commandReceived(deserialized);
+    };
 
-    // @ts-ignore
-    dreactionServer.current.on('disconnect', connectionDisconnected);
-    dreactionServer.current.on('portUnavailable', portUnavailable);
+    const handlePortUnavailable = () => {
+      portUnavailable();
+    };
 
-    dreactionServer.current.start();
+    rpc.addMessageListener('serverStatusChanged', handleServerStatus);
+    rpc.addMessageListener('connectionEstablished', handleConnection);
+    rpc.addMessageListener('connectionDisconnected', handleDisconnect);
+    rpc.addMessageListener('commandReceived', handleCommand);
+    rpc.addMessageListener('portUnavailable', handlePortUnavailable);
 
     return () => {
-      dreactionServer.current?.stop();
+      rpc.removeMessageListener('serverStatusChanged', handleServerStatus);
+      rpc.removeMessageListener('connectionEstablished', handleConnection);
+      rpc.removeMessageListener('connectionDisconnected', handleDisconnect);
+      rpc.removeMessageListener('commandReceived', handleCommand);
+      rpc.removeMessageListener('portUnavailable', handlePortUnavailable);
     };
   }, [
     serverStarted,
@@ -98,18 +112,13 @@ export const DReactionServerProvider: React.FC<{
 
   const sendCommand = useCallback(
     (type: string, payload: Record<string, any>, clientId?: string) => {
-      // TODO: Do better then just throwing these away...
-      if (!dreactionServer.current) {
-        return;
-      }
-
-      dreactionServer.current.send(
+      rpc.request.sendCommand({
         type,
         payload,
-        clientId ?? selectedClientId ?? undefined
-      );
+        clientId: clientId ?? selectedClientId ?? undefined,
+      });
     },
-    [dreactionServer, selectedClientId]
+    [selectedClientId]
   );
 
   return (

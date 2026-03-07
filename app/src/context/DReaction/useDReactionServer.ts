@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Command } from 'dreaction-server-core';
+import type { Command } from 'dreaction-protocol';
 import { notifications } from '@mantine/notifications';
 
 export enum ActionTypes {

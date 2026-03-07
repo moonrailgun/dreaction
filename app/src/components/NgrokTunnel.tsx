@@ -11,7 +11,6 @@ import {
   Tooltip,
 } from '@mantine/core';
 import React from 'react';
-import { config } from '../utils/config';
 import { useNgrokStore } from '../store/ngrok';
 import { CopyText } from './CopyText';
 import {
@@ -19,13 +18,9 @@ import {
   IconPlugConnected,
   IconQuestionMark,
 } from '@tabler/icons-react';
-
-// Import Electron shell API for opening external links
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const electron = window.require ? window.require('electron') : null;
+import { rpc } from '../utils/rpc';
 
 export const NgrokTunnel: React.FC = React.memo(() => {
-  // Ngrok state and actions
   const {
     status: ngrokStatus,
     tunnelUrl,
@@ -41,7 +36,7 @@ export const NgrokTunnel: React.FC = React.memo(() => {
   } = useNgrokStore();
 
   const handleStartTunnel = async () => {
-    await startTunnel(config.serverPort);
+    await startTunnel();
   };
 
   const handleStopTunnel = async () => {
@@ -49,13 +44,7 @@ export const NgrokTunnel: React.FC = React.memo(() => {
   };
 
   const handleOpenWebsite = () => {
-    // Use Electron's shell to open external browser
-    if (electron?.shell) {
-      electron.shell.openExternal('https://ngrok.com');
-    } else {
-      // Fallback to window.open if not in Electron environment
-      window.open('https://ngrok.com', '_blank');
-    }
+    rpc.request.openExternal({ url: 'https://ngrok.com' });
   };
 
   return (
@@ -66,7 +55,6 @@ export const NgrokTunnel: React.FC = React.memo(() => {
       className="border-l-4 ml-2 border-blue-400 dark:border-blue-600"
     >
       <div>
-        {/* Header with expand/collapse button */}
         <Group justify="space-between" className="mb-2">
           <div className="font-semibold flex items-center gap-2">
             Ngrok HTTPS Tunnel
@@ -94,9 +82,7 @@ export const NgrokTunnel: React.FC = React.memo(() => {
           </div>
         </Group>
 
-        {/* Collapsible content */}
         <div className="mt-3">
-          {/* Auth Token Input */}
           <TextInput
             label="Auth Token"
             placeholder="Enter your ngrok authtoken for custom features"
@@ -107,7 +93,6 @@ export const NgrokTunnel: React.FC = React.memo(() => {
             size="sm"
           />
 
-          {/* Custom Domain Input */}
           <TextInput
             label="Custom Domain (Optional)"
             placeholder="e.g., your-app.ngrok.io or custom.domain.com"
@@ -119,7 +104,6 @@ export const NgrokTunnel: React.FC = React.memo(() => {
             description="Requires ngrok paid plan with reserved domain"
           />
 
-          {/* Tunnel URL Display */}
           {tunnelUrl && (
             <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
               <div className="text-sm font-medium mb-2">Public URL:</div>
@@ -130,7 +114,6 @@ export const NgrokTunnel: React.FC = React.memo(() => {
                 <CopyText value={tunnelUrl} label="Copy URL" />
               </div>
 
-              {/* Connection hint */}
               <div className="pt-2 border-t border-blue-200 dark:border-blue-700">
                 <div className="text-xs font-medium text-blue-700 dark:text-blue-300 mb-1">
                   Connection Config:
@@ -157,7 +140,6 @@ export const NgrokTunnel: React.FC = React.memo(() => {
             </div>
           )}
 
-          {/* Error Display */}
           {ngrokError && (
             <Alert
               icon={<IconAlertCircle />}
@@ -171,7 +153,6 @@ export const NgrokTunnel: React.FC = React.memo(() => {
             </Alert>
           )}
 
-          {/* Control Buttons */}
           <div className="flex gap-2">
             {ngrokStatus !== 'connected' ? (
               <Button

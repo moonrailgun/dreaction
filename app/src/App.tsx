@@ -17,8 +17,6 @@ import {
   GOLD_SHADOW,
 } from './constants/theme';
 
-import '@mantine/core/styles.css';
-import '@mantine/charts/styles.css';
 
 // Define custom gold color palette
 const gold: MantineColorsTuple = [
