@@ -186,8 +186,31 @@ export const DeviceNetwork: React.FC = React.memo(() => {
     }
   };
 
+  const selectedIndex = selectedItem
+    ? items.findIndex((i) => i.id === selectedItem.id)
+    : -1;
+
   return (
     <div className="h-full flex">
+      {selectedIndex >= 0 && (
+        <style>{`
+          .waterfall-body .waterfall-row:nth-child(${selectedIndex + 1}) {
+            background-color: rgba(59, 130, 246, 0.08);
+          }
+          .waterfall-body .waterfall-row:nth-child(${selectedIndex + 1}) .waterfall-item-label {
+            color: #3b82f6;
+            font-weight: 600;
+          }
+          @media (prefers-color-scheme: dark) {
+            .waterfall-body .waterfall-row:nth-child(${selectedIndex + 1}) {
+              background-color: rgba(59, 130, 246, 0.15);
+            }
+            .waterfall-body .waterfall-row:nth-child(${selectedIndex + 1}) .waterfall-item-label {
+              color: #60a5fa;
+            }
+          }
+        `}</style>
+      )}
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         <div className="flex items-center h-10 sticky top-0 z-10 bg-white dark:bg-[#0A0A0A] border-b border-gray-300 dark:border-gray-800 px-4">
