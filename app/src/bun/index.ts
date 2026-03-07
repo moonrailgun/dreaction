@@ -34,7 +34,16 @@ function getLocalIPAddress(): string {
 
 ApplicationMenu.setApplicationMenu([
   {
-    submenu: [{ label: 'Quit', role: 'quit' }],
+    label: 'DReaction',
+    submenu: [
+      { label: 'About DReaction', role: 'about' },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideOthers' },
+      { role: 'showAll' },
+      { type: 'separator' },
+      { label: 'Quit DReaction', role: 'quit' },
+    ],
   },
   {
     label: 'Edit',
@@ -48,6 +57,20 @@ ApplicationMenu.setApplicationMenu([
       { role: 'pasteAndMatchStyle' },
       { role: 'delete' },
       { role: 'selectAll' },
+    ],
+  },
+  {
+    label: 'View',
+    submenu: [{ role: 'toggleFullScreen' }],
+  },
+  {
+    label: 'Window',
+    submenu: [
+      { role: 'minimize' },
+      { role: 'zoom' },
+      { role: 'close' },
+      { type: 'separator' },
+      { role: 'bringAllToFront' },
     ],
   },
 ]);

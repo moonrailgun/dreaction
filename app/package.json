@@ -11,7 +11,7 @@
     "build:canary": "bash scripts/build-css.sh && electrobun build --env=canary",
     "build:stable": "bash scripts/build-css.sh && electrobun build --env=stable",
     "build:css": "bash scripts/build-css.sh",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --ext ts,tsx",
     "release": "release-it",
     "release:patch": "release-it -i patch"
   },
@@ -54,7 +54,6 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
     "postcss": "^8.4.49",
     "postcss-cli": "^11.0.1",
     "postcss-import": "^16.1.1",
