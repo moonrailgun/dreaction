@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.0.2](https://github.com/moonrailgun/dreaction/compare/v2.0.1...v2.0.2) (2026-04-28)
+
+### Features
+
+* add application icons for macOS, Windows, and Linux with corresponding icon set ([1246453](https://github.com/moonrailgun/dreaction/commit/12464533f315f5401b9c3229c3e4db35fcb1d166))
+
+### Others
+
+* implement macOS DMG post-build script and update build commands for improved packaging ([25ad101](https://github.com/moonrailgun/dreaction/commit/25ad1014a92f5bb1379ec0c7c3f19aedbedea25f))
+
 ## [2.0.1](https://github.com/moonrailgun/dreaction/compare/v2.0.0...v2.0.1) (2026-04-28)
 
 ### Others
