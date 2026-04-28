@@ -25,5 +25,14 @@ export default {
       // The staging dir is generated before each build/dev run.
       '.native-deps/node_modules/@ngrok': 'node_modules/@ngrok',
     },
+    mac: {
+      icons: 'assets/icon.iconset',
+    },
+    win: {
+      icon: 'assets/icon.ico',
+    },
+    linux: {
+      icon: 'assets/icon.png',
+    },
   },
 } satisfies ElectrobunConfig;
