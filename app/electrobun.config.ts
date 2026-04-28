@@ -21,6 +21,9 @@ export default {
     },
     copy: {
       'src/views/main-ui/index.html': 'views/main-ui/index.html',
+      // Ship native deps that cannot be bundled (see scripts/prepare-native-deps.ts).
+      // The staging dir is generated before each build/dev run.
+      '.native-deps/node_modules/@ngrok': 'node_modules/@ngrok',
     },
   },
 } satisfies ElectrobunConfig;

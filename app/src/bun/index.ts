@@ -10,6 +10,7 @@ import {
   startDReactionServer,
   sendCommandToClient,
   getServerPort,
+  getInitialState,
 } from './server';
 import { startNgrokTunnel, stopNgrokTunnel } from './ngrok';
 
@@ -106,6 +107,9 @@ const mainUIRPC = BrowserView.defineRPC<MainUIRPCType>({
       },
       getLocalIP: () => {
         return getLocalIPAddress();
+      },
+      getInitialState: () => {
+        return getInitialState();
       },
     },
     messages: {},

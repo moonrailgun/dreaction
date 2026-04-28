@@ -94,7 +94,26 @@ export const DReactionServerProvider: React.FC<{
     rpc.addMessageListener('commandReceived', handleCommand);
     rpc.addMessageListener('portUnavailable', handlePortUnavailable);
 
+    // Pull initial state because the bun side may have started the server
+    // (and emitted 'serverStatusChanged' / 'connectionEstablished') before
+    // these listeners were registered. Without this the UI would stay stuck
+    // on the default 'stopped' status even after the server is up.
+    let cancelled = false;
+    rpc.request
+      .getInitialState({})
+      .then((initial) => {
+        if (cancelled || !initial) return;
+        handleServerStatus({ status: initial.serverStatus });
+        for (const connection of initial.connections) {
+          connectionEstablished(connection);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to fetch initial server state', err);
+      });
+
     return () => {
+      cancelled = true;
       rpc.removeMessageListener('serverStatusChanged', handleServerStatus);
       rpc.removeMessageListener('connectionEstablished', handleConnection);
       rpc.removeMessageListener('connectionDisconnected', handleDisconnect);

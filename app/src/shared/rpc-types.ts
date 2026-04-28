@@ -58,6 +58,16 @@ export type MainUIRPCType = {
         params: Record<string, never>;
         response: string;
       };
+      // Returned synchronously so the webview can recover any state that
+      // changed before its message listeners were registered (e.g. the
+      // server `start` event fired during bun bootstrap).
+      getInitialState: {
+        params: Record<string, never>;
+        response: {
+          serverStatus: ServerStatus;
+          connections: DReactionConnectionInfo[];
+        };
+      };
     };
     messages: Record<string, never>;
   }>;
