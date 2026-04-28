@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.0](https://github.com/moonrailgun/dreaction/compare/v1.10.4...v2.0.0) (2026-04-28)
+
+### Features
+
+* add support for staging native dependencies and improve server state management ([f22a25e](https://github.com/moonrailgun/dreaction/commit/f22a25e3d66942d8dd7df0038d4e06de30dfd750))
+* highlight selected item in DeviceNetwork component ([e1f8fd0](https://github.com/moonrailgun/dreaction/commit/e1f8fd0b2bdc836e3e01e9add92da81caab495ee))
+
+### Others
+
+* migrate example expo sdk from 52 to 54 ([78411f2](https://github.com/moonrailgun/dreaction/commit/78411f21157846fbfcc13a454e3c731ebcfe6995))
+* migrate to electronbun ([e34df8c](https://github.com/moonrailgun/dreaction/commit/e34df8cc5f29e76fa7b3842e6cc3d07717451ed0))
+* remove unused ESLint plugin and update configuration ([f2de019](https://github.com/moonrailgun/dreaction/commit/f2de019fc8ad10de8e261fb5a73f6795a7bbf67e))
+
 ## [1.10.4](https://github.com/moonrailgun/dreaction/compare/v1.10.3...v1.10.4) (2026-03-06)
 
 ### Others
