@@ -3,6 +3,7 @@ build
 artifacts
 dist-css
 .native-deps
+.dmg-stage
 
 # Logs
 logs

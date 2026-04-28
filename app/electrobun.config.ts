@@ -12,7 +12,11 @@ export default {
   build: {
     bun: {
       entrypoint: 'src/bun/index.ts',
-      external: ['@ngrok/ngrok', 'ws', 'dreaction-server-core', 'dreaction-protocol', 'eventemitter-strict'],
+      // Only `@ngrok/ngrok` must stay external because it loads a native
+      // .node binary at runtime. Workspace deps and pure JS deps must be
+      // bundled, otherwise the packaged app cannot resolve them inside
+      // /Applications where there is no node_modules walk-up path.
+      external: ['@ngrok/ngrok'],
     },
     views: {
       'main-ui': {
