@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.3](https://github.com/moonrailgun/dreaction/compare/v2.0.2...v2.0.3) (2026-04-28)
+
+### Others
+
+* update release-it configuration and use package version in app settings ([8919a7b](https://github.com/moonrailgun/dreaction/commit/8919a7bc5fc0d5d210bf5cfcc13bc601932acf1b))
+
 ## [2.0.2](https://github.com/moonrailgun/dreaction/compare/v2.0.1...v2.0.2) (2026-04-28)
 
 ### Features
