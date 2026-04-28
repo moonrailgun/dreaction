@@ -31,7 +31,7 @@ jobs:
     - name: Build and Package
       env:
         NODE_ENV: production
-      run: cd app && electrobun build --env=stable
+      run: bun run --cwd app build:stable
 
     - name: Upload Release Assets
       uses: softprops/action-gh-release@v1
@@ -66,7 +66,7 @@ jobs:
     - name: Build and Package
       env:
         NODE_ENV: production
-      run: cd app && electrobun build --env=stable
+      run: bun run --cwd app build:stable
 
     - name: Upload Release Assets
       uses: softprops/action-gh-release@v1
@@ -101,7 +101,7 @@ jobs:
     - name: Build and Package
       env:
         NODE_ENV: production
-      run: cd app && electrobun build --env=stable
+      run: bun run --cwd app build:stable
 
     - name: Upload Release Assets
       uses: softprops/action-gh-release@v1
