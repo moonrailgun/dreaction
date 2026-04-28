@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.1](https://github.com/moonrailgun/dreaction/compare/v2.0.0...v2.0.1) (2026-04-28)
+
+### Others
+
+* update build command in release workflow to use bun ([1c58c4c](https://github.com/moonrailgun/dreaction/commit/1c58c4cc0abaa63f71df21527218bc8fb4866e89))
+
 ## [2.0.0](https://github.com/moonrailgun/dreaction/compare/v1.10.4...v2.0.0) (2026-04-28)
 
 ### Features
