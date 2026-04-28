@@ -40,6 +40,7 @@ import {
 import { basename, join, resolve } from 'node:path';
 import { tmpdir } from 'node:os';
 import { spawnSync, type SpawnSyncReturns } from 'node:child_process';
+import packageJson from '../package.json' with { type: 'json' };
 
 const APP_ROOT = resolve(import.meta.dir, '..');
 const BUILD_ROOT = join(APP_ROOT, 'build');
@@ -48,6 +49,7 @@ const STAGE_ROOT = join(APP_ROOT, '.dmg-stage');
 const ASSETS_ROOT = join(APP_ROOT, 'assets');
 const BACKGROUND_SVG = join(ASSETS_ROOT, 'dmg-background.svg');
 const DS_STORE_CACHE = join(ASSETS_ROOT, 'dmg-DS_Store');
+const APP_VERSION = packageJson.version;
 
 // Final DMG window layout (logical points; macOS auto-applies @2x).
 const WINDOW = { x: 200, y: 100, width: 600, height: 400 } as const;
@@ -472,9 +474,17 @@ function folderSizeMb(folder: string): number {
 function rebuildDmg(buildDir: string, appBundle: string) {
   const buildName = basename(buildDir);
   const appName = basename(appBundle, '.app');
-  const dmgPath = join(ARTIFACTS_ROOT, `${buildName}-${appName}.dmg`);
+  // Electrobun emits the unversioned filename; we replace it with a
+  // versioned one so users can tell builds apart and CI uploads keep
+  // older releases addressable. The auto-update tarball + update.json
+  // keep their predictable names so the in-app updater still works.
+  const sourceDmgPath = join(ARTIFACTS_ROOT, `${buildName}-${appName}.dmg`);
+  const dmgPath = join(
+    ARTIFACTS_ROOT,
+    `${buildName}-${appName}-${APP_VERSION}.dmg`
+  );
 
-  if (!existsSync(dmgPath)) {
+  if (!existsSync(sourceDmgPath)) {
     console.log(`[fix-macos-dmg] no DMG found for ${buildName}, skipping`);
     return;
   }
@@ -544,6 +554,12 @@ function rebuildDmg(buildDir: string, appBundle: string) {
     dmgPath,
   ]);
   rmSync(rwDmg, { force: true });
+
+  // Drop the unversioned source DMG that electrobun emitted. We replaced
+  // it with the versioned filename above.
+  if (sourceDmgPath !== dmgPath) {
+    rmSync(sourceDmgPath, { force: true });
+  }
 }
 
 async function main() {

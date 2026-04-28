@@ -9,7 +9,10 @@
   },
   "npm": false,
   "hooks": {
-    "after:bump": "echo Version Upgrade Success. checkout more in CHANGELOG"
+    "after:bump": [
+      "bun run scripts/bump-version.ts ${version}",
+      "echo Version Upgrade Success. checkout more in CHANGELOG"
+    ]
   },
   "plugins": {
     "@release-it/conventional-changelog": {

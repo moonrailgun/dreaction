@@ -1,10 +1,11 @@
 import type { ElectrobunConfig } from 'electrobun';
+import packageJson from './package.json' with { type: 'json' };
 
 export default {
   app: {
     name: 'DReaction',
     identifier: 'com.moonrailgun.dreaction',
-    version: '1.10.0',
+    version: packageJson.version,
   },
   runtime: {
     exitOnLastWindowClosed: true,
