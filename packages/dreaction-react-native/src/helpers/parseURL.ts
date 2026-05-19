@@ -17,21 +17,3 @@ export function getHostFromUrl(url: string) {
 
   return host
 }
-
-/**
- * Extract host:port from URL
- * @param url URL string
- * @returns host:port string or throws if invalid
- */
-export function getHostWithPortFromUrl(url: string) {
-  const hostWithPort = url
-    .replace(/^(?:https?:\/\/)?/, '')
-    .split(/[/?#]/)[0]
-    .trim();
-
-  if (!hostWithPort) {
-    throw new Error('Invalid URL - host not found');
-  }
-
-  return hostWithPort;
-}
